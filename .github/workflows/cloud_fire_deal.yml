@@ -22,25 +22,35 @@ jobs:
         run: |
           pip install MetaTrader5 requests
 
-      - name: Download & Extract Pre-Configured Headless MT5 Runtime
+      - name: Download & Extract Pre-Configured Headless MT5 Runtime & Config
         shell: powershell
         run: |
-          $assetUrl = "https://api.github.com/repos/rcxtrXZGV/TITAN-LLM-QUANT-BRAIN/releases/assets/718089105"
-          $zipPath = "$env:TEMP\mt5_portable.zip"
+          $mt5ZipUrl = "https://api.github.com/repos/rcxtrXZGV/TITAN-LLM-QUANT-BRAIN/releases/assets/718089105"
+          $configZipUrl = "https://api.github.com/repos/rcxtrXZGV/TITAN-LLM-QUANT-BRAIN/releases/assets/718127679"
           $targetDir = "C:\MT5"
+          $appdataDir = "$env:APPDATA\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075"
           
-          Write-Host "Downloading Pre-configured MT5 Runtime via GitHub API Asset Stream..."
           $headers = @{
             "Authorization" = "token ${{ secrets.GITHUB_TOKEN }}"
             "Accept" = "application/octet-stream"
           }
-          Invoke-WebRequest -Uri $assetUrl -Headers $headers -OutFile $zipPath
           
-          Write-Host "Extracting to $targetDir..."
-          Expand-Archive -Path $zipPath -DestinationPath $targetDir -Force
+          Write-Host "1. Downloading MT5 binary..."
+          Invoke-WebRequest -Uri $mt5ZipUrl -Headers $headers -OutFile "$env:TEMP\mt5.zip"
+          Expand-Archive -Path "$env:TEMP\mt5.zip" -DestinationPath $targetDir -Force
           
-          Write-Host "Checking terminal64.exe existence..."
-          Test-Path "$targetDir\terminal64.exe"
+          Write-Host "2. Downloading Pre-authenticated Config..."
+          Invoke-WebRequest -Uri $configZipUrl -Headers $headers -OutFile "$env:TEMP\config.zip"
+          New-Item -ItemType Directory -Force -Path $appdataDir | Out-Null
+          Expand-Archive -Path "$env:TEMP\config.zip" -DestinationPath $appdataDir -Force
+
+          # Also copy config directly into C:\MT5 for portable mode
+          Copy-Item -Path "$appdataDir\*" -Destination $targetDir -Recurse -Force
+          
+          Write-Host "3. Pre-spawning MT5 background process..."
+          Start-Process -FilePath "$targetDir\terminal64.exe" -ArgumentList "/portable"
+          Start-Sleep -Seconds 5
+          Get-Process terminal64 -ErrorAction SilentlyContinue
 
       - name: Execute Cloud Deal to IC Markets Broker
         env:
