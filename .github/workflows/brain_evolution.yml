@@ -1,9 +1,10 @@
-name: Titan Autonomous LLM Evolution Engine
+name: Titan Autonomous LLM Evolution Engine (Turbo Edition)
 
 on:
   schedule:
-    # Runs 4 times a day during London & NY Sessions (Conserves 95% of GitHub Free Minutes)
-    - cron: '0 7,11,13,16 * * 1-5'
+    # Runs every 30 minutes during Monday-Friday market hours
+    # 48 runs/day * 20 days = 960 runs/month * ~1.2 mins = ~1,150 mins (Well within 2,000 Free Quota!)
+    - cron: '*/30 * * * 1-5'
   workflow_dispatch:
 
 permissions:
