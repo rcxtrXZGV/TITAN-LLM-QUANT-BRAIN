@@ -1,7 +1,7 @@
 {
   "system": "TITAN-LLM-QUANT-BRAIN",
   "version": "1.0-SELF-EVOLVING",
-  "last_run_utc": "2026-11-06T17:38:23.578859+00:00",
+  "last_run_utc": "2026-11-06T18:45:18.942071+00:00",
   "signal_history": [
     {
       "timestamp": "2026-11-06T17:34:33.538375+00:00",
@@ -12,6 +12,13 @@
     },
     {
       "timestamp": "2026-11-06T17:38:23.578876+00:00",
+      "signal": {
+        "action": "WAIT",
+        "rationale": "No clean institutional wick rejection; capital preserved."
+      }
+    },
+    {
+      "timestamp": "2026-11-06T18:45:18.942088+00:00",
       "signal": {
         "action": "WAIT",
         "rationale": "No clean institutional wick rejection; capital preserved."
