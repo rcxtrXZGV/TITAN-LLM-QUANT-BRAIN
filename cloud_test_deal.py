@@ -23,21 +23,27 @@ def log(msg):
 
 def main():
     log("Initializing Cloud MT5 Test Order...")
-    if not mt5.initialize():
-        log(f"Init failed: {mt5.last_error()}")
-        return
-
-    if not mt5.login(LOGIN, password=PASSWORD, server=SERVER):
-        log(f"Login failed: {mt5.last_error()}")
-        return
+    # Initialize with explicit server path
+    if not mt5.initialize(login=LOGIN, password=PASSWORD, server=SERVER):
+        log(f"Init with server failed: {mt5.last_error()}, trying raw init...")
+        if not mt5.initialize():
+            log(f"Raw Init failed: {mt5.last_error()}")
+            return
+        if not mt5.login(LOGIN, password=PASSWORD, server=SERVER):
+            log(f"Login failed: {mt5.last_error()}")
+            return
 
     acc = mt5.account_info()
-    log(f"Connected to Account #{acc.login} on {acc.server} | Balance: ${acc.balance:.2f}")
+    if not acc:
+        log(f"Could not retrieve account info: {mt5.last_error()}")
+        return
+
+    log(f"Connected to Account #{acc.login} on {acc.server} | Balance: ${acc.balance:.2f} | Trade Allowed: {acc.trade_allowed}")
 
     mt5.symbol_select(SYMBOL, True)
     tick = mt5.symbol_info_tick(SYMBOL)
-    if not tick:
-        log("No tick received.")
+    if not tick or tick.ask == 0:
+        log(f"No tick received for {SYMBOL}. Available symbols: {mt5.symbols_total()}")
         return
 
     # Send a small verification BUY deal
