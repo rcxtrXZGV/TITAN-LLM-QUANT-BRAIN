@@ -3,7 +3,6 @@ name: Titan Autonomous LLM Evolution Engine (Turbo Edition)
 on:
   schedule:
     # Runs every 30 minutes during Monday-Friday market hours
-    # 48 runs/day * 20 days = 960 runs/month * ~1.2 mins = ~1,150 mins (Well within 2,000 Free Quota!)
     - cron: '*/30 * * * 1-5'
   workflow_dispatch:
 
@@ -24,9 +23,11 @@ jobs:
 
       - name: Install Quant Dependencies
         run: |
-          pip install yfinance pandas requests
+          pip install yfinance pandas requests google-genai
 
       - name: Execute Titan Self-Evolution & Market Analysis
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           python titan_brain_core.py
 
