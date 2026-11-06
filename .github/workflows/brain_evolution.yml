@@ -1,0 +1,37 @@
+name: Titan Autonomous LLM Evolution Engine
+
+on:
+  schedule:
+    # Runs 4 times a day during London & NY Sessions (Conserves 95% of GitHub Free Minutes)
+    - cron: '0 7,11,13,16 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  evolve-brain:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Quant Dependencies
+        run: |
+          pip install yfinance pandas requests
+
+      - name: Execute Titan Self-Evolution & Market Analysis
+        run: |
+          python titan_brain_core.py
+
+      - name: Commit Evolved Knowledge & Memory
+        run: |
+          git config --local user.email "titan-brain@ai.quant"
+          git config --local user.name "Titan-Autonomous-Brain"
+          git add brain_vault/
+          git diff --staged --quiet || (git commit -m "Auto-evolve Titan LLM Brain & Audit [$(date -u)]" && git push)
