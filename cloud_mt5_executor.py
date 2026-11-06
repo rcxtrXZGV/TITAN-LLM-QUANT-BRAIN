@@ -1,23 +1,17 @@
 """
 TITAN CLOUD MT5 AUTONOMOUS EXECUTOR (XAUUSD)
-Runs directly on GitHub Actions (windows-latest virtual environment).
-1. Connects to MetaTrader 5 on the cloud VM.
-2. Logs in to IC Markets Demo account (53084231).
-3. Fetches live Gold ticks & evaluates A+ Predator Institutional Structure.
-4. Executes 0.02 Lot orders with tight SL <= 25 pips & Asymmetric 1:6 to 1:10 TP.
-5. Manages Break-Even dynamic armor.
+Engineered for: Persistent Session & Saved Account Mode.
+Does NOT force repeated raw credentials login. Utilizes existing terminal session state.
 """
 import os
 import sys
 import time
 import datetime
-import json
 import MetaTrader5 as mt5
 
 SYMBOL = "XAUUSD"
 MAGIC_NUMBER = 777111
 LOT_SIZE = 0.02
-MAX_SL_PIPS = 25.0
 TARGET_PIPS = 120.0
 
 LOGIN = int(os.environ.get("MT5_LOGIN", "53084231"))
@@ -28,26 +22,29 @@ def log(msg):
     now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     print(f"[{now}] {msg}", flush=True)
 
-def connect_cloud_mt5():
-    log("Initializing MetaTrader 5 on Cloud Windows VM...")
+def connect_persistent_session():
+    log("Connecting to persistent MT5 terminal session...")
+    
+    # First: Try clean initialize with NO forced login parameters (uses already saved/cached session)
     if not mt5.initialize():
-        log(f"MT5 Init Error: {mt5.last_error()}")
-        return False
-
-    logged_in = mt5.login(LOGIN, password=PASSWORD, server=SERVER)
-    if not logged_in:
-        log(f"Login failed: {mt5.last_error()}")
-        return False
+        log(f"Clean init failed: {mt5.last_error()}, attempting portable init...")
+        if not mt5.initialize(login=LOGIN, password=PASSWORD, server=SERVER):
+            log(f"Fatal MT5 Connection Error: {mt5.last_error()}")
+            return False
 
     acc = mt5.account_info()
-    if not acc:
-        log("No account info found.")
-        return False
+    # Only if account is not already connected or logged into another id, perform login
+    if acc is None or acc.login != LOGIN:
+        log(f"Account session not cached. Authenticating login #{LOGIN} once...")
+        if not mt5.login(LOGIN, password=PASSWORD, server=SERVER):
+            log(f"Login failed: {mt5.last_error()}")
+            return False
+        acc = mt5.account_info()
 
     log("=" * 65)
-    log(f"  CLOUD MT5 CONNECTED TO IC MARKETS DEMO!")
+    log(f"  PERSISTENT SESSION ACTIVE: IC MARKETS DEMO")
     log(f"  Login: {acc.login} | Server: {acc.server}")
-    log(f"  Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f} | Trade Allowed: {acc.trade_allowed}")
+    log(f"  Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f} | Connected: True")
     log("=" * 65)
     mt5.symbol_select(SYMBOL, True)
     return True
@@ -126,7 +123,6 @@ def evaluate_and_trade():
             tp_price = round(tick.ask + (TARGET_PIPS / 10), 2)
 
     if direction and sl_price > 0:
-        # Check if already in trade
         open_pos = mt5.positions_get(symbol=SYMBOL)
         if open_pos and any(p.magic == MAGIC_NUMBER for p in open_pos):
             log("Active position already open. Monitoring runner.")
@@ -156,7 +152,7 @@ def evaluate_and_trade():
             log(f"[!] Order rejected: {res.comment if res else mt5.last_error()}")
 
 def main():
-    if not connect_cloud_mt5():
+    if not connect_persistent_session():
         return
     manage_positions()
     evaluate_and_trade()
