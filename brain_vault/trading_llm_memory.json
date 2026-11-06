@@ -1,7 +1,7 @@
 {
   "system": "TITAN-LLM-QUANT-BRAIN",
   "version": "1.0-SELF-EVOLVING",
-  "last_run_utc": "2026-11-06T19:47:16.222242+00:00",
+  "last_run_utc": "2026-11-06T20:41:46.887976+00:00",
   "signal_history": [
     {
       "timestamp": "2026-11-06T17:34:33.538375+00:00",
@@ -33,6 +33,17 @@
         "tp": 4091.5,
         "confidence": 0.92,
         "rationale": "[A+ QUALITY HUNT] Deep liquidity sweep of the 4071.2 low followed by an immediate aggressive rejection pin-bar with a 2.30 lower wick, perfectly positioned for an asymmetric reversal targeting 4090+."
+      }
+    },
+    {
+      "timestamp": "2026-11-06T20:41:46.887989+00:00",
+      "signal": {
+        "action": "BUY",
+        "entry": 4074.6,
+        "sl": 4069.0,
+        "tp": 4092.6,
+        "confidence": 0.88,
+        "rationale": "[A+ QUALITY HUNT] Lower wick sweep below recent low with strong bullish pin-bar rejection, tight SL ($2.00), asymmetric target ($18.00)."
       }
     }
   ]
