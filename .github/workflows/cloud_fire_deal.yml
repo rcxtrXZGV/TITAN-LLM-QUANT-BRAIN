@@ -44,13 +44,8 @@ jobs:
           New-Item -ItemType Directory -Force -Path $appdataDir | Out-Null
           Expand-Archive -Path "$env:TEMP\config.zip" -DestinationPath $appdataDir -Force
 
-          # Also copy config directly into C:\MT5 for portable mode
           Copy-Item -Path "$appdataDir\*" -Destination $targetDir -Recurse -Force
-          
-          Write-Host "3. Pre-spawning MT5 background process..."
-          Start-Process -FilePath "$targetDir\terminal64.exe" -ArgumentList "/portable"
-          Start-Sleep -Seconds 5
-          Get-Process terminal64 -ErrorAction SilentlyContinue
+          Write-Host "Extracted MT5 runtime successfully to $targetDir"
 
       - name: Execute Cloud Deal to IC Markets Broker
         env:
