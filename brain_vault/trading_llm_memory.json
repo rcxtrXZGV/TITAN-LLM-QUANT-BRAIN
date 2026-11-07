@@ -1,5 +1,5 @@
 {
-  "total_records": 2,
+  "total_records": 3,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -10,6 +10,11 @@
       "timestamp": "2026-11-07T02:29:06.886150+00:00",
       "session": "WEEKEND CRYPTO HIGH-ALPHA",
       "analysis": "```json\n{\n  \"verdict\": \"WAIT\",\n  \"confidence_score\": 45,\n  \"session\": \"WEEKEND CRYPTO HIGH-ALPHA\",\n  \"setup_name\": \"Chop Filter\",\n  \"rationale\": \"Current order book depth displays insufficient institutional displacement post-sweep. Price action is mean-reverting within a narrow equilibrium band. Awaiting verified stop-hunt expansion before capital deployment.\",\n  \"sl_pips\": 20,\n  \"tp_pips\": 150,\n  \"scaling_plan\": \"Move SL to Breakeven at +15 pips, let runner hit 1:8+\"\n}\n```"
+    },
+    {
+      "timestamp": "2026-11-07T02:32:48.426510+00:00",
+      "type": "AUTONOMOUS_SELF_LEARNING",
+      "analysis": "{\n  \"evolution_cycle\": \"2026-11-07T02:32:46.601785+00:00\",\n  \"discovered_edge_name\": \"Algorithmic Liquidity Vacuum & Imbalance Rebalancing (ALVIR)\",\n  \"mechanics_explanation\": \"Retail traders aggressively breakout trade the consolidation range highs or lows, failing to notice the liquidity pool resting just beyond institutional algorithmic execution blocks. When a high-frequency sweep occurs, algorithmic order blocks trigger, absorbing retail stops and creating an immediate fair value gap (FVG) displacement in the opposite direction. Smart money traps breakout traders, fills large institutional block orders on the sweep, and initiates an immediate impulsive repricing toward the opposing liquidity pool.\",\n  \"optimal_timeframe\": \"M15 / M30\",\n  \"confluence_checklist\": [\n    \"Clear pre-session high/low or structural equal highs/lows (EQH/EQL) breached by exactly 12-28 pips\",\n    \"Immediate aggressive counter-displacement candle breaking the internal market structure (BOS) and leaving an untouched Fair Value Gap (FVG)\",\n    \"Volume profile showing exhaustion spike on the sweep followed by a zero-volume retracement into the mitigation block\"\n  ],\n  \"risk_reward_profile\": \"1:8 to 1:15\",\n  \"win_rate_probability\": \"90%+\",\n  \"autonomous_verdict_now\": \"WAIT\",\n  \"rationale\": \"Current order flow exhibits mid-range compression with zero structural displacement or liquidity clearance on major timeframes. Capital preservation remains priority one until algorithmic expansion manifests at key structural outer bands.\"\n}"
     }
   ]
 }

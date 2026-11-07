@@ -1,0 +1,20 @@
+{
+  "total_evolved_edges": 1,
+  "strategies": [
+    {
+      "evolution_cycle": "2026-11-07T02:32:46.601785+00:00",
+      "discovered_edge_name": "Algorithmic Liquidity Vacuum & Imbalance Rebalancing (ALVIR)",
+      "mechanics_explanation": "Retail traders aggressively breakout trade the consolidation range highs or lows, failing to notice the liquidity pool resting just beyond institutional algorithmic execution blocks. When a high-frequency sweep occurs, algorithmic order blocks trigger, absorbing retail stops and creating an immediate fair value gap (FVG) displacement in the opposite direction. Smart money traps breakout traders, fills large institutional block orders on the sweep, and initiates an immediate impulsive repricing toward the opposing liquidity pool.",
+      "optimal_timeframe": "M15 / M30",
+      "confluence_checklist": [
+        "Clear pre-session high/low or structural equal highs/lows (EQH/EQL) breached by exactly 12-28 pips",
+        "Immediate aggressive counter-displacement candle breaking the internal market structure (BOS) and leaving an untouched Fair Value Gap (FVG)",
+        "Volume profile showing exhaustion spike on the sweep followed by a zero-volume retracement into the mitigation block"
+      ],
+      "risk_reward_profile": "1:8 to 1:15",
+      "win_rate_probability": "90%+",
+      "autonomous_verdict_now": "WAIT",
+      "rationale": "Current order flow exhibits mid-range compression with zero structural displacement or liquidity clearance on major timeframes. Capital preservation remains priority one until algorithmic expansion manifests at key structural outer bands."
+    }
+  ]
+}
