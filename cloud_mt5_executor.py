@@ -26,7 +26,7 @@ def kill_terminal_instances():
 
 def main():
     log("==================================================")
-    log("TITAN CLOUD AUTONOMOUS EXECUTOR - NEW YORK & CRYPTO PREDATOR")
+    log("TITAN CLOUD AUTONOMOUS EXECUTOR - 1:6 TO 1:10+ RR")
     log("==================================================")
 
     now_utc = datetime.datetime.now(datetime.timezone.utc)
@@ -34,7 +34,7 @@ def main():
     weekday = now_utc.weekday()
 
     is_weekend = (weekday in [5, 6])
-    is_ny_session = (12 <= hour <= 19) # 5:30 PM to 12:30 AM IST (Peak US Institutional Liquidity)
+    is_ny_session = (12 <= hour <= 19)
 
     login_str = os.getenv("MT5_LOGIN", "")
     password = os.getenv("MT5_PASSWORD", "")
@@ -72,15 +72,12 @@ def main():
     acc = mt5.account_info()
     log(f"AUTHENTICATED: {acc.name} | Balance: ${acc.balance:.2f} | Server: {acc.server}")
 
-    # Asset Selection Law:
-    # Weekend -> BTCUSD
-    # Weekday -> XAUUSD (Only hunting in NY Killzone or high-conviction sweeps)
+    # Asset Selection: Weekend -> BTCUSD, Weekday -> XAUUSD
     target_symbol = "BTCUSD" if is_weekend else "XAUUSD"
     session_label = "WEEKEND CRYPTO HUNT" if is_weekend else ("NEW YORK KILLZONE (PRIME LIQUIDITY)" if is_ny_session else "ASIAN/OFF-PEAK CAPITAL PRESERVATION")
 
     log(f"Session: {session_label} | Target Symbol: {target_symbol}")
 
-    # Check symbol availability
     if not mt5.symbol_select(target_symbol, True):
         for alt in [f"{target_symbol}.", f"{target_symbol}+", f"{target_symbol}m", "GOLD"]:
             if mt5.symbol_select(alt, True):
@@ -93,7 +90,6 @@ def main():
     if tick and sinfo:
         log(f"Active Live Market: {target_symbol} | Bid={tick.bid} | Ask={tick.ask}")
 
-        # Trailing Breakeven Shield Management
         positions = mt5.positions_get(symbol=target_symbol) or []
         log(f"Current open positions on {target_symbol}: {len(positions)}")
 
@@ -105,7 +101,7 @@ def main():
             cur_sl = p.sl
 
             pip_size = 10.0 if "BTC" in target_symbol else 0.10
-            # If in profit by 15-20 pips, move SL to Entry + Buffer (Zero Risk)
+            # Breakeven Shield at +15 pips
             if pos_type == mt5.ORDER_TYPE_BUY and (cur_price - open_price) >= (15 * pip_size):
                 be_sl = open_price + (2 * pip_size)
                 if cur_sl < be_sl:
