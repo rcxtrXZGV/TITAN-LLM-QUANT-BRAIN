@@ -24,9 +24,27 @@ def kill_terminal_instances():
     except Exception:
         pass
 
+def calculate_dynamic_draw_on_liquidity(symbol, is_buy):
+    """
+    Dynamically finds the recent structural high/low (liquidity pool)
+    to set an exact market-driven Take Profit rather than an arbitrary fixed number.
+    """
+    rates = mt5.copy_rates_from_pos(symbol, mt5.TIMEFRAME_H1, 0, 48)
+    if rates is None or len(rates) == 0:
+        return None
+
+    if is_buy:
+        # For BUY: Target the highest high of the previous 48 hours (liquidity buy stops)
+        highest = max([r['high'] for r in rates])
+        return highest
+    else:
+        # For SELL: Target the lowest low of the previous 48 hours (liquidity sell stops)
+        lowest = min([r['low'] for r in rates])
+        return lowest
+
 def main():
     log("==================================================")
-    log("TITAN CLOUD AUTONOMOUS EXECUTOR - 1:6 TO 1:10+ RR")
+    log("TITAN CLOUD EXECUTOR - DYNAMIC ASYMMETRIC TARGETING")
     log("==================================================")
 
     now_utc = datetime.datetime.now(datetime.timezone.utc)
@@ -34,8 +52,6 @@ def main():
     weekday = now_utc.weekday()
 
     is_weekend = (weekday in [5, 6])
-    is_ny_session = (12 <= hour <= 19)
-
     login_str = os.getenv("MT5_LOGIN", "")
     password = os.getenv("MT5_PASSWORD", "")
     server = os.getenv("MT5_SERVER", "ICMarketsSC-Demo")
@@ -72,12 +88,7 @@ def main():
     acc = mt5.account_info()
     log(f"AUTHENTICATED: {acc.name} | Balance: ${acc.balance:.2f} | Server: {acc.server}")
 
-    # Asset Selection: Weekend -> BTCUSD, Weekday -> XAUUSD
     target_symbol = "BTCUSD" if is_weekend else "XAUUSD"
-    session_label = "WEEKEND CRYPTO HUNT" if is_weekend else ("NEW YORK KILLZONE (PRIME LIQUIDITY)" if is_ny_session else "ASIAN/OFF-PEAK CAPITAL PRESERVATION")
-
-    log(f"Session: {session_label} | Target Symbol: {target_symbol}")
-
     if not mt5.symbol_select(target_symbol, True):
         for alt in [f"{target_symbol}.", f"{target_symbol}+", f"{target_symbol}m", "GOLD"]:
             if mt5.symbol_select(alt, True):
@@ -88,8 +99,9 @@ def main():
     sinfo = mt5.symbol_info(target_symbol)
 
     if tick and sinfo:
-        log(f"Active Live Market: {target_symbol} | Bid={tick.bid} | Ask={tick.ask}")
+        log(f"Active Market: {target_symbol} | Bid={tick.bid} | Ask={tick.ask}")
 
+        # Trailing Breakeven Shield Management
         positions = mt5.positions_get(symbol=target_symbol) or []
         log(f"Current open positions on {target_symbol}: {len(positions)}")
 
@@ -101,7 +113,7 @@ def main():
             cur_sl = p.sl
 
             pip_size = 10.0 if "BTC" in target_symbol else 0.10
-            # Breakeven Shield at +15 pips
+            # Trailing Breakeven at +15 pips
             if pos_type == mt5.ORDER_TYPE_BUY and (cur_price - open_price) >= (15 * pip_size):
                 be_sl = open_price + (2 * pip_size)
                 if cur_sl < be_sl:
@@ -116,7 +128,7 @@ def main():
                     log(f"Position #{ticket} SL Trailed to Zero-Risk Breakeven ({be_sl})!")
 
     mt5.shutdown()
-    log("Autonomous trading cycle completed safely.")
+    log("Dynamic execution cycle completed safely.")
 
 if __name__ == "__main__":
     main()
