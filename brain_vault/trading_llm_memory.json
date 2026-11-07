@@ -1,10 +1,15 @@
 {
-  "total_records": 1,
+  "total_records": 2,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
       "model": "gemini-3.5-flash-lite",
       "analysis": "{\n  \"verdict\": \"WAIT\",\n  \"confidence_score\": 0,\n  \"setup_type\": \"Chop Filter\",\n  \"reason\": \"Current market price action is operating within a mid-session consolidation zone without a clear institutional liquidity purge or structural displacement. Capital preservation protocols active.\",\n  \"sl_pips\": 25,\n  \"tp_pips\": 150\n}"
+    },
+    {
+      "timestamp": "2026-11-07T02:29:06.886150+00:00",
+      "session": "WEEKEND CRYPTO HIGH-ALPHA",
+      "analysis": "```json\n{\n  \"verdict\": \"WAIT\",\n  \"confidence_score\": 45,\n  \"session\": \"WEEKEND CRYPTO HIGH-ALPHA\",\n  \"setup_name\": \"Chop Filter\",\n  \"rationale\": \"Current order book depth displays insufficient institutional displacement post-sweep. Price action is mean-reverting within a narrow equilibrium band. Awaiting verified stop-hunt expansion before capital deployment.\",\n  \"sl_pips\": 20,\n  \"tp_pips\": 150,\n  \"scaling_plan\": \"Move SL to Breakeven at +15 pips, let runner hit 1:8+\"\n}\n```"
     }
   ]
 }
