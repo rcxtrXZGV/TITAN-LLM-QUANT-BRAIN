@@ -1,162 +1,108 @@
-"""
-TITAN CLOUD MT5 AUTONOMOUS EXECUTOR (XAUUSD)
-Engineered for: Persistent Session & Saved Account Mode.
-Does NOT force repeated raw credentials login. Utilizes existing terminal session state.
-"""
 import os
 import sys
 import time
 import datetime
+import tempfile
+import subprocess
 import MetaTrader5 as mt5
 
-SYMBOL = "XAUUSD"
-MAGIC_NUMBER = 777111
-LOT_SIZE = 0.02
-TARGET_PIPS = 120.0
-
-LOGIN = int(os.environ.get("MT5_LOGIN", "53084231"))
-PASSWORD = os.environ.get("MT5_PASSWORD", "7!sOgsaOlLnT2M")
-SERVER = os.environ.get("MT5_SERVER", "ICMarketsSC-Demo")
-
 def log(msg):
-    now = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-    print(f"[{now}] {msg}", flush=True)
+    ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
+    print(f"[{ts}] {msg}", flush=True)
 
-def connect_persistent_session():
-    log("Connecting to persistent MT5 terminal session...")
-    
-    # First: Try clean initialize with NO forced login parameters (uses already saved/cached session)
-    if not mt5.initialize():
-        log(f"Clean init failed: {mt5.last_error()}, attempting portable init...")
-        if not mt5.initialize(login=LOGIN, password=PASSWORD, server=SERVER):
-            log(f"Fatal MT5 Connection Error: {mt5.last_error()}")
-            return False
+def choose_filling_mode(symbol_info):
+    filling_flags = int(getattr(symbol_info, "filling_mode", 0) or 0)
+    if filling_flags & 2:
+        return mt5.ORDER_FILLING_IOC
+    if filling_flags & 1:
+        return mt5.ORDER_FILLING_FOK
+    return mt5.ORDER_FILLING_RETURN
 
-    acc = mt5.account_info()
-    # Only if account is not already connected or logged into another id, perform login
-    if acc is None or acc.login != LOGIN:
-        log(f"Account session not cached. Authenticating login #{LOGIN} once...")
-        if not mt5.login(LOGIN, password=PASSWORD, server=SERVER):
-            log(f"Login failed: {mt5.last_error()}")
-            return False
-        acc = mt5.account_info()
-
-    log("=" * 65)
-    log(f"  PERSISTENT SESSION ACTIVE: IC MARKETS DEMO")
-    log(f"  Login: {acc.login} | Server: {acc.server}")
-    log(f"  Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f} | Connected: True")
-    log("=" * 65)
-    mt5.symbol_select(SYMBOL, True)
-    return True
-
-def manage_positions():
-    positions = mt5.positions_get(symbol=SYMBOL)
-    if not positions:
-        return
-
-    for p in positions:
-        if p.magic != MAGIC_NUMBER:
-            continue
-        # Breakeven armor at +15 pips
-        if p.type == mt5.ORDER_TYPE_BUY:
-            profit_pips = (p.price_current - p.price_open) * 10
-            if profit_pips >= 15.0 and p.sl < p.price_open:
-                new_sl = round(p.price_open + 0.30, 2)
-                req = {
-                    "action": mt5.TRADE_ACTION_SLTP,
-                    "position": p.ticket,
-                    "symbol": SYMBOL,
-                    "sl": new_sl,
-                    "tp": p.tp
-                }
-                mt5.order_send(req)
-                log(f"[SHIELD] Breakeven locked for BUY #{p.ticket} @ {new_sl}!")
-        elif p.type == mt5.ORDER_TYPE_SELL:
-            profit_pips = (p.price_open - p.price_current) * 10
-            if profit_pips >= 15.0 and (p.sl == 0.0 or p.sl > p.price_open):
-                new_sl = round(p.price_open - 0.30, 2)
-                req = {
-                    "action": mt5.TRADE_ACTION_SLTP,
-                    "position": p.ticket,
-                    "symbol": SYMBOL,
-                    "sl": new_sl,
-                    "tp": p.tp
-                }
-                mt5.order_send(req)
-                log(f"[SHIELD] Breakeven locked for SELL #{p.ticket} @ {new_sl}!")
-
-def evaluate_and_trade():
-    rates = mt5.copy_rates_from_pos(SYMBOL, mt5.TIMEFRAME_M5, 0, 20)
-    if rates is None or len(rates) < 10:
-        return
-
-    tick = mt5.symbol_info_tick(SYMBOL)
-    last_bar = rates[-2]
-    c_open = last_bar['open']
-    c_high = last_bar['high']
-    c_low = last_bar['low']
-    c_close = last_bar['close']
-    rng = c_high - c_low
-
-    if rng < 1.0:
-        log("Market in tight chop (< $1 range). Sitting on hands.")
-        return
-
-    wick_up = c_high - max(c_open, c_close)
-    wick_down = min(c_open, c_close) - c_low
-
-    direction = None
-    sl_price = 0.0
-    tp_price = 0.0
-
-    if wick_up >= 0.50 * rng and c_close < c_open:
-        inval = (c_high + 0.30) - tick.bid
-        if 0.80 <= inval <= 2.50:
-            direction = "SELL"
-            sl_price = round(c_high + 0.30, 2)
-            tp_price = round(tick.bid - (TARGET_PIPS / 10), 2)
-    elif wick_down >= 0.50 * rng and c_close > c_open:
-        inval = tick.ask - (c_low - 0.30)
-        if 0.80 <= inval <= 2.50:
-            direction = "BUY"
-            sl_price = round(c_low - 0.30, 2)
-            tp_price = round(tick.ask + (TARGET_PIPS / 10), 2)
-
-    if direction and sl_price > 0:
-        open_pos = mt5.positions_get(symbol=SYMBOL)
-        if open_pos and any(p.magic == MAGIC_NUMBER for p in open_pos):
-            log("Active position already open. Monitoring runner.")
-            return
-
-        order_type = mt5.ORDER_TYPE_BUY if direction == "BUY" else mt5.ORDER_TYPE_SELL
-        entry_price = tick.ask if direction == "BUY" else tick.bid
-        
-        req = {
-            "action": mt5.TRADE_ACTION_DEAL,
-            "symbol": SYMBOL,
-            "volume": LOT_SIZE,
-            "type": order_type,
-            "price": float(entry_price),
-            "sl": float(sl_price),
-            "tp": float(tp_price),
-            "deviation": 20,
-            "magic": MAGIC_NUMBER,
-            "comment": "TITAN_PREDATOR",
-            "type_time": mt5.ORDER_TIME_GTC,
-            "type_filling": mt5.ORDER_FILLING_IOC,
-        }
-        res = mt5.order_send(req)
-        if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-            log(f"[TRADE EXECUTED] {direction} {SYMBOL} #{res.order} @ {res.price} | SL: {sl_price} | TP: {tp_price}")
-        else:
-            log(f"[!] Order rejected: {res.comment if res else mt5.last_error()}")
+def kill_terminal_instances():
+    try:
+        subprocess.run(["taskkill", "/F", "/IM", "terminal64.exe"], capture_output=True)
+    except Exception:
+        pass
 
 def main():
-    if not connect_persistent_session():
-        return
-    manage_positions()
-    evaluate_and_trade()
+    log("==================================================")
+    log("TITAN CLOUD AUTONOMOUS EXECUTOR (24/7 AUTOPILOT)")
+    log("==================================================")
+
+    login_str = os.getenv("MT5_LOGIN", "")
+    password = os.getenv("MT5_PASSWORD", "")
+    server = os.getenv("MT5_SERVER", "ICMarketsSC-Demo")
+
+    login = int(login_str)
+    terminal_path = r"C:\MT5\terminal64.exe"
+    if not os.path.exists(terminal_path):
+        terminal_path = r"C:\Program Files\MetaTrader 5\terminal64.exe"
+
+    kill_terminal_instances()
+    time.sleep(3)
+
+    ini_path = os.path.join(tempfile.gettempdir(), "mt5_startup.ini")
+    with open(ini_path, "w", encoding="utf-8") as f:
+        f.write("[Common]\n")
+        f.write(f"Login={login}\n")
+        f.write(f"Password={password}\n")
+        f.write(f"Server={server}\n")
+        f.write("News=false\n")
+        f.write("EnableAutoTrading=true\n")
+    
+    proc = subprocess.Popen([terminal_path, f"/config:{ini_path}"])
+    time.sleep(45)
+
+    if not (mt5.initialize(path=terminal_path, timeout=60000) or mt5.initialize(timeout=60000)):
+        log("Could not attach to MT5")
+        sys.exit(1)
+
+    try:
+        os.remove(ini_path)
+    except Exception:
+        pass
+
+    acc = mt5.account_info()
+    log(f"AUTHENTICATED: {acc.name} | Balance: ${acc.balance:.2f} | Server: {acc.server}")
+
+    # Determine Active Symbol: Weekend -> BTCUSD, Weekday -> XAUUSD
+    weekday = datetime.datetime.now(datetime.timezone.utc).weekday()
+    target_symbol = "BTCUSD" if weekday in [5, 6] else "XAUUSD"
+    
+    # Check symbol availability and select
+    if not mt5.symbol_select(target_symbol, True):
+        log(f"Primary symbol {target_symbol} not found directly, checking variations...")
+        for alt in [f"{target_symbol}.", f"{target_symbol}+", f"{target_symbol}m", "GOLD"]:
+            if mt5.symbol_select(alt, True):
+                target_symbol = alt
+                break
+
+    tick = mt5.symbol_info_tick(target_symbol)
+    sinfo = mt5.symbol_info(target_symbol)
+    log(f"Active Market: {target_symbol} | Bid={getattr(tick, 'bid', 0)} | Ask={getattr(tick, 'ask', 0)}")
+
+    # Check open positions to protect capital and manage break-even
+    positions = mt5.positions_get(symbol=target_symbol) or []
+    log(f"Current open positions on {target_symbol}: {len(positions)}")
+
+    # Manage trailing breakeven on open runners
+    for p in positions:
+        ticket = p.ticket
+        pos_type = p.type
+        open_price = p.price_open
+        cur_price = p.price_current
+        cur_sl = p.sl
+
+        # If gain >= 15-20 pips, move SL to entry + small buffer (Zero Risk)
+        if pos_type == mt5.ORDER_TYPE_BUY and (cur_price - open_price) >= (20 * sinfo.point * 10):
+            be_sl = open_price + (2 * sinfo.point * 10)
+            if cur_sl < be_sl:
+                req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": round(be_sl, sinfo.digits), "tp": p.tp}
+                mt5.order_send(req)
+                log(f"Position #{ticket} SL moved to Break-Even ({be_sl})!")
+
     mt5.shutdown()
+    log("Cycle completed safely.")
 
 if __name__ == "__main__":
     main()
