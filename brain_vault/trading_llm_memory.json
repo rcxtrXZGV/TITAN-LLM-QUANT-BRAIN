@@ -1,71 +1,10 @@
 {
-  "system": "TITAN-LLM-QUANT-BRAIN",
-  "version": "1.0-SELF-EVOLVING",
-  "last_run_utc": "2026-11-06T23:32:25.365894+00:00",
-  "signal_history": [
+  "total_records": 1,
+  "historical_insights": [
     {
-      "timestamp": "2026-11-06T17:34:33.538375+00:00",
-      "signal": {
-        "action": "WAIT",
-        "rationale": "No clean institutional wick rejection; capital preserved."
-      }
-    },
-    {
-      "timestamp": "2026-11-06T17:38:23.578876+00:00",
-      "signal": {
-        "action": "WAIT",
-        "rationale": "No clean institutional wick rejection; capital preserved."
-      }
-    },
-    {
-      "timestamp": "2026-11-06T18:45:18.942088+00:00",
-      "signal": {
-        "action": "WAIT",
-        "rationale": "No clean institutional wick rejection; capital preserved."
-      }
-    },
-    {
-      "timestamp": "2026-11-06T19:47:16.222254+00:00",
-      "signal": {
-        "action": "BUY",
-        "entry": 4073.5,
-        "sl": 4070.7,
-        "tp": 4091.5,
-        "confidence": 0.92,
-        "rationale": "[A+ QUALITY HUNT] Deep liquidity sweep of the 4071.2 low followed by an immediate aggressive rejection pin-bar with a 2.30 lower wick, perfectly positioned for an asymmetric reversal targeting 4090+."
-      }
-    },
-    {
-      "timestamp": "2026-11-06T20:41:46.887989+00:00",
-      "signal": {
-        "action": "BUY",
-        "entry": 4074.6,
-        "sl": 4069.0,
-        "tp": 4092.6,
-        "confidence": 0.88,
-        "rationale": "[A+ QUALITY HUNT] Lower wick sweep below recent low with strong bullish pin-bar rejection, tight SL ($2.00), asymmetric target ($18.00)."
-      }
-    },
-    {
-      "timestamp": "2026-11-06T21:35:40.813739+00:00",
-      "signal": {
-        "action": "WAIT",
-        "rationale": "No clean institutional wick rejection; capital preserved."
-      }
-    },
-    {
-      "timestamp": "2026-11-06T22:35:52.047210+00:00",
-      "signal": {
-        "action": "WAIT",
-        "rationale": "No clean institutional wick rejection; capital preserved."
-      }
-    },
-    {
-      "timestamp": "2026-11-06T23:32:25.365918+00:00",
-      "signal": {
-        "action": "WAIT",
-        "rationale": "No clean institutional wick rejection; capital preserved."
-      }
+      "timestamp": "2026-11-07T02:25:42.595672+00:00",
+      "model": "gemini-3.5-flash-lite",
+      "analysis": "{\n  \"verdict\": \"WAIT\",\n  \"confidence_score\": 0,\n  \"setup_type\": \"Chop Filter\",\n  \"reason\": \"Current market price action is operating within a mid-session consolidation zone without a clear institutional liquidity purge or structural displacement. Capital preservation protocols active.\",\n  \"sl_pips\": 25,\n  \"tp_pips\": 150\n}"
     }
   ]
 }
