@@ -65,13 +65,17 @@ def main():
     acc = mt5.account_info()
     log(f"AUTHENTICATED: {acc.name} | Balance: ${acc.balance:.2f} | Server: {acc.server}")
 
-    # Determine Active Symbol: Weekend -> BTCUSD, Weekday -> XAUUSD
+    # Determine Active Symbol:
+    # Weekend (Sat/Sun) -> BTCUSD (24/7 Crypto)
+    # Weekdays (Mon-Fri) -> XAUUSD (Gold Master)
     weekday = datetime.datetime.now(datetime.timezone.utc).weekday()
-    target_symbol = "BTCUSD" if weekday in [5, 6] else "XAUUSD"
+    is_weekend = weekday in [5, 6]
+    target_symbol = "BTCUSD" if is_weekend else "XAUUSD"
     
+    log(f"Market Mode: {'WEEKEND (CRYPTO BTCUSD)' if is_weekend else 'WEEKDAY (GOLD XAUUSD MASTER)'}")
+
     # Check symbol availability and select
     if not mt5.symbol_select(target_symbol, True):
-        log(f"Primary symbol {target_symbol} not found directly, checking variations...")
         for alt in [f"{target_symbol}.", f"{target_symbol}+", f"{target_symbol}m", "GOLD"]:
             if mt5.symbol_select(alt, True):
                 target_symbol = alt
@@ -79,30 +83,38 @@ def main():
 
     tick = mt5.symbol_info_tick(target_symbol)
     sinfo = mt5.symbol_info(target_symbol)
-    log(f"Active Market: {target_symbol} | Bid={getattr(tick, 'bid', 0)} | Ask={getattr(tick, 'ask', 0)}")
+    
+    if tick and sinfo:
+        log(f"Active Live Market: {target_symbol} | Bid={tick.bid} | Ask={tick.ask}")
 
-    # Check open positions to protect capital and manage break-even
-    positions = mt5.positions_get(symbol=target_symbol) or []
-    log(f"Current open positions on {target_symbol}: {len(positions)}")
+        # Check and manage open positions (Trailing Zero-Risk Breakeven)
+        positions = mt5.positions_get(symbol=target_symbol) or []
+        log(f"Current open positions on {target_symbol}: {len(positions)}")
 
-    # Manage trailing breakeven on open runners
-    for p in positions:
-        ticket = p.ticket
-        pos_type = p.type
-        open_price = p.price_open
-        cur_price = p.price_current
-        cur_sl = p.sl
+        for p in positions:
+            ticket = p.ticket
+            pos_type = p.type
+            open_price = p.price_open
+            cur_price = p.price_current
+            cur_sl = p.sl
 
-        # If gain >= 15-20 pips, move SL to entry + small buffer (Zero Risk)
-        if pos_type == mt5.ORDER_TYPE_BUY and (cur_price - open_price) >= (20 * sinfo.point * 10):
-            be_sl = open_price + (2 * sinfo.point * 10)
-            if cur_sl < be_sl:
-                req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": round(be_sl, sinfo.digits), "tp": p.tp}
-                mt5.order_send(req)
-                log(f"Position #{ticket} SL moved to Break-Even ({be_sl})!")
+            # Breakeven Shield (+15 to +20 pips profit -> Move SL to Entry + Profit)
+            pip_size = 10.0 if "BTC" in target_symbol else 0.10
+            if pos_type == mt5.ORDER_TYPE_BUY and (cur_price - open_price) >= (20 * pip_size):
+                be_sl = open_price + (2 * pip_size)
+                if cur_sl < be_sl:
+                    req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": round(be_sl, sinfo.digits), "tp": p.tp}
+                    mt5.order_send(req)
+                    log(f"Position #{ticket} SL Trailed to Zero-Risk Breakeven ({be_sl})!")
+            elif pos_type == mt5.ORDER_TYPE_SELL and (open_price - cur_price) >= (20 * pip_size):
+                be_sl = open_price - (2 * pip_size)
+                if cur_sl > be_sl or cur_sl == 0:
+                    req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": round(be_sl, sinfo.digits), "tp": p.tp}
+                    mt5.order_send(req)
+                    log(f"Position #{ticket} SL Trailed to Zero-Risk Breakeven ({be_sl})!")
 
     mt5.shutdown()
-    log("Cycle completed safely.")
+    log("Autonomous trading & risk management cycle completed safely.")
 
 if __name__ == "__main__":
     main()
