@@ -2,8 +2,8 @@ name: Titan Cloud Autonomous MT5 Executor (24/7 Serverless)
 
 on:
   schedule:
-    # Runs every 30 minutes during Monday-Friday market hours
-    - cron: '*/30 * * * 1-5'
+    # Runs automatically every 30 minutes 24/7 completely free
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -23,22 +23,31 @@ jobs:
 
       - name: Install Dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install MetaTrader5 pandas numpy
+          pip install MetaTrader5 requests
 
-      - name: Download and Install Headless MetaTrader 5 Terminal
+      - name: Download & Extract Pre-Configured Headless MT5 Runtime & Config
         shell: powershell
         run: |
-          [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-          $installerUrl = "https://download.mql5.com/cdn/web/metaquotes.software.corp/mt5/mt5setup.exe"
-          $installerPath = "$env:TEMP\mt5setup.exe"
-          Write-Host "Downloading Official MetaTrader 5 Setup..."
-          Invoke-WebRequest -Uri $installerUrl -OutFile $installerPath -UserAgent "Mozilla/5.0"
-          Write-Host "Installing MT5 in silent portable mode..."
-          Start-Process -FilePath $installerPath -ArgumentList "/auto /portable" -Wait -NoNewWindow
-          Write-Host "MT5 Installation Complete."
+          $mt5ZipUrl = "https://api.github.com/repos/rcxtrXZGV/TITAN-LLM-QUANT-BRAIN/releases/assets/718089105"
+          $configZipUrl = "https://api.github.com/repos/rcxtrXZGV/TITAN-LLM-QUANT-BRAIN/releases/assets/718127679"
+          $targetDir = "C:\MT5"
+          $appdataDir = "$env:APPDATA\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075"
+          
+          $headers = @{
+            "Authorization" = "token ${{ secrets.GITHUB_TOKEN }}"
+            "Accept" = "application/octet-stream"
+          }
+          
+          Invoke-WebRequest -Uri $mt5ZipUrl -Headers $headers -OutFile "$env:TEMP\mt5.zip"
+          Expand-Archive -Path "$env:TEMP\mt5.zip" -DestinationPath $targetDir -Force
+          
+          Invoke-WebRequest -Uri $configZipUrl -Headers $headers -OutFile "$env:TEMP\config.zip"
+          New-Item -ItemType Directory -Force -Path $appdataDir | Out-Null
+          Expand-Archive -Path "$env:TEMP\config.zip" -DestinationPath $appdataDir -Force
 
-      - name: Run Titan Cloud MT5 Trader
+          Copy-Item -Path "$appdataDir\*" -Destination $targetDir -Recurse -Force
+
+      - name: Execute Autonomous Trading Cycle
         env:
           MT5_LOGIN: ${{ secrets.MT5_LOGIN }}
           MT5_PASSWORD: ${{ secrets.MT5_PASSWORD }}
