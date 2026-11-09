@@ -1,5 +1,5 @@
 {
-  "total_records": 13,
+  "total_records": 14,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -164,6 +164,21 @@
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 211,
         "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-09T12:58:43.881348+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T12:58:43.881348+00:00",
+        "dynamic_market_mode": "Liquidity Hunt & Expansion",
+        "active_draw_on_liquidity": "Previous Day High (PDH) liquidity pool and unmitigated daily H4 Fair Value Gap zone at 1.09450",
+        "dynamic_tp_rationale": "Order flow imbalance confirms institutional accumulation following an Asian Session sweep below the 1.08200 lows. Price is currently expanding into a clean, unmitigated H4 Fair Value Gap and resting buy-side liquidity pool 142 pips away, offering an optimal mathematical expansion window without intervening structural resistance.",
+        "recommended_dynamic_rr": "1:6.8",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21,
+        "dynamic_tp_pips": 142,
+        "breakeven_milestone_pips": 17
       }
     }
   ]
