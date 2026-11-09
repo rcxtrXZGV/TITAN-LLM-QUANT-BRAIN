@@ -1,5 +1,5 @@
 {
-  "total_records": 22,
+  "total_records": 23,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -298,6 +298,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 189,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-09T22:40:50.347206+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T22:40:50.347206+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Trend Expansion",
+        "active_draw_on_liquidity": "Previous Day High combined with unmitigated H4 Fair Value Gap at 1.09450",
+        "dynamic_tp_rationale": "Price has just completed an institutional stop-hunt below the Asian Low. Order block validation confirms strong buy-side imbalances. The nearest structural liquidity pool resting above the current market price sits at the daily session resistance, perfectly aligning with a major H4 FVG. The mathematical distance allows for an optimized high-probability asymmetric expansion without encountering major intermediate resistance.",
+        "recommended_dynamic_rr": "1:9.6",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": 211,
         "breakeven_milestone_pips": 18
       }
     }
