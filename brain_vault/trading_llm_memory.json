@@ -1,5 +1,5 @@
 {
-  "total_records": 4,
+  "total_records": 5,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -28,6 +28,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 21.5,
         "dynamic_tp_pips": 202.1,
+        "breakeven_milestone_pips": 15
+      }
+    },
+    {
+      "timestamp": "2026-11-09T02:02:08.833948+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T02:02:08.833948+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Expansion",
+        "active_draw_on_liquidity": "Previous Day High (PDH) liquidity pool coupled with an unmitigated H4 Fair Value Gap at 1.08450",
+        "dynamic_tp_rationale": "Price has swept the Asian Session Low, triggering resting institutional buy-stops. The nearest macro structural imbalance lies at the H4 FVG overlapping with the PDH. Distance to this liquidity pool maps to an exact 1:9.4 risk-to-reward expansion profile based on the 22-pip institutional sweep wick stop-loss.",
+        "recommended_dynamic_rr": "1:9.4",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": 206,
         "breakeven_milestone_pips": 15
       }
     }
