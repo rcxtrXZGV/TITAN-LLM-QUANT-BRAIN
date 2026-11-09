@@ -1,5 +1,5 @@
 {
-  "total_records": 23,
+  "total_records": 24,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -313,6 +313,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 211,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-09T23:34:54.084717+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T23:34:54.084717+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Expansion",
+        "active_draw_on_liquidity": "Unmitigated Daily H4 Fair Value Gap overlapping with Previous Day High",
+        "dynamic_tp_rationale": "Price has just swept the Asian Session Low, triggering institutional buy-side program delivery. The nearest unmitigated structural imbalance rests at the previous day's high, providing an unobstructed expansion corridor yielding a clean 1:8.6 risk-to-reward ratio based on current volatility profiles.",
+        "recommended_dynamic_rr": "1:8.6",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22.5,
+        "dynamic_tp_pips": 193.5,
         "breakeven_milestone_pips": 18
       }
     }
