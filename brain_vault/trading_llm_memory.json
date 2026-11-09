@@ -1,5 +1,5 @@
 {
-  "total_records": 15,
+  "total_records": 16,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -193,6 +193,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 189,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-09T15:25:28.726261+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T15:25:28.726261+00:00",
+        "dynamic_market_mode": "Expansion / Liquidity Hunt",
+        "active_draw_on_liquidity": "Unmitigated H4 Bearish Fair Value Gap intersecting with Previous Day High (PDH)",
+        "dynamic_tp_rationale": "Price has cleanly swept the Asian Session Low and rejected via an institutional displacement leg. The nearest high-timeframe resting liquidity pool resides at the H4 FVG and PDH boundary, located 148 pips away from the structural entry. With a strict 21-pip risk envelope placed safely beyond the sweep wick, the geometric distance to the liquidity target mathematically yields an optimal risk-to-reward ratio without arbitrary truncation.",
+        "recommended_dynamic_rr": "1:7.05",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21,
+        "dynamic_tp_pips": 148,
         "breakeven_milestone_pips": 18
       }
     }
