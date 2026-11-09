@@ -1,5 +1,5 @@
 {
-  "total_records": 20,
+  "total_records": 21,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -269,6 +269,21 @@
         "dynamic_sl_pips": 22.5,
         "dynamic_tp_pips": 211.5,
         "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-09T20:46:24.616346+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T20:46:24.616346+00:00",
+        "dynamic_market_mode": "Liquidity Hunt",
+        "active_draw_on_liquidity": "Unmitigated H4 Fair Value Gap overlapping with Previous Day High",
+        "dynamic_tp_rationale": "Price has executed an institutional sweep of the Asian Session Low, triggering buy-side imbalances. The structural Draw on Liquidity is located at the prevailing H4 FVG and Previous Day High, offering a clean unmitigated runway spanning 185 pips against a protected 21-pip structural stop loss.",
+        "recommended_dynamic_rr": "1:8.8",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21,
+        "dynamic_tp_pips": 185,
+        "breakeven_milestone_pips": 17
       }
     }
   ]
