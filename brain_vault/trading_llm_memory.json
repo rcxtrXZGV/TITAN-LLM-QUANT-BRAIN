@@ -1,5 +1,5 @@
 {
-  "total_records": 11,
+  "total_records": 12,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -134,6 +134,21 @@
         "dynamic_sl_pips": 21.5,
         "dynamic_tp_pips": 167.7,
         "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-09T10:51:30.294129+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T10:51:30.294129+00:00",
+        "dynamic_market_mode": "Expansion / Liquidity Hunt",
+        "active_draw_on_liquidity": "Unmitigated H4 Bearish Fair Value Gap intersecting with Previous Day High (PDH)",
+        "dynamic_tp_rationale": "Price has successfully swept the Asian Session Low and rejected off a major daily institutional order block. The immediate internal liquidity has been cleared, exposing a clean imbalance directly into the H4 FVG and PDH resting liquidity pool at 1.09250. Distance from execution sweep wick to the resting liquidity target dictates an optimal unconstrained expansion vector.",
+        "recommended_dynamic_rr": "1:9.8",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21.5,
+        "dynamic_tp_pips": 210.7,
+        "breakeven_milestone_pips": 17.5
       }
     }
   ]
