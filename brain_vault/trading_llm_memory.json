@@ -1,5 +1,5 @@
 {
-  "total_records": 18,
+  "total_records": 19,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -238,6 +238,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 21.5,
         "dynamic_tp_pips": 206.4,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-09T18:49:06.218680+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T18:49:06.218680+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Expansion",
+        "active_draw_on_liquidity": "Unmitigated H4 Fair Value Gap overlapping with Previous Day High (PDH)",
+        "dynamic_tp_rationale": "Price has executed an institutional stop-hunt below the Asian Session Low, sweeping resting retail longs. Market structure shift (MSS) confirmed on the 15M timeframe. The nearest high-timeframe resting liquidity pool resides at the H4 FVG and Previous Day High, offering an unhindered expansion corridor of 185 pips against a protected institutional sweep wick.",
+        "recommended_dynamic_rr": "1:8.4",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": 185,
         "breakeven_milestone_pips": 18
       }
     }
