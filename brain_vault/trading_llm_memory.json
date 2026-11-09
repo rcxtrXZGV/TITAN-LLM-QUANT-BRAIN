@@ -1,5 +1,5 @@
 {
-  "total_records": 9,
+  "total_records": 10,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -103,6 +103,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 211,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-09T08:45:34.488676+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T08:45:34.488676+00:00",
+        "dynamic_market_mode": "Expansion / Liquidity Hunt",
+        "active_draw_on_liquidity": "Unmitigated H4 Bearish Fair Value Gap overlapping with Previous Day High (PDH)",
+        "dynamic_tp_rationale": "Price has just engineered a market structure shift (MSS) following a classic institutional sweep of the Asian session low. Order flow imbalance confirms an aggressive expansion phase toward the upper structural boundary. The nearest major resting liquidity pool (PDH + H4 FVG) sits precisely 184 pips away, allowing for an optimal unconstrained run without premature structural resistance.",
+        "recommended_dynamic_rr": "1:8.8",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21,
+        "dynamic_tp_pips": 184,
         "breakeven_milestone_pips": 18
       }
     }
