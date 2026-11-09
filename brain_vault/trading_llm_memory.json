@@ -1,5 +1,5 @@
 {
-  "total_records": 7,
+  "total_records": 8,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -74,6 +74,21 @@
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 206,
         "breakeven_milestone_pips": 15
+      }
+    },
+    {
+      "timestamp": "2026-11-09T05:57:38.529429+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T05:57:38.529429+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Expansion",
+        "active_draw_on_liquidity": "Previous Day High (PDH) liquidity pool coupled with an unmitigated H4 Bearish Fair Value Gap at 1.08450",
+        "dynamic_tp_rationale": "Order flow imbalance confirms an institutional sweep of the Asian Session low. Price is currently expanding into a low-resistance liquidity run. Nearest structural target clearing all intermediate resting stop-losses sits precisely at the H4 FVG and PDH, yielding an optimal mathematical distance of 185 pips against a 22-pip risk profile.",
+        "recommended_dynamic_rr": "1:8.4",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": 185,
+        "breakeven_milestone_pips": 18
       }
     }
   ]
