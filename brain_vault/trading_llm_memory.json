@@ -1,5 +1,5 @@
 {
-  "total_records": 17,
+  "total_records": 18,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -224,6 +224,21 @@
         "dynamic_sl_pips": 22.4,
         "dynamic_tp_pips": 210.5,
         "breakeven_milestone_pips": 15
+      }
+    },
+    {
+      "timestamp": "2026-11-09T17:52:11.096400+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T17:52:11.096400+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Expansion",
+        "active_draw_on_liquidity": "Unmitigated H4 Fair Value Gap overlapping with Previous Day High (PDH)",
+        "dynamic_tp_rationale": "Price has just executed an institutional sweep of the Asian session low, triggering stop-loss clusters and filling an M15 discount array. The immediate path of least resistance points directly toward the unmitigated H4 Fair Value Gap and Previous Day High resting at 1.08450. Structural range compression on the lower timeframes indicates an impending high-velocity expansion phase, projecting a clean liquidity sweep to the upside with zero significant internal resistance blocks in between.",
+        "recommended_dynamic_rr": "1:9.6",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21.5,
+        "dynamic_tp_pips": 206.4,
+        "breakeven_milestone_pips": 18
       }
     }
   ]
