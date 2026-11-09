@@ -1,5 +1,5 @@
 {
-  "total_records": 14,
+  "total_records": 15,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -179,6 +179,21 @@
         "dynamic_sl_pips": 21,
         "dynamic_tp_pips": 142,
         "breakeven_milestone_pips": 17
+      }
+    },
+    {
+      "timestamp": "2026-11-09T14:19:29.604286+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T14:19:29.604286+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Expansion",
+        "active_draw_on_liquidity": "Unmitigated Daily/H4 Fair Value Gap overlapping with Previous Day High",
+        "dynamic_tp_rationale": "Price has swept the Asian Session Low, triggering institutional buy-stops. The nearest significant unmitigated H4 Fair Value Gap and opposing liquidity pool sits at a clean structural distance, yielding an optimal risk-to-reward ratio without arbitrary caps.",
+        "recommended_dynamic_rr": "1:8.6",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": 189,
+        "breakeven_milestone_pips": 18
       }
     }
   ]
