@@ -1,5 +1,5 @@
 {
-  "total_records": 19,
+  "total_records": 20,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -253,6 +253,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 185,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-09T19:50:58.514620+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T19:50:58.514620+00:00",
+        "dynamic_market_mode": "Expansion / Liquidity Hunt",
+        "active_draw_on_liquidity": "Previous Day High (PDH) liquidity pool coupled with an unmitigated Daily Fair Value Gap at 1.08750",
+        "dynamic_tp_rationale": "Order flow imbalance confirms institutional accumulation following a London/New York session sweep of the Asian Low. Price is currently expanding into a structural vacuum with zero overhead resistance until the external range liquidity pool at the PDH, yielding an optimal mathematical reward-to-risk trajectory.",
+        "recommended_dynamic_rr": "1:9.4",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22.5,
+        "dynamic_tp_pips": 211.5,
         "breakeven_milestone_pips": 18
       }
     }
