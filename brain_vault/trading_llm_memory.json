@@ -1,5 +1,5 @@
 {
-  "total_records": 8,
+  "total_records": 9,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -88,6 +88,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 185,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-09T07:22:43.574318+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-09T07:22:43.574318+00:00",
+        "dynamic_market_mode": "Liquidity Hunt into Expansion",
+        "active_draw_on_liquidity": "Previous Day High (PDH) aligned with unmitigated Daily Fair Value Gap at 1.08950",
+        "dynamic_tp_rationale": "Price has just swept the Asian Session Low, executing institutional stop-runs and filling an M15 discount array. Order flow alignment shows clear displacement towards the primary external liquidity pool at the Previous Day High. Current distance to the target structural liquidity provides a clean, unobstructed path, yielding a mathematically optimal R:R expansion without premature capping.",
+        "recommended_dynamic_rr": "1:9.6",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": 211,
         "breakeven_milestone_pips": 18
       }
     }
