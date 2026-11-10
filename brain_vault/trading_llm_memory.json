@@ -1,5 +1,5 @@
 {
-  "total_records": 29,
+  "total_records": 30,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -403,6 +403,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 21.5,
         "dynamic_tp_pips": 184.0,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-10T05:47:34.564571+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T05:47:34.564571+00:00",
+        "dynamic_market_mode": "Liquidity Hunt & Expansion",
+        "active_draw_on_liquidity": "Previous Day High (PDH) liquidity pool coupled with an unmitigated Daily Fair Value Gap at 1.09450",
+        "dynamic_tp_rationale": "Price has engineered a clean stop-hunt below the Asian Session Low, sweeping late retail longs. Order flow imbalance indicates a high-probability expansion phase directly into the macro structural liquidity pool resting 148 pips higher. Mathematical expectancy and volume profile analysis support an extended run without structural resistance.",
+        "recommended_dynamic_rr": "1:6.8",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21.5,
+        "dynamic_tp_pips": 146.2,
         "breakeven_milestone_pips": 18
       }
     }
