@@ -1,5 +1,5 @@
 {
-  "total_records": 36,
+  "total_records": 37,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -509,6 +509,21 @@
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 206,
         "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-10T17:43:19.791398+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T17:43:19.791398+00:00",
+        "dynamic_market_mode": "Expansion",
+        "active_draw_on_liquidity": "Unmitigated Daily/H4 Fair Value Gap overlapping with Previous Day High",
+        "dynamic_tp_rationale": "Price has aggressively swept the Asian Session Low and cleared early retail breakout stops. Order flow imbalance indicates institutional sponsorship moving toward the upper daily liquidity pool at 1.09240. Distance to this resting liquidity provides a clean, unobstructed expansion path yielding an optimal risk-to-reward profile without structural resistance.",
+        "recommended_dynamic_rr": "1:8.6",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22.5,
+        "dynamic_tp_pips": 193.5,
+        "breakeven_milestone_pips": 15
       }
     }
   ]
