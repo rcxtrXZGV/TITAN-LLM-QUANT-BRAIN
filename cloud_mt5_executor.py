@@ -99,7 +99,7 @@ def run_trading_cycle(candidates):
                     "tp": tp,
                     "deviation": 30,
                     "magic": 777001,
-                    "comment": f"VPS_{sym}",
+                    "comment": f"TITAN_{sym}",
                     "type_time": mt5.ORDER_TIME_GTC,
                     "type_filling": filling_mode,
                 }
@@ -123,7 +123,7 @@ def run_trading_cycle(candidates):
                     "tp": tp,
                     "deviation": 30,
                     "magic": 777002,
-                    "comment": f"VPS_{sym}",
+                    "comment": f"TITAN_{sym}",
                     "type_time": mt5.ORDER_TIME_GTC,
                     "type_filling": filling_mode,
                 }
@@ -133,7 +133,7 @@ def run_trading_cycle(candidates):
 
 def main():
     log("==================================================")
-    log("TITAN CLOUD VPS-ENGINE: 5-HOUR CONTINUOUS LIVE DAEMON")
+    log("TITAN COMPLIANT SERVERLESS RUNNER - MULTI-ASSET")
     log("==================================================")
 
     login_str = os.getenv("MT5_LOGIN", "")
@@ -170,34 +170,15 @@ def main():
         pass
 
     acc = mt5.account_info()
-    log(f"VPS DAEMON ONLINE: {acc.name} | Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f}")
+    log(f"AUTHENTICATED: {acc.name} | Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f}")
 
     candidates = ["XAUUSD", "BTCUSD", "ETHUSD", "EURUSD", "GBPUSD", "USDJPY", "US30", "NAS100"]
 
-    # Continuous Real-Time Loop (Runs for 5 Hours = 18,000 seconds)
-    # Checks every 15 seconds like a real VPS!
-    start_time = time.time()
-    max_duration_seconds = 5 * 3600 - 300  # 4 hours 55 minutes
+    # Run standard compliant scan
+    run_trading_cycle(candidates)
 
-    log("Starting Continuous 15-Second High-Frequency Market Scanner...")
-    loop_count = 0
-
-    while (time.time() - start_time) < max_duration_seconds:
-        try:
-            run_trading_cycle(candidates)
-        except Exception as e:
-            log(f"Cycle scan exception: {e}")
-
-        loop_count += 1
-        if loop_count % 40 == 0:  # Log status every 10 minutes
-            acc_cur = mt5.account_info()
-            elapsed_min = int((time.time() - start_time) / 60)
-            log(f"[VPS Alive - {elapsed_min}m elapsed] Balance: ${acc_cur.balance:.2f} | Equity: ${acc_cur.equity:.2f}")
-
-        time.sleep(15)  # 15-second tick interval
-
-    log("5-Hour VPS session cycle completed smoothly. Ready for relay.")
     mt5.shutdown()
+    log("Execution cycle completed safely.")
 
 if __name__ == "__main__":
     main()
