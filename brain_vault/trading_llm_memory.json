@@ -1,5 +1,5 @@
 {
-  "total_records": 33,
+  "total_records": 34,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -464,6 +464,21 @@
         "dynamic_sl_pips": 22.5,
         "dynamic_tp_pips": 216.0,
         "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-10T10:25:03.044757+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T10:25:03.044757+00:00",
+        "dynamic_market_mode": "Liquidity Hunt",
+        "active_draw_on_liquidity": "Previous Day High (PDH) aligned with an unmitigated H4 Bearish Fair Value Gap at 1.08450",
+        "dynamic_tp_rationale": "Price has executed an institutional sweep of the Asian Session Low, leaving a clean imbalance. The nearest high-volume resting liquidity pool sits at the PDH overlap with the H4 FVG, exactly 184 pips away. With momentum expanding and volatility indexing at 1.4x ATR, room allows for an extended structural run without mid-range friction.",
+        "recommended_dynamic_rr": "1:8.8",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21,
+        "dynamic_tp_pips": 184,
+        "breakeven_milestone_pips": 15
       }
     }
   ]
