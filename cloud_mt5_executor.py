@@ -9,6 +9,7 @@ Post-Audit Hardening:
    - No dependency on runner timing to exit: Broker matches TP/SL with zero latency.
 3. Realistic Institutional Expectancy:
    - High Asymmetry (1:6+ RR): Even with 40-50% win rate, math generates exponential compounding.
+4. Clean ASCII Logging: Zero emoji / UTF-8 encoding errors on Windows cp1252.
 """
 
 import os
@@ -19,9 +20,14 @@ import tempfile
 import subprocess
 import MetaTrader5 as mt5
 
+# Force UTF-8 on Windows stdout
+if sys.platform.startswith('win'):
+    sys.stdout.reconfigure(encoding='utf-8')
+
 def log(msg):
     ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
-    print(f"[{ts}] {msg}", flush=True)
+    clean_msg = msg.encode('ascii', errors='replace').decode('ascii')
+    print(f"[{ts}] {clean_msg}", flush=True)
 
 def choose_filling_mode(symbol_info):
     filling_flags = int(getattr(symbol_info, "filling_mode", 0) or 0)
@@ -38,13 +44,7 @@ def kill_terminal_instances():
         pass
 
 def calculate_safe_dollar_lot(sym, sinfo, sl_distance, max_dollar_risk=2.00):
-    """
-    CRITICAL CEO AUDIT FIX:
-    Guarantees that a loss NEVER exceeds $2.00 on ANY asset (Gold, Forex, Crypto, Indices).
-    Calculates exact monetary loss = volume * contract_size * sl_distance.
-    """
     min_vol = sinfo.volume_min
-    max_vol = sinfo.volume_max
     step_vol = sinfo.volume_step
     contract_size = getattr(sinfo, "trade_contract_size", 100.0) or 100.0
     tick_value = getattr(sinfo, "trade_tick_value", 1.0) or 1.0
@@ -53,7 +53,6 @@ def calculate_safe_dollar_lot(sym, sinfo, sl_distance, max_dollar_risk=2.00):
     if sl_distance <= 0:
         return min_vol
 
-    # Dollar loss per 1.0 lot for this SL distance
     loss_per_lot = (sl_distance / point) * tick_value if point > 0 else 1000.0
     if loss_per_lot <= 0:
         return min_vol
@@ -102,7 +101,6 @@ def scan_and_trade(sym, sinfo, tick, equity):
     if not signal:
         return
 
-    # CEO AUDIT FIX: Strict 1% Equity ($2.00) Risk Lock
     max_risk_dollar = min(2.50, max(1.50, equity * 0.012))
     lot = calculate_safe_dollar_lot(sym, sinfo, sl_dist, max_risk_dollar)
     filling_mode = choose_filling_mode(sinfo)
@@ -111,7 +109,7 @@ def scan_and_trade(sym, sinfo, tick, equity):
     if signal == "BUY":
         price = tick.ask
         sl = round(price - sl_dist, digits)
-        tp = round(price + (sl_dist * 6.5), digits)  # Direct Broker-Level TP (1:6.5 RR)
+        tp = round(price + (sl_dist * 6.5), digits)
         req = {
             "action": mt5.TRADE_ACTION_DEAL,
             "symbol": sym,
@@ -122,20 +120,20 @@ def scan_and_trade(sym, sinfo, tick, equity):
             "tp": tp,
             "deviation": 25,
             "magic": 888777,
-            "comment": f"TITAN_AUTO_{sym}",
+            "comment": f"TITAN_{sym}",
             "type_time": mt5.ORDER_TIME_GTC,
             "type_filling": filling_mode,
         }
         res = mt5.order_send(req)
         if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-            log(f"🔥 [ORDER EXECUTED] BUY {lot} lots {sym} @ {price} | SL: {sl} | TP: {tp} (Max Risk: ${max_risk_dollar:.2f})")
+            log(f"[ORDER EXECUTED LIVE] BUY {lot} lots {sym} @ {price} | Order: {res.order} | SL: {sl} | TP: {tp} (Risk: ${max_risk_dollar:.2f})")
         else:
             log(f"Order attempted on {sym} result: {getattr(res, 'comment', 'retcode ' + str(getattr(res, 'retcode', 'err')))}")
 
     elif signal == "SELL":
         price = tick.bid
         sl = round(price + sl_dist, digits)
-        tp = round(price - (sl_dist * 6.5), digits)  # Direct Broker-Level TP (1:6.5 RR)
+        tp = round(price - (sl_dist * 6.5), digits)
         req = {
             "action": mt5.TRADE_ACTION_DEAL,
             "symbol": sym,
@@ -146,13 +144,13 @@ def scan_and_trade(sym, sinfo, tick, equity):
             "tp": tp,
             "deviation": 25,
             "magic": 888777,
-            "comment": f"TITAN_AUTO_{sym}",
+            "comment": f"TITAN_{sym}",
             "type_time": mt5.ORDER_TIME_GTC,
             "type_filling": filling_mode,
         }
         res = mt5.order_send(req)
         if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-            log(f"🔥 [ORDER EXECUTED] SELL {lot} lots {sym} @ {price} | SL: {sl} | TP: {tp} (Max Risk: ${max_risk_dollar:.2f})")
+            log(f"[ORDER EXECUTED LIVE] SELL {lot} lots {sym} @ {price} | Order: {res.order} | SL: {sl} | TP: {tp} (Risk: ${max_risk_dollar:.2f})")
         else:
             log(f"Order attempted on {sym} result: {getattr(res, 'comment', 'retcode ' + str(getattr(res, 'retcode', 'err')))}")
 
