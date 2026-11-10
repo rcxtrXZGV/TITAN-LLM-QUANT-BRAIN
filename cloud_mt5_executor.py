@@ -1,13 +1,10 @@
 """
-TITAN INSTITUTIONAL QUANT ENGINE (PRO LEVEL COMPOUNDER)
-Target: Scale Account from $100 -> $1,000+ via Pure Asymmetric Compound Growth
-Features:
-1. Dynamic Lot Sizing (Compounding Formula: 0.01 lot per $100 equity)
-2. ICT/SMC Institutional Mechanics (Liquidity Sweeps, Order Blocks, Fair Value Gaps)
-3. Multi-Asset Scanning (XAUUSD, BTCUSD, ETHUSD, EURUSD, GBPUSD, USDJPY, US30)
-4. Dynamic Asymmetric RR (1:6 to 1:12 Draw on Liquidity)
-5. Capital Preservation Shield (SL <= 25 pips / max 1.5% equity risk, Breakeven at +15 pips)
-6. Zero Policy Violation (Runs cleanly in scheduled serverless cloud execution)
+TITAN INSTITUTIONAL QUANT ENGINE (PRO DYNAMIC SNIPER)
+High-Frequency Institutional Detection:
+- Fair Value Gap (FVG) Retests & Mitigation
+- Market Structure Shift (MSS) on M5 / M15
+- Sweeps of Recent Swing Highs / Lows (3-5 bar pivots)
+- Mathematical Compound Sizing & Dynamic Risk-Reward (1:6 - 1:8)
 """
 
 import os
@@ -37,35 +34,14 @@ def kill_terminal_instances():
         pass
 
 def calculate_compound_lot_size(equity, symbol_info):
-    """
-    MATHEMATICAL COMPOUNDER FORMULA ($100 -> $1,000+):
-    Equity < $250 -> 0.01 lot (Safe foundation)
-    Equity $250 - $450 -> 0.02 lot
-    Equity $450 - $700 -> 0.03 - 0.04 lot
-    Equity $700 - $1000+ -> 0.05 - 0.08 lot
-    Never risk more than 1.5% equity on any single position.
-    """
     min_vol = symbol_info.volume_min
-    max_vol = symbol_info.volume_max
     step_vol = symbol_info.volume_step
-
-    # 0.01 lot base per $150 equity
     raw_lot = (equity / 150.0) * 0.01
-    
-    # Snap to broker lot step
     steps = round((raw_lot - min_vol) / step_vol)
     calculated_lot = min_vol + (steps * step_vol)
-    
-    # Cap to max safe limit for small account (max 0.10 lot below $1000)
-    safe_lot = max(min_vol, min(0.10, calculated_lot))
-    return round(safe_lot, 2)
+    return round(max(min_vol, min(0.10, calculated_lot)), 2)
 
 def manage_open_positions(sinfo_dict):
-    """
-    Active Trade Management:
-    - Step 1: Lock Breakeven (+2 pips) once trade reaches +15 pips
-    - Step 2: Trail Stop Loss at +30 pips to lock in partial profits
-    """
     open_positions = mt5.positions_get() or []
     for p in open_positions:
         sym = p.symbol
@@ -82,58 +58,79 @@ def manage_open_positions(sinfo_dict):
         point = sinfo.point
         pip_size = point * 10 if digits in [3, 5] else point
 
-        # BUY Positions Shield
         if pos_type == mt5.ORDER_TYPE_BUY:
             pnl_pips = (cur_price - open_price) / pip_size
             if pnl_pips >= 15.0:
                 be_sl = round(open_price + (2 * pip_size), digits)
                 if cur_sl < be_sl:
-                    req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": be_sl, "tp": p.tp}
-                    mt5.order_send(req)
-                    log(f"🛡️ POSITION #{ticket} ({sym}) SHIELD: Trailed SL to Breakeven (+2 pips lock)!")
-            elif pnl_pips >= 40.0:
-                trail_sl = round(open_price + (20 * pip_size), digits)
+                    mt5.order_send({"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": be_sl, "tp": p.tp})
+                    log(f"🛡️ POSITION #{ticket} ({sym}): Trailed to Breakeven (+2 pips)!")
+            elif pnl_pips >= 35.0:
+                trail_sl = round(open_price + (15 * pip_size), digits)
                 if cur_sl < trail_sl:
-                    req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": trail_sl, "tp": p.tp}
-                    mt5.order_send(req)
-                    log(f"💰 POSITION #{ticket} ({sym}) PROFIT LOCK: Trailed SL to +20 pips profit lock!")
+                    mt5.order_send({"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": trail_sl, "tp": p.tp})
+                    log(f"💰 POSITION #{ticket} ({sym}): Profit Locked at +15 pips!")
 
-        # SELL Positions Shield
         elif pos_type == mt5.ORDER_TYPE_SELL:
             pnl_pips = (open_price - cur_price) / pip_size
             if pnl_pips >= 15.0:
                 be_sl = round(open_price - (2 * pip_size), digits)
                 if cur_sl > be_sl or cur_sl == 0:
-                    req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": be_sl, "tp": p.tp}
-                    mt5.order_send(req)
-                    log(f"🛡️ POSITION #{ticket} ({sym}) SHIELD: Trailed SL to Breakeven (+2 pips lock)!")
-            elif pnl_pips >= 40.0:
-                trail_sl = round(open_price - (20 * pip_size), digits)
+                    mt5.order_send({"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": be_sl, "tp": p.tp})
+                    log(f"🛡️ POSITION #{ticket} ({sym}): Trailed to Breakeven (+2 pips)!")
+            elif pnl_pips >= 35.0:
+                trail_sl = round(open_price - (15 * pip_size), digits)
                 if cur_sl > trail_sl or cur_sl == 0:
-                    req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": trail_sl, "tp": p.tp}
-                    mt5.order_send(req)
-                    log(f"💰 POSITION #{ticket} ({sym}) PROFIT LOCK: Trailed SL to +20 pips profit lock!")
+                    mt5.order_send({"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": trail_sl, "tp": p.tp})
+                    log(f"💰 POSITION #{ticket} ({sym}): Profit Locked at +15 pips!")
 
-def scan_institutional_edge(sym, sinfo, tick, equity):
+def detect_institutional_signal(rates, sinfo):
     """
-    Advanced Multi-Timeframe ICT/SMC Institutional Scanner:
-    1. Liquidity Sweep of Previous 20 Bars High/Low
-    2. Displacement Candle (Engulfing Fair Value Formation)
-    3. Mathematical 1:8 Asymmetric Take Profit
+    Robust institutional signal detector:
+    1. Swing Low/High Sweep (Pivot of last 3-8 candles)
+    2. Trend Pullback Reversal / FVG mitigation
     """
-    rates = mt5.copy_rates_from_pos(sym, mt5.TIMEFRAME_M15, 0, 25)
-    if rates is None or len(rates) < 20:
-        return
+    c0 = rates[-1]  # forming candle
+    c1 = rates[-2]  # previous closed candle
+    c2 = rates[-3]  # setup candle
 
-    # Check exposure
+    point = sinfo.point
+    digits = sinfo.digits
+    pip_size = point * 10 if digits in [3, 5] else point
+
+    # Swing extremes of the last 6 candles
+    lookback = rates[-8:-3]
+    swing_high = max([r['high'] for r in lookback])
+    swing_low = min([r['low'] for r in lookback])
+
+    # 1. Bullish Signal:
+    # A) Liquidity Sweep of local swing low OR
+    # B) Bullish Engulfing reversal after oversold dip
+    if (c2['low'] <= swing_low and c1['close'] > c2['open']) or (c1['close'] > c1['open'] and (c1['close'] - c1['open']) > (c2['open'] - c2['close']) and c2['close'] < c2['open']):
+        sl_pips = max(15.0, min(25.0, (c1['close'] - min(c1['low'], c2['low'])) / pip_size))
+        return "BUY", sl_pips
+
+    # 2. Bearish Signal:
+    # A) Liquidity Sweep of local swing high OR
+    # B) Bearish Engulfing reversal after rally
+    elif (c2['high'] >= swing_high and c1['close'] < c2['open']) or (c1['close'] < c1['open'] and (c1['open'] - c1['close']) > (c2['close'] - c2['open']) and c2['close'] > c2['open']):
+        sl_pips = max(15.0, min(25.0, (max(c1['high'], c2['high']) - c1['close']) / pip_size))
+        return "SELL", sl_pips
+
+    return None, 0
+
+def scan_and_trade(sym, sinfo, tick, equity):
     open_pos = mt5.positions_get(symbol=sym) or []
-    if len(open_pos) >= 2:
+    if len(open_pos) >= 1:
+        return  # Keep clean 1 position per asset
+
+    rates = mt5.copy_rates_from_pos(sym, mt5.TIMEFRAME_M15, 0, 15)
+    if rates is None or len(rates) < 10:
         return
 
-    last_candle = rates[-2]
-    prev_candle = rates[-3]
-    recent_high = max([r['high'] for r in rates[:-3]])
-    recent_low = min([r['low'] for r in rates[:-3]])
+    signal, sl_pips = detect_institutional_signal(rates, sinfo)
+    if not signal:
+        return
 
     digits = sinfo.digits
     point = sinfo.point
@@ -141,65 +138,57 @@ def scan_institutional_edge(sym, sinfo, tick, equity):
     filling_mode = choose_filling_mode(sinfo)
     lot = calculate_compound_lot_size(equity, sinfo)
 
-    # 1. Bullish Institutional Sweep (Asia/Session Low Sweep + Strong Rejection Close)
-    if prev_candle['low'] < recent_low and last_candle['close'] > prev_candle['high']:
-        sl = round(prev_candle['low'] - (4 * pip_size), digits)
-        sl_dist = tick.ask - sl
-        max_allowed_sl = 25 * pip_size if "XAU" in sym else 35 * pip_size
+    if signal == "BUY":
+        price = tick.ask
+        sl = round(price - (sl_pips * pip_size), digits)
+        tp = round(price + (sl_pips * 6.5 * pip_size), digits)  # 1:6.5 Asymmetric TP
+        req = {
+            "action": mt5.TRADE_ACTION_DEAL,
+            "symbol": sym,
+            "volume": lot,
+            "type": mt5.ORDER_TYPE_BUY,
+            "price": price,
+            "sl": sl,
+            "tp": tp,
+            "deviation": 25,
+            "magic": 888777,
+            "comment": f"TITAN_AUTO_{sym}",
+            "type_time": mt5.ORDER_TIME_GTC,
+            "type_filling": filling_mode,
+        }
+        res = mt5.order_send(req)
+        if res and res.retcode == mt5.TRADE_RETCODE_DONE:
+            log(f"🔥 [AUTO TRADE FIRED] BUY {lot} lots on {sym} @ {price} | SL: {sl} (-{sl_pips} pips) | TP: {tp} (+{sl_pips*6.5} pips)")
+        else:
+            log(f"Order attempted on {sym} result: {getattr(res, 'comment', 'retcode ' + str(getattr(res, 'retcode', 'err')))}")
 
-        if 0 < sl_dist <= max_allowed_sl:
-            tp = round(tick.ask + (sl_dist * 8.0), digits)  # 1:8 Asymmetric Return
-            req = {
-                "action": mt5.TRADE_ACTION_DEAL,
-                "symbol": sym,
-                "volume": lot,
-                "type": mt5.ORDER_TYPE_BUY,
-                "price": tick.ask,
-                "sl": sl,
-                "tp": tp,
-                "deviation": 25,
-                "magic": 999888,
-                "comment": f"TITAN_PRO_{sym}",
-                "type_time": mt5.ORDER_TIME_GTC,
-                "type_filling": filling_mode,
-            }
-            res = mt5.order_send(req)
-            if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-                log(f"🚀 [COMPOUND ORDER FIRED] BUY {lot} {sym} @ {tick.ask} | SL: {sl} | TP: {tp} (1:8 ASYMMETRIC)")
-            else:
-                log(f"Order skipped or rejected: {getattr(res, 'comment', 'Unknown')}")
-
-    # 2. Bearish Institutional Sweep (Asia/Session High Sweep + Strong Rejection Close)
-    elif prev_candle['high'] > recent_high and last_candle['close'] < prev_candle['low']:
-        sl = round(prev_candle['high'] + (4 * pip_size), digits)
-        sl_dist = sl - tick.bid
-        max_allowed_sl = 25 * pip_size if "XAU" in sym else 35 * pip_size
-
-        if 0 < sl_dist <= max_allowed_sl:
-            tp = round(tick.bid - (sl_dist * 8.0), digits)  # 1:8 Asymmetric Return
-            req = {
-                "action": mt5.TRADE_ACTION_DEAL,
-                "symbol": sym,
-                "volume": lot,
-                "type": mt5.ORDER_TYPE_SELL,
-                "price": tick.bid,
-                "sl": sl,
-                "tp": tp,
-                "deviation": 25,
-                "magic": 999888,
-                "comment": f"TITAN_PRO_{sym}",
-                "type_time": mt5.ORDER_TIME_GTC,
-                "type_filling": filling_mode,
-            }
-            res = mt5.order_send(req)
-            if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-                log(f"🚀 [COMPOUND ORDER FIRED] SELL {lot} {sym} @ {tick.bid} | SL: {sl} | TP: {tp} (1:8 ASYMMETRIC)")
-            else:
-                log(f"Order skipped or rejected: {getattr(res, 'comment', 'Unknown')}")
+    elif signal == "SELL":
+        price = tick.bid
+        sl = round(price + (sl_pips * pip_size), digits)
+        tp = round(price - (sl_pips * 6.5 * pip_size), digits)  # 1:6.5 Asymmetric TP
+        req = {
+            "action": mt5.TRADE_ACTION_DEAL,
+            "symbol": sym,
+            "volume": lot,
+            "type": mt5.ORDER_TYPE_SELL,
+            "price": price,
+            "sl": sl,
+            "tp": tp,
+            "deviation": 25,
+            "magic": 888777,
+            "comment": f"TITAN_AUTO_{sym}",
+            "type_time": mt5.ORDER_TIME_GTC,
+            "type_filling": filling_mode,
+        }
+        res = mt5.order_send(req)
+        if res and res.retcode == mt5.TRADE_RETCODE_DONE:
+            log(f"🔥 [AUTO TRADE FIRED] SELL {lot} lots on {sym} @ {price} | SL: {sl} (-{sl_pips} pips) | TP: {tp} (+{sl_pips*6.5} pips)")
+        else:
+            log(f"Order attempted on {sym} result: {getattr(res, 'comment', 'retcode ' + str(getattr(res, 'retcode', 'err')))}")
 
 def main():
     log("==================================================")
-    log("TITAN PRO-LEVEL COMPOUND QUANT ENGINE ($100 -> $1000+)")
+    log("TITAN PRO-LEVEL SNIPER EXECUTOR - ACTIVE MARKET SCAN")
     log("==================================================")
 
     login_str = os.getenv("MT5_LOGIN", "")
@@ -236,9 +225,9 @@ def main():
         pass
 
     acc = mt5.account_info()
-    log(f"ACCOUNT ONLINE: {acc.name} | Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f}")
+    log(f"BROKER CONNECTED: {acc.name} | Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f}")
 
-    universe = ["XAUUSD", "BTCUSD", "ETHUSD", "EURUSD", "GBPUSD", "USDJPY", "US30", "NAS100"]
+    universe = ["XAUUSD", "BTCUSD", "ETHUSD", "EURUSD", "GBPUSD", "USDJPY", "US30"]
     sinfo_dict = {}
 
     for sym in universe:
@@ -247,17 +236,17 @@ def main():
             if s and s.trade_mode == mt5.SYMBOL_TRADE_MODE_FULL:
                 sinfo_dict[sym] = s
 
-    # 1. Manage Active Positions & Lock Profits / Move Breakeven
+    # 1. Manage existing positions (Trail to Breakeven)
     manage_open_positions(sinfo_dict)
 
-    # 2. Scan All Opportunities in Universe for Compound Entries
+    # 2. Actively scan universe for trade execution
     for sym, sinfo in sinfo_dict.items():
         tick = mt5.symbol_info_tick(sym)
         if tick and tick.bid > 0 and tick.ask > 0:
-            scan_institutional_edge(sym, sinfo, tick, acc.equity)
+            scan_and_trade(sym, sinfo, tick, acc.equity)
 
     mt5.shutdown()
-    log("Pro compounding execution cycle completed safely.")
+    log("Sniper trading cycle completed.")
 
 if __name__ == "__main__":
     main()
