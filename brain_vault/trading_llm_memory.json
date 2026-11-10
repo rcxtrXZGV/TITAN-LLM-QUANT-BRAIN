@@ -1,5 +1,5 @@
 {
-  "total_records": 26,
+  "total_records": 27,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -359,6 +359,21 @@
         "dynamic_sl_pips": 21,
         "dynamic_tp_pips": 142.8,
         "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-10T02:46:08.625191+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T02:46:08.625191+00:00",
+        "dynamic_market_mode": "Liquidity Hunt",
+        "active_draw_on_liquidity": "Previous Day High combined with unmitigated H4 Fair Value Gap at 1.08450",
+        "dynamic_tp_rationale": "Price has swept the Asian Session Low, triggering institutional buy-side imbalance. Nearest high-volume resting liquidity pool sits cleanly at the H4 FVG and Previous Day High, offering a structural 1:8.5 risk-to-reward expansion profile without encountering intermediate resistance.",
+        "recommended_dynamic_rr": "1:8.5",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22.0,
+        "dynamic_tp_pips": 187.0,
+        "breakeven_milestone_pips": 15
       }
     }
   ]
