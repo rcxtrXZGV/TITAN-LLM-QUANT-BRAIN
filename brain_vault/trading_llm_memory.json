@@ -1,5 +1,5 @@
 {
-  "total_records": 31,
+  "total_records": 32,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -433,6 +433,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 21,
         "dynamic_tp_pips": 142,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-10T08:10:26.296310+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T08:10:26.296310+00:00",
+        "dynamic_market_mode": "Expansion",
+        "active_draw_on_liquidity": "Unmitigated Daily H4 Fair Value Gap overlapping with Previous Day High (PDH)",
+        "dynamic_tp_rationale": "Order flow shows strong institutional accumulation following a London session sweep of the Asian Low. Price is accelerating into a high-timeframe void with zero immediate resistance below the PDH liquidity pool located 185 pips away, yielding an optimal mathematical expansion target.",
+        "recommended_dynamic_rr": "1:8.8",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21.5,
+        "dynamic_tp_pips": 189.2,
         "breakeven_milestone_pips": 18
       }
     }
