@@ -1,5 +1,5 @@
 {
-  "total_records": 30,
+  "total_records": 31,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -418,6 +418,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 21.5,
         "dynamic_tp_pips": 146.2,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-10T06:56:26.069697+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T06:56:26.069697+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Expansion",
+        "active_draw_on_liquidity": "Previous Day High (PDH) aligned with an unmitigated H4 Bearish Fair Value Gap at 1.08950",
+        "dynamic_tp_rationale": "Asian session low has been swept, creating a strong displacement candle breaking structure (BOS) to the upside. The closest major resting institutional liquidity pool is the H4 FVG and PDH 142 pips away, offering an optimal mathematical expansion target matching current ATR volatility.",
+        "recommended_dynamic_rr": "1:6.8",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21,
+        "dynamic_tp_pips": 142,
         "breakeven_milestone_pips": 18
       }
     }
