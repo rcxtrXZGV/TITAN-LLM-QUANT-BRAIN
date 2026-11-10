@@ -1,5 +1,5 @@
 {
-  "total_records": 39,
+  "total_records": 40,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -553,6 +553,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 211,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-10T22:36:18.422823+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T22:36:18.422823+00:00",
+        "dynamic_market_mode": "Liquidity Hunt",
+        "active_draw_on_liquidity": "Unmitigated H4 Fair Value Gap overlapping with Previous Day High",
+        "dynamic_tp_rationale": "Price has executed an institutional sweep of the Asian Low, purging resting retail stop-loss liquidity. The path of least resistance is a vertical expansion toward the daily liquidity pool at the upper boundary. Structural imbalance on the H4 timeframe confirms a clean void, allowing for maximum velocity without intermediate resistance.",
+        "recommended_dynamic_rr": "1:9.4",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": 206,
         "breakeven_milestone_pips": 18
       }
     }
