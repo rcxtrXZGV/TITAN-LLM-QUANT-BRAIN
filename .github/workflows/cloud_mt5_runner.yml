@@ -2,7 +2,7 @@ name: Titan Cloud Autonomous MT5 Executor (24/7 Serverless)
 
 on:
   schedule:
-    # Runs automatically every 30 minutes 24/7 completely free
+    # 24/7 Unlimited Free Autopilot on Public Repo
     - cron: '*/30 * * * *'
   workflow_dispatch:
 
@@ -25,27 +25,16 @@ jobs:
         run: |
           pip install MetaTrader5 requests
 
-      - name: Download & Extract Pre-Configured Headless MT5 Runtime & Config
+      - name: Download & Extract Pre-Configured Headless MT5 Runtime
         shell: powershell
         run: |
-          $mt5ZipUrl = "https://api.github.com/repos/rcxtrXZGV/TITAN-LLM-QUANT-BRAIN/releases/assets/718089105"
-          $configZipUrl = "https://api.github.com/repos/rcxtrXZGV/TITAN-LLM-QUANT-BRAIN/releases/assets/718127679"
+          $mt5ZipUrl = "https://github.com/rcxtrXZGV/TITAN-LLM-QUANT-BRAIN/releases/download/v1.0.0/mt5_portable.zip"
           $targetDir = "C:\MT5"
-          $appdataDir = "$env:APPDATA\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075"
           
-          $headers = @{
-            "Authorization" = "token ${{ secrets.GITHUB_TOKEN }}"
-            "Accept" = "application/octet-stream"
-          }
-          
-          Invoke-WebRequest -Uri $mt5ZipUrl -Headers $headers -OutFile "$env:TEMP\mt5.zip"
+          Write-Host "Downloading standalone MT5 runtime..."
+          Invoke-WebRequest -Uri $mt5ZipUrl -OutFile "$env:TEMP\mt5.zip"
           Expand-Archive -Path "$env:TEMP\mt5.zip" -DestinationPath $targetDir -Force
-          
-          Invoke-WebRequest -Uri $configZipUrl -Headers $headers -OutFile "$env:TEMP\config.zip"
-          New-Item -ItemType Directory -Force -Path $appdataDir | Out-Null
-          Expand-Archive -Path "$env:TEMP\config.zip" -DestinationPath $appdataDir -Force
-
-          Copy-Item -Path "$appdataDir\*" -Destination $targetDir -Recurse -Force
+          Write-Host "Extracted MT5 runtime successfully to $targetDir"
 
       - name: Execute Autonomous Trading Cycle
         env:
