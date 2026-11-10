@@ -1,5 +1,5 @@
 {
-  "total_records": 28,
+  "total_records": 29,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -389,6 +389,21 @@
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": "215",
         "breakeven_milestone_pips": 15
+      }
+    },
+    {
+      "timestamp": "2026-11-10T04:46:38.562082+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T04:46:38.562082+00:00",
+        "dynamic_market_mode": "Liquidity Hunt & Expansion",
+        "active_draw_on_liquidity": "Previous Day High (PDH) liquidity pool coupled with an unmitigated H4 Fair Value Gap at 1.09450",
+        "dynamic_tp_rationale": "Price has swept the Asian Session Low, triggering resting institutional buy-stops. Order flow momentum indicates an aggressive expansion phase targeting the unmitigated H4 FVG and PDH overhead. With market structure shifting bullish on the 15M and validated by 1H institutional block orders, the nearest major resting liquidity is 184 pips away. A fixed target would violate the dynamic mandate; therefore, the TP is pinned directly to the external liquidity sweep zone, yielding an optimal mathematical R:R.",
+        "recommended_dynamic_rr": "1:8.6",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21.5,
+        "dynamic_tp_pips": 184.0,
+        "breakeven_milestone_pips": 18
       }
     }
   ]
