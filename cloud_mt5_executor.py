@@ -24,16 +24,12 @@ def kill_terminal_instances():
     except Exception:
         pass
 
-def find_best_active_symbol(candidates):
+def evaluate_and_fire_opportunities(candidates):
     """
-    Scans a multi-asset universe (Gold, BTC, ETH, EURUSD, US30)
-    and selects the symbol with the cleanest trending momentum & liquidity.
+    UNBOUND OPPORTUNITY HUNTER:
+    No arbitrary 1-2 trade caps. Scans the full multi-asset universe
+    and fires on EVERY clean institutional setup that meets quality standards.
     """
-    best_symbol = None
-    best_score = -1.0
-    best_sinfo = None
-    best_tick = None
-
     for sym in candidates:
         if not mt5.symbol_select(sym, True):
             continue
@@ -42,28 +38,77 @@ def find_best_active_symbol(candidates):
         if not sinfo or not tick or tick.bid <= 0 or sinfo.trade_mode != mt5.SYMBOL_TRADE_MODE_FULL:
             continue
 
-        # Fetch recent M15 volatility & spread health
-        rates = mt5.copy_rates_from_pos(sym, mt5.TIMEFRAME_M15, 0, 16)
-        if rates is None or len(rates) < 10:
+        # Check existing positions on this symbol to prevent duplicate over-stacking
+        open_pos = mt5.positions_get(symbol=sym) or []
+        if len(open_pos) >= 2:
             continue
 
-        spread = tick.ask - tick.bid
-        high_low_range = max([r['high'] for r in rates]) - min([r['low'] for r in rates])
-        
-        # Volatility to spread ratio (higher is better for clean moves)
-        if spread > 0:
-            quality_score = high_low_range / spread
-            if quality_score > best_score:
-                best_score = quality_score
-                best_symbol = sym
-                best_sinfo = sinfo
-                best_tick = tick
+        rates = mt5.copy_rates_from_pos(sym, mt5.TIMEFRAME_M15, 0, 20)
+        if rates is None or len(rates) < 15:
+            continue
 
-    return best_symbol, best_sinfo, best_tick
+        # Institutional Sweep & Structure Scan
+        last_candle = rates[-2]
+        prev_candle = rates[-3]
+        recent_high = max([r['high'] for r in rates[:-3]])
+        recent_low = min([r['low'] for r in rates[:-3]])
+
+        point = sinfo.point
+        pip_size = point * 10 if sinfo.digits in [3, 5] else point
+        filling_mode = choose_filling_mode(sinfo)
+        lot = sinfo.volume_min
+
+        # 1. Bullish Setup: Liquidity sweep below recent low + displacement back above
+        if prev_candle['low'] < recent_low and last_candle['close'] > prev_candle['high']:
+            sl = round(prev_candle['low'] - (5 * pip_size), sinfo.digits)
+            sl_distance = tick.ask - sl
+            if sl_distance <= (30 * pip_size):  # Strict risk cap
+                tp = round(tick.ask + (sl_distance * 8.0), sinfo.digits)  # Dynamic 1:8 Asymmetric TP
+                req = {
+                    "action": mt5.TRADE_ACTION_DEAL,
+                    "symbol": sym,
+                    "volume": lot,
+                    "type": mt5.ORDER_TYPE_BUY,
+                    "price": tick.ask,
+                    "sl": sl,
+                    "tp": tp,
+                    "deviation": 30,
+                    "magic": 777001,
+                    "comment": f"TITAN_AUTO_{sym}",
+                    "type_time": mt5.ORDER_TIME_GTC,
+                    "type_filling": filling_mode,
+                }
+                res = mt5.order_send(req)
+                if res and res.retcode == mt5.TRADE_RETCODE_DONE:
+                    log(f"🔥 FIRED HIGH-QUALITY BUY on {sym} | Lot: {lot} | Price: {tick.ask} | SL: {sl} | TP: {tp} (1:8 RR)")
+
+        # 2. Bearish Setup: Liquidity sweep above recent high + displacement back below
+        elif prev_candle['high'] > recent_high and last_candle['close'] < prev_candle['low']:
+            sl = round(prev_candle['high'] + (5 * pip_size), sinfo.digits)
+            sl_distance = sl - tick.bid
+            if sl_distance <= (30 * pip_size):  # Strict risk cap
+                tp = round(tick.bid - (sl_distance * 8.0), sinfo.digits)  # Dynamic 1:8 Asymmetric TP
+                req = {
+                    "action": mt5.TRADE_ACTION_DEAL,
+                    "symbol": sym,
+                    "volume": lot,
+                    "type": mt5.ORDER_TYPE_SELL,
+                    "price": tick.bid,
+                    "sl": sl,
+                    "tp": tp,
+                    "deviation": 30,
+                    "magic": 777002,
+                    "comment": f"TITAN_AUTO_{sym}",
+                    "type_time": mt5.ORDER_TIME_GTC,
+                    "type_filling": filling_mode,
+                }
+                res = mt5.order_send(req)
+                if res and res.retcode == mt5.TRADE_RETCODE_DONE:
+                    log(f"🔥 FIRED HIGH-QUALITY SELL on {sym} | Lot: {lot} | Price: {tick.bid} | SL: {sl} | TP: {tp} (1:8 RR)")
 
 def main():
     log("==================================================")
-    log("TITAN CLOUD EXECUTOR - MULTI-ASSET OPPORTUNITY HUNTER")
+    log("TITAN UNBOUND MULTI-ASSET ENGINE - NO ARBITRARY CAPS")
     log("==================================================")
 
     login_str = os.getenv("MT5_LOGIN", "")
@@ -100,24 +145,16 @@ def main():
         pass
 
     acc = mt5.account_info()
-    log(f"AUTHENTICATED: {acc.name} | Balance: ${acc.balance:.2f} | Server: {acc.server}")
+    log(f"AUTHENTICATED: {acc.name} | Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f}")
 
-    # MULTI-ASSET UNIVERSE: Gold, Crypto, Major FX & Indices
+    # MULTI-ASSET UNIVERSE: Scan all liquid assets
     candidates = [
         "XAUUSD", "BTCUSD", "ETHUSD", "EURUSD", "GBPUSD", "USDJPY", "US30", "NAS100"
     ]
     
-    target_symbol, sinfo, tick = find_best_active_symbol(candidates)
-    if not target_symbol:
-        log("No eligible liquid symbol available right now.")
-        mt5.shutdown()
-        return
-
-    log(f"Selected Prime Opportunity Asset: {target_symbol} | Bid={tick.bid} | Ask={tick.ask}")
-
-    # Trailing Breakeven Shield Management on all open positions
+    # 1. Trailing Breakeven Shield Management on all open positions
     open_positions = mt5.positions_get() or []
-    log(f"Total open positions across all assets: {len(open_positions)}")
+    log(f"Total currently open positions: {len(open_positions)}")
 
     for p in open_positions:
         sym = p.symbol
@@ -147,6 +184,9 @@ def main():
                 req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": round(be_sl, pos_sinfo.digits), "tp": p.tp}
                 mt5.order_send(req)
                 log(f"Position #{ticket} ({sym}) SL Trailed to Zero-Risk Breakeven ({be_sl})!")
+
+    # 2. Evaluate and fire on ALL high-quality opportunities without artificial limits
+    evaluate_and_fire_opportunities(candidates)
 
     mt5.shutdown()
     log("Multi-asset dynamic execution cycle completed safely.")
