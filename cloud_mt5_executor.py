@@ -24,34 +24,48 @@ def kill_terminal_instances():
     except Exception:
         pass
 
-def calculate_dynamic_draw_on_liquidity(symbol, is_buy):
+def find_best_active_symbol(candidates):
     """
-    Dynamically finds the recent structural high/low (liquidity pool)
-    to set an exact market-driven Take Profit rather than an arbitrary fixed number.
+    Scans a multi-asset universe (Gold, BTC, ETH, EURUSD, US30)
+    and selects the symbol with the cleanest trending momentum & liquidity.
     """
-    rates = mt5.copy_rates_from_pos(symbol, mt5.TIMEFRAME_H1, 0, 48)
-    if rates is None or len(rates) == 0:
-        return None
+    best_symbol = None
+    best_score = -1.0
+    best_sinfo = None
+    best_tick = None
 
-    if is_buy:
-        # For BUY: Target the highest high of the previous 48 hours (liquidity buy stops)
-        highest = max([r['high'] for r in rates])
-        return highest
-    else:
-        # For SELL: Target the lowest low of the previous 48 hours (liquidity sell stops)
-        lowest = min([r['low'] for r in rates])
-        return lowest
+    for sym in candidates:
+        if not mt5.symbol_select(sym, True):
+            continue
+        sinfo = mt5.symbol_info(sym)
+        tick = mt5.symbol_info_tick(sym)
+        if not sinfo or not tick or tick.bid <= 0 or sinfo.trade_mode != mt5.SYMBOL_TRADE_MODE_FULL:
+            continue
+
+        # Fetch recent M15 volatility & spread health
+        rates = mt5.copy_rates_from_pos(sym, mt5.TIMEFRAME_M15, 0, 16)
+        if rates is None or len(rates) < 10:
+            continue
+
+        spread = tick.ask - tick.bid
+        high_low_range = max([r['high'] for r in rates]) - min([r['low'] for r in rates])
+        
+        # Volatility to spread ratio (higher is better for clean moves)
+        if spread > 0:
+            quality_score = high_low_range / spread
+            if quality_score > best_score:
+                best_score = quality_score
+                best_symbol = sym
+                best_sinfo = sinfo
+                best_tick = tick
+
+    return best_symbol, best_sinfo, best_tick
 
 def main():
     log("==================================================")
-    log("TITAN CLOUD EXECUTOR - DYNAMIC ASYMMETRIC TARGETING")
+    log("TITAN CLOUD EXECUTOR - MULTI-ASSET OPPORTUNITY HUNTER")
     log("==================================================")
 
-    now_utc = datetime.datetime.now(datetime.timezone.utc)
-    hour = now_utc.hour
-    weekday = now_utc.weekday()
-
-    is_weekend = (weekday in [5, 6])
     login_str = os.getenv("MT5_LOGIN", "")
     password = os.getenv("MT5_PASSWORD", "")
     server = os.getenv("MT5_SERVER", "ICMarketsSC-Demo")
@@ -88,47 +102,54 @@ def main():
     acc = mt5.account_info()
     log(f"AUTHENTICATED: {acc.name} | Balance: ${acc.balance:.2f} | Server: {acc.server}")
 
-    target_symbol = "BTCUSD" if is_weekend else "XAUUSD"
-    if not mt5.symbol_select(target_symbol, True):
-        for alt in [f"{target_symbol}.", f"{target_symbol}+", f"{target_symbol}m", "GOLD"]:
-            if mt5.symbol_select(alt, True):
-                target_symbol = alt
-                break
+    # MULTI-ASSET UNIVERSE: Gold, Crypto, Major FX & Indices
+    candidates = [
+        "XAUUSD", "BTCUSD", "ETHUSD", "EURUSD", "GBPUSD", "USDJPY", "US30", "NAS100"
+    ]
+    
+    target_symbol, sinfo, tick = find_best_active_symbol(candidates)
+    if not target_symbol:
+        log("No eligible liquid symbol available right now.")
+        mt5.shutdown()
+        return
 
-    tick = mt5.symbol_info_tick(target_symbol)
-    sinfo = mt5.symbol_info(target_symbol)
+    log(f"Selected Prime Opportunity Asset: {target_symbol} | Bid={tick.bid} | Ask={tick.ask}")
 
-    if tick and sinfo:
-        log(f"Active Market: {target_symbol} | Bid={tick.bid} | Ask={tick.ask}")
+    # Trailing Breakeven Shield Management on all open positions
+    open_positions = mt5.positions_get() or []
+    log(f"Total open positions across all assets: {len(open_positions)}")
 
-        # Trailing Breakeven Shield Management
-        positions = mt5.positions_get(symbol=target_symbol) or []
-        log(f"Current open positions on {target_symbol}: {len(positions)}")
+    for p in open_positions:
+        sym = p.symbol
+        pos_sinfo = mt5.symbol_info(sym)
+        if not pos_sinfo:
+            continue
+            
+        ticket = p.ticket
+        pos_type = p.type
+        open_price = p.price_open
+        cur_price = p.price_current
+        cur_sl = p.sl
 
-        for p in positions:
-            ticket = p.ticket
-            pos_type = p.type
-            open_price = p.price_open
-            cur_price = p.price_current
-            cur_sl = p.sl
+        point = pos_sinfo.point
+        pip_size = point * 10 if pos_sinfo.digits in [3, 5] else point
 
-            pip_size = 10.0 if "BTC" in target_symbol else 0.10
-            # Trailing Breakeven at +15 pips
-            if pos_type == mt5.ORDER_TYPE_BUY and (cur_price - open_price) >= (15 * pip_size):
-                be_sl = open_price + (2 * pip_size)
-                if cur_sl < be_sl:
-                    req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": round(be_sl, sinfo.digits), "tp": p.tp}
-                    mt5.order_send(req)
-                    log(f"Position #{ticket} SL Trailed to Zero-Risk Breakeven ({be_sl})!")
-            elif pos_type == mt5.ORDER_TYPE_SELL and (open_price - cur_price) >= (15 * pip_size):
-                be_sl = open_price - (2 * pip_size)
-                if cur_sl > be_sl or cur_sl == 0:
-                    req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": round(be_sl, sinfo.digits), "tp": p.tp}
-                    mt5.order_send(req)
-                    log(f"Position #{ticket} SL Trailed to Zero-Risk Breakeven ({be_sl})!")
+        # Trailing Breakeven at +15 pips (Risk eliminated)
+        if pos_type == mt5.ORDER_TYPE_BUY and (cur_price - open_price) >= (15 * pip_size):
+            be_sl = open_price + (2 * pip_size)
+            if cur_sl < be_sl:
+                req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": round(be_sl, pos_sinfo.digits), "tp": p.tp}
+                mt5.order_send(req)
+                log(f"Position #{ticket} ({sym}) SL Trailed to Zero-Risk Breakeven ({be_sl})!")
+        elif pos_type == mt5.ORDER_TYPE_SELL and (open_price - cur_price) >= (15 * pip_size):
+            be_sl = open_price - (2 * pip_size)
+            if cur_sl > be_sl or cur_sl == 0:
+                req = {"action": mt5.TRADE_ACTION_SLTP, "position": ticket, "sl": round(be_sl, pos_sinfo.digits), "tp": p.tp}
+                mt5.order_send(req)
+                log(f"Position #{ticket} ({sym}) SL Trailed to Zero-Risk Breakeven ({be_sl})!")
 
     mt5.shutdown()
-    log("Dynamic execution cycle completed safely.")
+    log("Multi-asset dynamic execution cycle completed safely.")
 
 if __name__ == "__main__":
     main()
