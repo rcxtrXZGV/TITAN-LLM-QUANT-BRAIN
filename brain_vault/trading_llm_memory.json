@@ -1,5 +1,5 @@
 {
-  "total_records": 35,
+  "total_records": 36,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -493,6 +493,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 22.0,
         "dynamic_tp_pips": 215.6,
+        "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-10T14:49:43.436549+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T14:49:43.436549+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Expansion",
+        "active_draw_on_liquidity": "Unmitigated H4 Fair Value Gap overlapping with Previous Day High (PDH)",
+        "dynamic_tp_rationale": "Price has cleared the Asian Session Low sweep and successfully retested the institutional order block on the 15-minute timeframe. Order flow is exhibiting high momentum expansion with no intermediate resistance until the macro H4 liquidity pool at the PDH.",
+        "recommended_dynamic_rr": "1:9.4",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": 206,
         "breakeven_milestone_pips": 18
       }
     }
