@@ -1,17 +1,19 @@
-name: Titan Cloud Autonomous MT5 Executor (24/7 Serverless)
+name: Titan Cloud Autonomous MT5 Executor (24/7 Serverless VPS Mode)
 
 on:
   schedule:
-    # 24/7 UNLIMITED FREE EXECUTION ON PUBLIC REPO
-    - cron: '*/30 * * * *'
+    # Trigger relay every 4 hours to ensure continuous VPS execution without gaps
+    - cron: '0 */4 * * *'
   workflow_dispatch:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
-  cloud-trade:
+  cloud-vps-daemon:
     runs-on: windows-latest
+    timeout-minutes: 350
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -56,10 +58,21 @@ jobs:
           Copy-Item -Path "$appdataDir\*" -Destination $targetDir -Recurse -Force
           Write-Host "Extracted MT5 runtime successfully to $targetDir"
 
-      - name: Execute Autonomous Trading Cycle
+      - name: Launch 5-Hour Continuous Live VPS Trading Daemon
         env:
           MT5_LOGIN: ${{ secrets.MT5_LOGIN }}
           MT5_PASSWORD: ${{ secrets.MT5_PASSWORD }}
           MT5_SERVER: ${{ secrets.MT5_SERVER }}
         run: |
           python cloud_mt5_executor.py
+
+      - name: Continuous Self-Relay Loop (Launch Next VPS Runner Seamlessly)
+        if: always()
+        shell: bash
+        run: |
+          echo "Relaying to next seamless continuous VPS runner session..."
+          curl -X POST \
+            -H "Accept: application/vnd.github.v3+json" \
+            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+            https://api.github.com/repos/${{ github.repository }}/actions/workflows/cloud_mt5_runner.yml/dispatches \
+            -d '{"ref":"main"}' || true
