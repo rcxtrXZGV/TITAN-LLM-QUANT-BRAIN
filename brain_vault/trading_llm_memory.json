@@ -1,5 +1,5 @@
 {
-  "total_records": 37,
+  "total_records": 38,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -524,6 +524,21 @@
         "dynamic_sl_pips": 22.5,
         "dynamic_tp_pips": 193.5,
         "breakeven_milestone_pips": 15
+      }
+    },
+    {
+      "timestamp": "2026-11-10T20:39:17.824471+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T20:39:17.824471+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Expansion",
+        "active_draw_on_liquidity": "Unmitigated Daily/H4 Fair Value Gap overlapping with Previous Day High sweep pool",
+        "dynamic_tp_rationale": "Price has cleared the Asian Session Low sweep wick, rejecting institutional mitigation blocks with high-volume delta imbalance. The direct structural path to the opposite daily liquidity pool is cleanly unmitigated, offering an optimal risk-to-reward expansion trajectory without intermediate resistance.",
+        "recommended_dynamic_rr": "1:9.6",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": 211,
+        "breakeven_milestone_pips": 18
       }
     }
   ]
