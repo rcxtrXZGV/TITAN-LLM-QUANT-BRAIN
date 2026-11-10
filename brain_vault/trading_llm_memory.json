@@ -1,5 +1,5 @@
 {
-  "total_records": 27,
+  "total_records": 28,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -373,6 +373,21 @@
         "verdict": "BUY",
         "dynamic_sl_pips": 22.0,
         "dynamic_tp_pips": 187.0,
+        "breakeven_milestone_pips": 15
+      }
+    },
+    {
+      "timestamp": "2026-11-10T03:44:45.016945+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-10T03:44:45.016945+00:00",
+        "dynamic_market_mode": "Expansion / Liquidity Hunt",
+        "active_draw_on_liquidity": "Previous Day High (PDH) liquidity pool and unmitigated H4 Fair Value Gap at 1.08450",
+        "dynamic_tp_rationale": "Asian session sweep completed below institutional discount array. Price is expanding northward with zero internal resistance until the liquidity void at the PDH, offering an optimal mathematical runway scaling to a 1:9.8 risk-to-reward profile.",
+        "recommended_dynamic_rr": "1:9.8",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": "215",
         "breakeven_milestone_pips": 15
       }
     }
