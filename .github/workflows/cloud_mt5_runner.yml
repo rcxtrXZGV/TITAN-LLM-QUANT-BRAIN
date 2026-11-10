@@ -1,9 +1,12 @@
-name: Titan Cloud Autonomous MT5 Executor (24/7 Serverless)
+name: Titan Cloud Autonomous MT5 Executor (Sniper New York Session)
 
 on:
   schedule:
-    # 24/7 compliant schedule every 30 minutes
-    - cron: '*/30 * * * *'
+    # 1. Weekdays (Monday-Friday): New York High-Volume Session (12:00 - 18:00 UTC / 5:30 PM - 11:30 PM IST)
+    # Fires every 15 minutes during peak liquidity
+    - cron: '*/15 12-18 * * 1-5'
+    # 2. Weekends (Saturday-Sunday): 24/7 High-Volume Crypto (BTCUSD, ETHUSD)
+    - cron: '*/30 * * * 0,6'
   workflow_dispatch:
 
 permissions:
@@ -25,7 +28,17 @@ jobs:
         run: |
           pip install MetaTrader5 requests
 
-      - name: Download & Extract Pre-Configured Headless MT5 Runtime & Config
+      - name: High-Speed Cache MT5 Runtime (Zero Delay Restore)
+        id: cache-mt5
+        uses: actions/cache@v4
+        with:
+          path: |
+            C:\MT5
+            C:\Users\runneradmin\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075
+          key: titan-mt5-runtime-v1
+
+      - name: 1-Time Initial Download (Only Runs on Cache Miss)
+        if: steps.cache-mt5.outputs.cache-hit != 'true'
         shell: powershell
         run: |
           $mt5ZipUrl = "https://github.com/rcxtrXZGV/TITAN-LLM-QUANT-BRAIN/releases/download/v1.0.0/mt5_portable.zip"
@@ -33,19 +46,18 @@ jobs:
           $targetDir = "C:\MT5"
           $appdataDir = "$env:APPDATA\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075"
           
-          Write-Host "1. Downloading standalone MT5 runtime..."
+          Write-Host "Initial 1-Time Setup: Caching runtime for permanent instant access..."
           Invoke-WebRequest -Uri $mt5ZipUrl -OutFile "$env:TEMP\mt5.zip"
           Expand-Archive -Path "$env:TEMP\mt5.zip" -DestinationPath $targetDir -Force
           
-          Write-Host "2. Downloading Pre-authenticated Config..."
           Invoke-WebRequest -Uri $configZipUrl -OutFile "$env:TEMP\config.zip"
           New-Item -ItemType Directory -Force -Path $appdataDir | Out-Null
           Expand-Archive -Path "$env:TEMP\config.zip" -DestinationPath $appdataDir -Force
 
           Copy-Item -Path "$appdataDir\*" -Destination $targetDir -Recurse -Force
-          Write-Host "Extracted MT5 runtime successfully to $targetDir"
+          Write-Host "MT5 runtime successfully prepared and saved to high-speed cache!"
 
-      - name: Execute Autonomous Trading Cycle
+      - name: Execute High-Volume Sniper Trading Cycle
         env:
           MT5_LOGIN: ${{ secrets.MT5_LOGIN }}
           MT5_PASSWORD: ${{ secrets.MT5_PASSWORD }}
