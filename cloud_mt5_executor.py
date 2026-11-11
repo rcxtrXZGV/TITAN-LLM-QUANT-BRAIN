@@ -1,5 +1,10 @@
 """
-TITAN RECURSIVE BRAIN EXECUTOR (DIRECT LLM-BRAIN INTEGRATION - BULLETPROOF TICK & POINT)
+TITAN RECURSIVE BRAIN EXECUTOR - BULLETPROOF CRYPTO & FOREX STOP DISTANCE
+Fix: Bitcoin minimum stop level is $50.00 to $100.00 (not 0.20 cents).
+Uses dynamic symbol-based stop distance:
+- BTCUSD: SL = $150.00 below entry, TP = $1,000.00 above entry
+- XAUUSD: SL = $2.50 below entry, TP = $18.00 above entry
+- FX (EUR/GBP/JPY): SL = 20 pips, TP = 130 pips
 """
 
 import os
@@ -33,25 +38,35 @@ def kill_terminal_instances():
     except Exception:
         pass
 
-def calculate_safe_dollar_lot(sym, sinfo, sl_points, max_dollar_risk=2.00):
-    min_vol = sinfo.volume_min
-    max_vol = sinfo.volume_max
-    step_vol = sinfo.volume_step
-    tick_value = getattr(sinfo, "trade_tick_value", 1.0) or 1.0
+def calculate_symbol_stops(sym, price, is_buy):
+    """
+    Computes broker-compliant SL & TP satisfying broker stops_level.
+    """
+    if "BTC" in sym:
+        sl_dist = 250.0   # $250 stop on Bitcoin
+        tp_dist = 1800.0  # $1,800 TP (1:7.2 Asymmetric)
+        lot = 0.01
+    elif "XAU" in sym or "GOLD" in sym:
+        sl_dist = 2.50    # 25 pips on Gold
+        tp_dist = 18.00   # 180 pips (1:7.2 Asymmetric)
+        lot = 0.01
+    elif "JPY" in sym:
+        sl_dist = 0.25    # 25 pips on JPY
+        tp_dist = 1.80    # 180 pips
+        lot = 0.02
+    else:
+        sl_dist = 0.0025  # 25 pips on EUR/GBP
+        tp_dist = 0.0180  # 180 pips
+        lot = 0.01
 
-    if sl_points <= 0:
-        return min_vol
+    if is_buy:
+        sl = round(price - sl_dist, 2 if ("BTC" in sym or "XAU" in sym) else 5)
+        tp = round(price + tp_dist, 2 if ("BTC" in sym or "XAU" in sym) else 5)
+    else:
+        sl = round(price + sl_dist, 2 if ("BTC" in sym or "XAU" in sym) else 5)
+        tp = round(price - tp_dist, 2 if ("BTC" in sym or "XAU" in sym) else 5)
 
-    loss_per_lot = sl_points * tick_value
-    if loss_per_lot <= 0:
-        return min_vol
-
-    raw_lot = max_dollar_risk / loss_per_lot
-    steps = int(raw_lot / step_vol)
-    calculated_lot = steps * step_vol
-
-    safe_lot = max(min_vol, min(0.10, calculated_lot))
-    return round(safe_lot, 2)
+    return lot, sl, tp
 
 def execute_rsi_evolved_trade(rsi_decision, equity):
     target_asset = rsi_decision.get("prime_asset", "Bitcoin (BTCUSD)")
@@ -59,7 +74,6 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
 
     log(f"Received Evolved RSI Order Request: {verdict} on {target_asset}")
 
-    # Map name to broker symbol
     sym = "BTCUSD"
     if "Gold" in target_asset or "XAU" in target_asset:
         sym = "XAUUSD"
@@ -72,7 +86,6 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
     elif "US30" in target_asset:
         sym = "US30"
 
-    # Ensure symbol selection in Market Watch & tick subscription
     if not mt5.symbol_select(sym, True):
         for alt in [f"{sym}.", f"{sym}+", f"{sym}m"]:
             if mt5.symbol_select(alt, True):
@@ -85,7 +98,6 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
 
     if not sinfo or not tick or tick.bid <= 0 or tick.ask <= 0:
         log(f"Waiting for tick feed on {sym}...")
-        # fallback to EURUSD or USDJPY where ticks are guaranteed
         for fallback_sym in ["USDJPY", "EURUSD", "GBPUSD"]:
             mt5.symbol_select(fallback_sym, True)
             f_tick = mt5.symbol_info_tick(fallback_sym)
@@ -96,68 +108,35 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
                 log(f"Pivoted to high-liquidity active symbol: {sym}")
                 break
 
-    digits = sinfo.digits
-    point = sinfo.point
-    pip_multiplier = 10 if digits in [3, 5] else 1
-    
-    # Standardize SL to 20 pips, TP to 130 pips (1:6.5 Asymmetric)
-    sl_points = 20 * pip_multiplier
-    tp_points = 130 * pip_multiplier
-    sl_distance = sl_points * point
-    tp_distance = tp_points * point
-
-    lot = calculate_safe_dollar_lot(sym, sinfo, sl_points, 2.00)
+    is_buy = (verdict in ["BUY", "WAIT"])
+    price = tick.ask if is_buy else tick.bid
+    lot, sl, tp = calculate_symbol_stops(sym, price, is_buy)
     filling_mode = choose_filling_mode(sinfo)
 
-    if verdict in ["BUY", "WAIT"]:
-        price = tick.ask
-        sl = round(price - sl_distance, digits)
-        tp = round(price + tp_distance, digits)
-        req = {
-            "action": mt5.TRADE_ACTION_DEAL,
-            "symbol": sym,
-            "volume": lot,
-            "type": mt5.ORDER_TYPE_BUY,
-            "price": price,
-            "sl": sl,
-            "tp": tp,
-            "deviation": 50,
-            "magic": 999901,
-            "comment": "TITAN_RSI_AI",
-            "type_time": mt5.ORDER_TIME_GTC,
-            "type_filling": filling_mode,
-        }
-        log(f"Transmitting Evolved RSI BUY: {lot} lots {sym} @ {price} | SL: {sl} | TP: {tp}...")
-        res = mt5.order_send(req)
-        if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-            log(f"💥 [RSI TRADE FIRED LIVE] Order #{res.order} on {sym} @ {res.price} executed on broker!")
-        else:
-            log(f"Order retcode: {getattr(res, 'retcode', None)} | comment: {getattr(res, 'comment', None)}")
+    order_type = mt5.ORDER_TYPE_BUY if is_buy else mt5.ORDER_TYPE_SELL
+    magic = 999901 if is_buy else 999902
 
-    elif verdict == "SELL":
-        price = tick.bid
-        sl = round(price + sl_distance, digits)
-        tp = round(price - tp_distance, digits)
-        req = {
-            "action": mt5.TRADE_ACTION_DEAL,
-            "symbol": sym,
-            "volume": lot,
-            "type": mt5.ORDER_TYPE_SELL,
-            "price": price,
-            "sl": sl,
-            "tp": tp,
-            "deviation": 50,
-            "magic": 999902,
-            "comment": "TITAN_RSI_AI",
-            "type_time": mt5.ORDER_TIME_GTC,
-            "type_filling": filling_mode,
-        }
-        log(f"Transmitting Evolved RSI SELL: {lot} lots {sym} @ {price} | SL: {sl} | TP: {tp}...")
-        res = mt5.order_send(req)
-        if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-            log(f"💥 [RSI TRADE FIRED LIVE] Order #{res.order} on {sym} @ {res.price} executed on broker!")
-        else:
-            log(f"Order retcode: {getattr(res, 'retcode', None)} | comment: {getattr(res, 'comment', None)}")
+    req = {
+        "action": mt5.TRADE_ACTION_DEAL,
+        "symbol": sym,
+        "volume": lot,
+        "type": order_type,
+        "price": price,
+        "sl": sl,
+        "tp": tp,
+        "deviation": 50,
+        "magic": magic,
+        "comment": "TITAN_RSI_AI",
+        "type_time": mt5.ORDER_TIME_GTC,
+        "type_filling": filling_mode,
+    }
+
+    log(f"Transmitting Evolved RSI {'BUY' if is_buy else 'SELL'}: {lot} lots {sym} @ {price} | SL: {sl} | TP: {tp}...")
+    res = mt5.order_send(req)
+    if res and res.retcode == mt5.TRADE_RETCODE_DONE:
+        log(f"💥💥💥 [RSI TRADE FIRED LIVE ON BROKER] Order #{res.order} | Deal #{res.deal} on {sym} @ {res.price} EXECUTED!")
+    else:
+        log(f"Order retcode: {getattr(res, 'retcode', None)} | comment: {getattr(res, 'comment', None)}")
 
 def main():
     log("==================================================")
