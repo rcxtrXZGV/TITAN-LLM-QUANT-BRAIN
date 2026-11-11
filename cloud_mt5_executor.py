@@ -1,26 +1,19 @@
 """
-TITAN INSTITUTIONAL QUANT ENGINE (PRO LEVEL - AUDIT VERIFIED)
-Post-Audit Hardening:
-1. True Dollar-Risk Position Sizing: Max $2.00 Risk (1% Equity) on ALL assets.
-   - Calculates exact tick value for Gold, Forex, Crypto & US30 dynamically.
-   - Stop Loss is NEVER allowed to risk more than $2.00 regardless of pip distance.
-2. Direct Broker-Level TP & SL:
-   - Both SL & TP are submitted directly to IC Markets Server at order placement.
-   - No dependency on runner timing to exit: Broker matches TP/SL with zero latency.
-3. Realistic Institutional Expectancy:
-   - High Asymmetry (1:6+ RR): Even with 40-50% win rate, math generates exponential compounding.
-4. Clean ASCII Logging: Zero emoji / UTF-8 encoding errors on Windows cp1252.
+TITAN RECURSIVE BRAIN EXECUTOR (DIRECT LLM-BRAIN INTEGRATION)
+Directly connects Gemini's Recursive Self-Improvement (RSI) Evolved Intelligence
+to MetaTrader 5 Broker for Instant Live Execution.
+Reads latest RSI evolution decision & fires with strict $2.00 dollar-risk management.
 """
 
 import os
 import sys
+import json
 import time
 import datetime
 import tempfile
 import subprocess
 import MetaTrader5 as mt5
 
-# Force UTF-8 on Windows stdout
 if sys.platform.startswith('win'):
     sys.stdout.reconfigure(encoding='utf-8')
 
@@ -45,8 +38,8 @@ def kill_terminal_instances():
 
 def calculate_safe_dollar_lot(sym, sinfo, sl_distance, max_dollar_risk=2.00):
     min_vol = sinfo.volume_min
+    max_vol = sinfo.volume_max
     step_vol = sinfo.volume_step
-    contract_size = getattr(sinfo, "trade_contract_size", 100.0) or 100.0
     tick_value = getattr(sinfo, "trade_tick_value", 1.0) or 1.0
     point = sinfo.point
 
@@ -64,52 +57,54 @@ def calculate_safe_dollar_lot(sym, sinfo, sl_distance, max_dollar_risk=2.00):
     safe_lot = max(min_vol, min(0.10, calculated_lot))
     return round(safe_lot, 2)
 
-def detect_institutional_signal(rates, sinfo):
-    c1 = rates[-2]  # previous closed candle
-    c2 = rates[-3]  # setup candle
+def execute_rsi_evolved_trade(rsi_decision, equity):
+    target_asset = rsi_decision.get("prime_asset", "Bitcoin (BTCUSD)")
+    verdict = rsi_decision.get("verdict", "BUY")
+    sl_pips = float(rsi_decision.get("calculated_sl_pips", 140))
+    tp_pips = float(rsi_decision.get("calculated_tp_pips", 1412))
 
-    lookback = rates[-8:-3]
-    swing_high = max([r['high'] for r in lookback])
-    swing_low = min([r['low'] for r in lookback])
+    log(f"Received Evolved RSI Order Request: {verdict} on {target_asset}")
+
+    # Map name to broker symbol
+    sym = "BTCUSD"
+    if "Gold" in target_asset or "XAU" in target_asset:
+        sym = "XAUUSD"
+    elif "EUR" in target_asset:
+        sym = "EURUSD"
+    elif "GBP" in target_asset:
+        sym = "GBPUSD"
+    elif "JPY" in target_asset:
+        sym = "USDJPY"
+    elif "US30" in target_asset:
+        sym = "US30"
+
+    if not mt5.symbol_select(sym, True):
+        for alt in [f"{sym}.", f"{sym}+", f"{sym}m"]:
+            if mt5.symbol_select(alt, True):
+                sym = alt
+                break
+
+    sinfo = mt5.symbol_info(sym)
+    tick = mt5.symbol_info_tick(sym)
+
+    if not sinfo or not tick:
+        log(f"Broker symbol {sym} not available for trading.")
+        return
 
     point = sinfo.point
     digits = sinfo.digits
     pip_size = point * 10 if digits in [3, 5] else point
+    sl_dist = sl_pips * pip_size
+    tp_dist = tp_pips * pip_size
 
-    # Bullish Sweep + Momentum Close
-    if (c2['low'] <= swing_low and c1['close'] > c2['open']) or (c1['close'] > c1['open'] and (c1['close'] - c1['open']) > (c2['open'] - c2['close']) and c2['close'] < c2['open']):
-        sl_dist = max(15.0 * pip_size, min(30.0 * pip_size, c1['close'] - min(c1['low'], c2['low'])))
-        return "BUY", sl_dist
-
-    # Bearish Sweep + Momentum Close
-    elif (c2['high'] >= swing_high and c1['close'] < c2['open']) or (c1['close'] < c1['open'] and (c1['open'] - c1['close']) > (c2['close'] - c2['open']) and c2['close'] > c2['open']):
-        sl_dist = max(15.0 * pip_size, min(30.0 * pip_size, max(c1['high'], c2['high']) - c1['close']))
-        return "SELL", sl_dist
-
-    return None, 0
-
-def scan_and_trade(sym, sinfo, tick, equity):
-    open_pos = mt5.positions_get(symbol=sym) or []
-    if len(open_pos) >= 1:
-        return  # Max 1 position per asset
-
-    rates = mt5.copy_rates_from_pos(sym, mt5.TIMEFRAME_M15, 0, 15)
-    if rates is None or len(rates) < 10:
-        return
-
-    signal, sl_dist = detect_institutional_signal(rates, sinfo)
-    if not signal:
-        return
-
-    max_risk_dollar = min(2.50, max(1.50, equity * 0.012))
-    lot = calculate_safe_dollar_lot(sym, sinfo, sl_dist, max_risk_dollar)
+    # Cap dollar risk strictly to $2.00
+    lot = calculate_safe_dollar_lot(sym, sinfo, sl_dist, 2.00)
     filling_mode = choose_filling_mode(sinfo)
-    digits = sinfo.digits
 
-    if signal == "BUY":
+    if verdict == "BUY":
         price = tick.ask
         sl = round(price - sl_dist, digits)
-        tp = round(price + (sl_dist * 6.5), digits)
+        tp = round(price + tp_dist, digits)
         req = {
             "action": mt5.TRADE_ACTION_DEAL,
             "symbol": sym,
@@ -118,22 +113,23 @@ def scan_and_trade(sym, sinfo, tick, equity):
             "price": price,
             "sl": sl,
             "tp": tp,
-            "deviation": 25,
-            "magic": 888777,
-            "comment": f"TITAN_{sym}",
+            "deviation": 50,
+            "magic": 999901,
+            "comment": "TITAN_RSI_AI",
             "type_time": mt5.ORDER_TIME_GTC,
             "type_filling": filling_mode,
         }
+        log(f"Transmitting Evolved RSI BUY: {lot} lots {sym} @ {price} | SL: {sl} | TP: {tp}...")
         res = mt5.order_send(req)
         if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-            log(f"[ORDER EXECUTED LIVE] BUY {lot} lots {sym} @ {price} | Order: {res.order} | SL: {sl} | TP: {tp} (Risk: ${max_risk_dollar:.2f})")
+            log(f"💥 [RSI TRADE FIRED LIVE] Order #{res.order} on {sym} @ {res.price} executed on broker!")
         else:
-            log(f"Order attempted on {sym} result: {getattr(res, 'comment', 'retcode ' + str(getattr(res, 'retcode', 'err')))}")
+            log(f"Order retcode: {getattr(res, 'retcode', None)} | comment: {getattr(res, 'comment', None)}")
 
-    elif signal == "SELL":
+    elif verdict == "SELL":
         price = tick.bid
         sl = round(price + sl_dist, digits)
-        tp = round(price - (sl_dist * 6.5), digits)
+        tp = round(price - tp_dist, digits)
         req = {
             "action": mt5.TRADE_ACTION_DEAL,
             "symbol": sym,
@@ -142,22 +138,40 @@ def scan_and_trade(sym, sinfo, tick, equity):
             "price": price,
             "sl": sl,
             "tp": tp,
-            "deviation": 25,
-            "magic": 888777,
-            "comment": f"TITAN_{sym}",
+            "deviation": 50,
+            "magic": 999902,
+            "comment": "TITAN_RSI_AI",
             "type_time": mt5.ORDER_TIME_GTC,
             "type_filling": filling_mode,
         }
+        log(f"Transmitting Evolved RSI SELL: {lot} lots {sym} @ {price} | SL: {sl} | TP: {tp}...")
         res = mt5.order_send(req)
         if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-            log(f"[ORDER EXECUTED LIVE] SELL {lot} lots {sym} @ {price} | Order: {res.order} | SL: {sl} | TP: {tp} (Risk: ${max_risk_dollar:.2f})")
+            log(f"💥 [RSI TRADE FIRED LIVE] Order #{res.order} on {sym} @ {res.price} executed on broker!")
         else:
-            log(f"Order attempted on {sym} result: {getattr(res, 'comment', 'retcode ' + str(getattr(res, 'retcode', 'err')))}")
+            log(f"Order retcode: {getattr(res, 'retcode', None)} | comment: {getattr(res, 'comment', None)}")
 
 def main():
     log("==================================================")
-    log("TITAN AUDIT-HARDENED PRO QUANT EXECUTOR")
+    log("TITAN RECURSIVE BRAIN EXECUTOR - LIVE BROKER DISPATCH")
     log("==================================================")
+
+    memory_path = os.path.join("brain_vault", "trading_llm_memory.json")
+    if not os.path.exists(memory_path):
+        log("No brain vault memory found.")
+        return
+
+    with open(memory_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    latest_insight = data.get("historical_insights", [])[-1]
+    rsi_decision = latest_insight.get("rsi_evolution", {}).get("active_market_bias", {})
+
+    if not rsi_decision:
+        log("No active RSI decision found in latest insight.")
+        return
+
+    log(f"Loaded RSI Brain Decision: {rsi_decision.get('prime_asset')} | Verdict: {rsi_decision.get('verdict')}")
 
     login_str = os.getenv("MT5_LOGIN", "")
     password = os.getenv("MT5_PASSWORD", "")
@@ -195,23 +209,11 @@ def main():
     acc = mt5.account_info()
     log(f"BROKER CONNECTED: {acc.name} | Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f}")
 
-    universe = ["XAUUSD", "BTCUSD", "ETHUSD", "EURUSD", "GBPUSD", "USDJPY", "US30"]
-    sinfo_dict = {}
-
-    for sym in universe:
-        if mt5.symbol_select(sym, True):
-            s = mt5.symbol_info(sym)
-            if s and s.trade_mode == mt5.SYMBOL_TRADE_MODE_FULL:
-                sinfo_dict[sym] = s
-
-    # Multi-Asset Execution with Exact Dollar Sizing
-    for sym, sinfo in sinfo_dict.items():
-        tick = mt5.symbol_info_tick(sym)
-        if tick and tick.bid > 0 and tick.ask > 0:
-            scan_and_trade(sym, sinfo, tick, acc.equity)
+    # Fire the exact trade evolved by the Recursive Self-Improvement LLM
+    execute_rsi_evolved_trade(rsi_decision, acc.equity)
 
     mt5.shutdown()
-    log("Sniper trading cycle completed.")
+    log("RSI Execution cycle successfully finalized.")
 
 if __name__ == "__main__":
     main()
