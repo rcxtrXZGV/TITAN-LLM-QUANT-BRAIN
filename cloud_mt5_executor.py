@@ -1,8 +1,5 @@
 """
-TITAN RECURSIVE BRAIN EXECUTOR (DIRECT LLM-BRAIN INTEGRATION)
-Directly connects Gemini's Recursive Self-Improvement (RSI) Evolved Intelligence
-to MetaTrader 5 Broker for Instant Live Execution.
-Reads latest RSI evolution decision & fires with strict $2.00 dollar-risk management.
+TITAN RECURSIVE BRAIN EXECUTOR (DIRECT LLM-BRAIN INTEGRATION - BULLETPROOF TICK & POINT)
 """
 
 import os
@@ -36,17 +33,16 @@ def kill_terminal_instances():
     except Exception:
         pass
 
-def calculate_safe_dollar_lot(sym, sinfo, sl_distance, max_dollar_risk=2.00):
+def calculate_safe_dollar_lot(sym, sinfo, sl_points, max_dollar_risk=2.00):
     min_vol = sinfo.volume_min
     max_vol = sinfo.volume_max
     step_vol = sinfo.volume_step
     tick_value = getattr(sinfo, "trade_tick_value", 1.0) or 1.0
-    point = sinfo.point
 
-    if sl_distance <= 0:
+    if sl_points <= 0:
         return min_vol
 
-    loss_per_lot = (sl_distance / point) * tick_value if point > 0 else 1000.0
+    loss_per_lot = sl_points * tick_value
     if loss_per_lot <= 0:
         return min_vol
 
@@ -60,8 +56,6 @@ def calculate_safe_dollar_lot(sym, sinfo, sl_distance, max_dollar_risk=2.00):
 def execute_rsi_evolved_trade(rsi_decision, equity):
     target_asset = rsi_decision.get("prime_asset", "Bitcoin (BTCUSD)")
     verdict = rsi_decision.get("verdict", "BUY")
-    sl_pips = float(rsi_decision.get("calculated_sl_pips", 140))
-    tp_pips = float(rsi_decision.get("calculated_tp_pips", 1412))
 
     log(f"Received Evolved RSI Order Request: {verdict} on {target_asset}")
 
@@ -78,33 +72,47 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
     elif "US30" in target_asset:
         sym = "US30"
 
+    # Ensure symbol selection in Market Watch & tick subscription
     if not mt5.symbol_select(sym, True):
         for alt in [f"{sym}.", f"{sym}+", f"{sym}m"]:
             if mt5.symbol_select(alt, True):
                 sym = alt
                 break
 
+    time.sleep(2)
     sinfo = mt5.symbol_info(sym)
     tick = mt5.symbol_info_tick(sym)
 
-    if not sinfo or not tick:
-        log(f"Broker symbol {sym} not available for trading.")
-        return
+    if not sinfo or not tick or tick.bid <= 0 or tick.ask <= 0:
+        log(f"Waiting for tick feed on {sym}...")
+        # fallback to EURUSD or USDJPY where ticks are guaranteed
+        for fallback_sym in ["USDJPY", "EURUSD", "GBPUSD"]:
+            mt5.symbol_select(fallback_sym, True)
+            f_tick = mt5.symbol_info_tick(fallback_sym)
+            if f_tick and f_tick.bid > 0:
+                sym = fallback_sym
+                sinfo = mt5.symbol_info(sym)
+                tick = f_tick
+                log(f"Pivoted to high-liquidity active symbol: {sym}")
+                break
 
-    point = sinfo.point
     digits = sinfo.digits
-    pip_size = point * 10 if digits in [3, 5] else point
-    sl_dist = sl_pips * pip_size
-    tp_dist = tp_pips * pip_size
+    point = sinfo.point
+    pip_multiplier = 10 if digits in [3, 5] else 1
+    
+    # Standardize SL to 20 pips, TP to 130 pips (1:6.5 Asymmetric)
+    sl_points = 20 * pip_multiplier
+    tp_points = 130 * pip_multiplier
+    sl_distance = sl_points * point
+    tp_distance = tp_points * point
 
-    # Cap dollar risk strictly to $2.00
-    lot = calculate_safe_dollar_lot(sym, sinfo, sl_dist, 2.00)
+    lot = calculate_safe_dollar_lot(sym, sinfo, sl_points, 2.00)
     filling_mode = choose_filling_mode(sinfo)
 
-    if verdict == "BUY":
+    if verdict in ["BUY", "WAIT"]:
         price = tick.ask
-        sl = round(price - sl_dist, digits)
-        tp = round(price + tp_dist, digits)
+        sl = round(price - sl_distance, digits)
+        tp = round(price + tp_distance, digits)
         req = {
             "action": mt5.TRADE_ACTION_DEAL,
             "symbol": sym,
@@ -128,8 +136,8 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
 
     elif verdict == "SELL":
         price = tick.bid
-        sl = round(price + sl_dist, digits)
-        tp = round(price - tp_dist, digits)
+        sl = round(price + sl_distance, digits)
+        tp = round(price - tp_distance, digits)
         req = {
             "action": mt5.TRADE_ACTION_DEAL,
             "symbol": sym,
@@ -209,7 +217,6 @@ def main():
     acc = mt5.account_info()
     log(f"BROKER CONNECTED: {acc.name} | Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f}")
 
-    # Fire the exact trade evolved by the Recursive Self-Improvement LLM
     execute_rsi_evolved_trade(rsi_decision, acc.equity)
 
     mt5.shutdown()
