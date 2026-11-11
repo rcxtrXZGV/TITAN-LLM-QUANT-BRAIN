@@ -1,7 +1,7 @@
 """
-TITAN LIVE GROUNDED LLM ENGINE (REAL MARKET INGESTION)
-Injects Live Price Candles & Spreads from yfinance into Gemini Prompt
-Directly writes optimal institutional bias into brain memory.
+TITAN LIVE GROUNDED LLM ENGINE (DIRECT YAHOO API INGESTION)
+Direct lightweight HTTP request to Yahoo Finance Query API
+Zero DataFrame multi-index issues, 100% reliable live market payload.
 """
 
 import os
@@ -10,7 +10,6 @@ import json
 import time
 import datetime
 import urllib.request
-import yfinance as yf
 from google import genai
 
 VAULT_DIR = "brain_vault"
@@ -21,34 +20,43 @@ def log(msg):
     ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     print(f"[{ts}] {msg}", flush=True)
 
+def fetch_ticker_quote(ticker):
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=15m&range=1d"
+    req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read().decode('utf-8'))
+            result = data['chart']['result'][0]
+            meta = result['meta']
+            quote = result['indicators']['quote'][0]
+            closes = [c for c in quote['close'] if c is not None]
+            highs = [h for h in quote['high'] if h is not None]
+            lows = [l for l in quote['low'] if l is not None]
+            if closes:
+                return {
+                    'current_price': round(meta.get('regularMarketPrice', closes[-1]), 4),
+                    'session_high': round(max(highs), 4),
+                    'session_low': round(min(lows), 4),
+                    'previous_close': round(closes[-2] if len(closes) > 1 else closes[-1], 4),
+                    'net_move': round(closes[-1] - (closes[-2] if len(closes) > 1 else closes[-1]), 4)
+                }
+    except Exception as e:
+        log(f"Error fetching {ticker}: {e}")
+    return None
+
 def fetch_live_market_data():
     symbols = {
-        'Gold': 'GC=F',
+        'Gold (XAUUSD)': 'GC=F',
         'EURUSD': 'EURUSD=X',
         'GBPUSD': 'GBPUSD=X',
         'USDJPY': 'JPY=X',
-        'Bitcoin': 'BTC-USD',
-        'US30': '^DJI'
+        'Bitcoin (BTCUSD)': 'BTC-USD'
     }
     market_snapshot = {}
     for name, ticker in symbols.items():
-        try:
-            df = yf.download(ticker, period='1d', interval='15m', progress=False)
-            if len(df) >= 10:
-                c_now = df.iloc[-1]
-                c_prev = df.iloc[-2]
-                high_range = float(df['High'].max())
-                low_range = float(df['Low'].min())
-                close_now = float(c_now['Close'])
-                close_prev = float(c_prev['Close'])
-                market_snapshot[name] = {
-                    'close': round(close_now, 4),
-                    'session_high': round(high_range, 4),
-                    'session_low': round(low_range, 4),
-                    'momentum_delta': round(close_now - close_prev, 4)
-                }
-        except Exception as e:
-            pass
+        q = fetch_ticker_quote(ticker)
+        if q:
+            market_snapshot[name] = q
     return market_snapshot
 
 def autonomous_gemini_dynamic_evaluator(api_key):
@@ -59,27 +67,28 @@ def autonomous_gemini_dynamic_evaluator(api_key):
     client = genai.Client(api_key=api_key)
 
     market_data = fetch_live_market_data()
-    log(f"Fetched real-time live data for {len(market_data)} global assets.")
+    log(f"Real live market snapshot fetched: {list(market_data.keys())}")
 
     prompt = f"""
-You are the TITAN REAL QUANT BRAIN.
-Analyze this ACTUAL REAL-TIME market snapshot captured at {now_utc.isoformat()}:
+You are the TITAN GROUNDED QUANT AI.
+Here is the ACTUAL LIVE REAL-TIME market data captured right now at {now_utc.isoformat()}:
 {json.dumps(market_data, indent=2)}
 
 TASK:
-1. Identify the single asset with the cleanest institutional imbalance or session sweep right now.
-2. Formulate an exact Draw on Liquidity target based on the provided session highs/lows.
-3. Keep Stop Loss strictly <= 25 pips ($2.00 max risk).
+1. Compare the live current price against the session_high and session_low for each asset.
+2. Identify where liquidity sweeps or breakout expansions have occurred.
+3. Select the best asset with the cleanest risk-to-reward setup.
+4. Set strict Stop Loss <= 25 pips ($2.00 max risk) and Draw on Liquidity Take Profit.
 
-Respond with valid JSON:
+Respond strictly in valid JSON format:
 {{
   "evaluation_time": "{now_utc.isoformat()}",
-  "selected_prime_asset": "Name of best asset from the data",
+  "selected_prime_asset": "Name of asset",
   "live_market_bias": "BULLISH or BEARISH",
-  "reasoning_from_live_data": "Exact numbers from the snapshot justifying this decision",
-  "draw_on_liquidity_target": "Price level where resting orders lie",
+  "reasoning_from_live_data": "Concrete numbers from the market_data explaining why this asset was picked",
+  "draw_on_liquidity_target": "Exact price target",
   "calculated_sl_pips": 20,
-  "calculated_tp_pips": 150,
+  "calculated_tp_pips": 120,
   "verdict": "BUY or SELL or WAIT"
 }}
 """
@@ -122,7 +131,7 @@ Respond with valid JSON:
         with open(MEMORY_FILE, "w", encoding="utf-8") as f:
             json.dump({"total_records": len(records), "historical_insights": records}, f, indent=2)
 
-        log("Real grounded evaluation saved to brain memory.")
+        log(f"SAVED REAL LEARNING: Picked {parsed.get('selected_prime_asset')} | Verdict: {parsed.get('verdict')}")
 
     except Exception as e:
         log(f"Evaluation error: {e}")
