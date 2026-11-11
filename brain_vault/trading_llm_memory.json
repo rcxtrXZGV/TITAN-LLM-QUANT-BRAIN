@@ -1,5 +1,5 @@
 {
-  "total_records": 46,
+  "total_records": 47,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -659,6 +659,21 @@
         "dynamic_sl_pips": 22,
         "dynamic_tp_pips": 206,
         "breakeven_milestone_pips": 18
+      }
+    },
+    {
+      "timestamp": "2026-11-11T05:26:23.570334+00:00",
+      "type": "REAL_GROUNDED_EVALUATION",
+      "market_snapshot": {},
+      "data": {
+        "evaluation_time": "2026-11-11T05:26:23.570334+00:00",
+        "selected_prime_asset": "NONE",
+        "live_market_bias": "BULLISH",
+        "reasoning_from_live_data": "No market snapshot data was provided in the input payload ({}), making it impossible to identify real-time institutional imbalances, session sweeps, or calculate precise stop losses.",
+        "draw_on_liquidity_target": "0.00",
+        "calculated_sl_pips": 0,
+        "calculated_tp_pips": 0,
+        "verdict": "WAIT"
       }
     }
   ]
