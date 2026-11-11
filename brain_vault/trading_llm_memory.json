@@ -1,5 +1,5 @@
 {
-  "total_records": 45,
+  "total_records": 46,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -644,6 +644,21 @@
         "dynamic_sl_pips": 21,
         "dynamic_tp_pips": 180,
         "breakeven_milestone_pips": 15
+      }
+    },
+    {
+      "timestamp": "2026-11-11T04:52:38.353562+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-11T04:52:38.353562+00:00",
+        "dynamic_market_mode": "Liquidity Hunt & Expansion",
+        "active_draw_on_liquidity": "Unmitigated H4 Fair Value Gap overlapping with Previous Day London Session High",
+        "dynamic_tp_rationale": "Price has swept the Asian low liquidity pool and displaced aggressively with high institutional volume, creating a clear imbalance. The next major resting liquidity and unmitigated H4 FVG reside at a distance yielding a mathematically optimal structural target without encountering premature resistance.",
+        "recommended_dynamic_rr": "1:9.4",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 22,
+        "dynamic_tp_pips": 206,
+        "breakeven_milestone_pips": 18
       }
     }
   ]
