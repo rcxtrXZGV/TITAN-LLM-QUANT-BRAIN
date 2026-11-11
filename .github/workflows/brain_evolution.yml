@@ -2,8 +2,8 @@ name: Titan Autonomous LLM Evolution Engine (Turbo Edition)
 
 on:
   schedule:
-    # Runs every 30 minutes during Monday-Friday market hours
-    - cron: '*/30 * * * 1-5'
+    # 24/7/365 UNSTOPPABLE SELF-LEARNING & RESEARCH (Runs every 30 minutes non-stop)
+    - cron: '*/30 * * * *'
   workflow_dispatch:
 
 permissions:
