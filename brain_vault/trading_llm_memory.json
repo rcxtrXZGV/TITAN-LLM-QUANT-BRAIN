@@ -1,5 +1,5 @@
 {
-  "total_records": 44,
+  "total_records": 45,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -629,6 +629,21 @@
         "dynamic_sl_pips": 22.0,
         "dynamic_tp_pips": 185.0,
         "breakeven_milestone_pips": 15.0
+      }
+    },
+    {
+      "timestamp": "2026-11-11T03:48:07.308752+00:00",
+      "type": "DYNAMIC_TARGETING_EVALUATION",
+      "data": {
+        "evaluation_time": "2026-11-11T03:48:07.308752+00:00",
+        "dynamic_market_mode": "Liquidity Hunt / Expansion",
+        "active_draw_on_liquidity": "Previous Day High (PDH) and unmitigated Daily Fair Value Gap at 1.09240",
+        "dynamic_tp_rationale": "Price has just completed an institutional sweep of the Asian session low, triggering stop-loss clusters and filling an M15 discount array. The path of least resistance points directly toward the external liquidity pool resting at the Previous Day High. Current range expansion metrics support an extended run, placing the optimal liquidity clearance target at a 1:8.6 risk-to-reward ratio distance.",
+        "recommended_dynamic_rr": "1:8.6",
+        "verdict": "BUY",
+        "dynamic_sl_pips": 21,
+        "dynamic_tp_pips": 180,
+        "breakeven_milestone_pips": 15
       }
     }
   ]
