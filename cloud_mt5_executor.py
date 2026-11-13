@@ -1,10 +1,6 @@
 """
-TITAN RECURSIVE BRAIN EXECUTOR - BULLETPROOF CRYPTO & FOREX STOP DISTANCE
-Fix: Bitcoin minimum stop level is $50.00 to $100.00 (not 0.20 cents).
-Uses dynamic symbol-based stop distance:
-- BTCUSD: SL = $150.00 below entry, TP = $1,000.00 above entry
-- XAUUSD: SL = $2.50 below entry, TP = $18.00 above entry
-- FX (EUR/GBP/JPY): SL = 20 pips, TP = 130 pips
+TITAN RECURSIVE BRAIN EXECUTOR - BULLETPROOF CRYPTO, FOREX & GOLD STOP DISTANCE
+WITH POSITION LIMIT GUARD: Avoids duplicate trades if an active position is already running!
 """
 
 import os
@@ -73,6 +69,15 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
     verdict = rsi_decision.get("verdict", "BUY")
 
     log(f"Received Evolved RSI Order Request: {verdict} on {target_asset}")
+
+    # Check for active open positions to avoid stacking duplicate risk
+    open_positions = mt5.positions_get()
+    if open_positions and len(open_positions) > 0:
+        log(f"ACTIVE POSITION GUARD: {len(open_positions)} position(s) already running on broker.")
+        for p in open_positions:
+            log(f"  -> Ticket #{p.ticket} | {p.symbol} | Volume: {p.volume} | Profit: ${p.profit:.2f}")
+        log("Skipping new order to preserve asymmetric single-bullet risk cap ($2.50 max total portfolio risk).")
+        return
 
     sym = "BTCUSD"
     if "Gold" in target_asset or "XAU" in target_asset:
