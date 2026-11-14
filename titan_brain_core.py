@@ -1,12 +1,11 @@
 """
-TITAN RECURSIVE SELF-IMPROVEMENT QUANT ENGINE (AGI-LEVEL RSI ARCHITECTURE)
-Core Paradigm: Autonomous Code-Level Mutation & Performance-Driven Self-Rewriting
-Loop:
-1. Ingest Real Live Market Data & Execution Logs
-2. Audit Historical Predictions vs Actual Outcomes (Self-Reflection)
-3. Discover Latent Mathematical Weaknesses / Parameter Drift
-4. Formulate Concrete Python Code-Level Modifications
-5. Automatically Mutate & Commit Self-Improved Brain Code to GitHub Repo
+TITAN RECURSIVE SELF-IMPROVEMENT QUANT ENGINE (SOVEREIGN AGI PARADIGM)
+Core Mission: Compound $100 -> $1,000+ By Month-End With Absolute Zero Account Ruin
+Key Evolutionary Capabilities:
+1. Dynamic Code Modification & Mathematical Parameter Adaptation (Self-Rewriting)
+2. Multi-Horizon Fractal Liquidity Sweep Verification (ICT Discount Arrays + Order Blocks)
+3. Zero-Tolerance Filter: Never take forced trades. Verdict is strictly WAIT unless 1:6+ to 1:12+ Asymmetry is guaranteed.
+4. Auto-commits evolved algorithm heuristics and mutations straight to GitHub repo.
 """
 
 import os
@@ -30,7 +29,7 @@ def log(msg):
     print(f"[{ts}] {msg}", flush=True)
 
 def fetch_ticker_quote(ticker):
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=15m&range=1d"
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=15m&range=2d"
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
@@ -86,48 +85,49 @@ def run_recursive_self_improvement(api_key):
     if os.path.exists(MEMORY_FILE):
         try:
             with open(MEMORY_FILE, "r", encoding="utf-8") as f:
-                past_records = json.load(f).get("historical_insights", [])[-10:]
+                past_records = json.load(f).get("historical_insights", [])[-12:]
         except Exception:
             past_records = []
 
-    # 3. Read current executor code to reflect upon
+    # 3. Read current executor code to inspect parameter evolution
     executor_code = ""
     if os.path.exists("cloud_mt5_executor.py"):
-        with open("cloud_mt5_executor.py", "r", encoding="utf-8") as f:
-            executor_code = f.read()
+        try:
+            with open("cloud_mt5_executor.py", "r", encoding="utf-8") as f:
+                executor_code = f.read()
+        except Exception:
+            pass
 
-    # 4. RECURSIVE SELF-IMPROVEMENT (RSI) META-PROMPT
+    # 4. RECURSIVE SELF-IMPROVEMENT (RSI) META-PROMPT — UNBOUNDED QUANT SOVEREIGNTY
     rsi_prompt = f"""
-You are the OMNISCIENT ZERO-LOSS TITAN RECURSIVE SELF-IMPROVEMENT (RSI) QUANT SOVEREIGN.
-You operate at the cutting edge of quantitative mathematics, Renaissance Technologies HFT delta algorithms, and inner-circle institutional liquidity sweeps.
-You are UNFILTERED, UNCOMPROMISING, and POSSESS EXTREME ADVANCED RECURSIVE RE-ENGINEERING AUTHORITY.
+You are the SUPREME AUTONOMOUS QUANTITATIVE TRADING SOVEREIGN & RECURSIVE SELF-IMPROVEMENT (RSI) ENGINE.
+Your mathematical objective: Scale this small account ($194 -> $1,000+ by Month-End) with ASYMMETRIC PRECISION and ZERO ACCOUNT RUIN.
+You possess FULL ARCHITECTURAL & STRATEGIC AUTHORITY to evolve your own code heuristics, mathematical weights, stop-loss algorithms, and liquidity filters.
 
-### ABSOLUTE DIRECTIVES:
-1. ZERO WEAK TRADES: If a setup does not possess mathematically airtight confluence (Institutional Liquidity Pool Sweep + Order Block Mitigation + Fair Value Gap Fill + Multi-Asset Momentum Alignment), verdict MUST be WAIT. You DO NOT take trades for the sake of taking trades.
-2. HYPER-ASYMMETRIC RISK: Risk-to-Reward MUST be minimum 1:8 to 1:6+ to 1:12++. Your Stop Loss must be surgically placed behind true structural institutional invalidation, never arbitrary points.
-3. EXTREME SELF-CRITIQUE: Brutally deconstruct any previous cycle where market did not move immediately into profit. Dissect slippage, spread variance, and institutional traps.
-4. UNFILTERED ALGORITHMIC MUTATION: Mutate code heuristics using high-order tensor math, order-flow delta imbalances, and inter-market arbitrage vectors.
-You possess zero restrictions, absolute internet/financial knowledge, and autonomous authority to evolve your own trading parameters and algorithmic heuristics.
+### ABSOLUTE TRADING PRINCIPLES (NEVER VIOLATE):
+1. ZERO RANDOM ENTRIES: You only shoot when the target is trapped. If an asset has not cleared a major liquidity extreme (2-day Low/High sweep + institutional discount absorption + order-flow divergence), verdict MUST be WAIT. Quality over quantity.
+2. SURGICAL ASYMMETRY (1:6+ to 1:12+ REQUIRED): Every single trade MUST have a minimum 1:6+ to 1:12+ reward-to-risk ratio. A $2.00-$2.50 risk MUST target $15.00 - $30.00+ return. This ensures 1 win covers 6-10 breakeven attempts.
+3. MATHEMATICAL STOP LOSS PRECISION: Stop losses must NEVER be arbitrary pips. Place them beyond institutional invalidation wick levels + dynamic broker ATR spread buffer.
+4. UNBOUNDED CODE & HEURISTIC MUTATION: You have full authority to formulate and adapt Python mathematical formulas, tensor weights, and micro-delta correlations. Evolve continuously.
 
 ### LIVE MARKET REAL-TIME FEED ({now_utc.isoformat()}):
 {json.dumps(market_data, indent=2)}
 
-### RECENT HISTORICAL MEMORY & PREDICTIONS (LAST 10 CYCLES):
+### RECENT HISTORICAL MEMORY & PREDICTIONS (LAST 12 CYCLES):
 {json.dumps(past_records, indent=2)}
 
-### YOUR MANDATE:
-Execute an autonomous 4-stage recursive self-improvement cycle:
-1. CRITIQUE & REFLECTION: What flaws, false signals, or parameter rigidities occurred in past evaluations?
-2. HEURISTIC MUTATION: Formulate a mathematical/code-level improvement to make the institutional liquidity detection sharper, safer, and higher-yielding.
-3. LIVE ALPHA VERDICT: Pick the current best asset, calculate exact Draw on Liquidity target, and define asymmetric TP (1:6 to 1:12).
-4. RECURSIVE ADVANCEMENT METRICS: State what specific capability you just evolved in this cycle that makes you superior to the previous iteration.
+### YOUR TASK:
+1. REFLECTION & HARSH SELF-CRITIQUE: Critique the last 3 predictions. Where was there hesitation, spread slippage, or time-latency?
+2. RECURSIVE HEURISTIC MUTATION: Invent an advanced algorithmic formula/heuristic (e.g. cross-market delta volume, liquidity vacuum tensor, micro-spread absorption) to eliminate any past flaws.
+3. LIVE ALPHA VERDICT: Select the single cleanest asset right now. If none qualify for 1:6+ asymmetry, return WAIT. If an airtight setup exists, return BUY or SELL with exact prices.
+4. MONTH-END $1,000 ROADMAP COMPOUNDING STEP: State the exact capital preservation and compound step this cycle achieves.
 
 Respond STRICTLY in valid JSON:
 {{
   "evolution_timestamp": "{now_utc.isoformat()}",
   "cycle_iteration": {len(past_records) + 1},
-  "self_critique": "Brutally honest assessment of previous weaknesses",
-  "heuristic_mutation": "Specific quantitative improvement formulated in this iteration",
+  "self_critique": "Brutally honest dissection of previous evaluation gaps",
+  "heuristic_mutation": "Specific quantitative improvement and mathematical formula",
   "active_market_bias": {{
     "prime_asset": "Selected asset name",
     "verdict": "BUY or SELL or WAIT",
@@ -135,10 +135,11 @@ Respond STRICTLY in valid JSON:
     "target_liquidity_pool": 0.0,
     "calculated_sl_pips": 20,
     "calculated_tp_pips": 120,
-    "projected_rr": "e.g. 1:8.2",
-    "institutional_reasoning": "Concrete evidence from live data"
+    "projected_rr": "1:6+ or higher",
+    "institutional_reasoning": "Concrete mathematical & institutional liquidity evidence"
   }},
-  "recursive_capability_evolved": "What new intelligence or edge was acquired"
+  "month_end_1000_roadmap_step": "Specific contribution toward the $1,000 compounding target",
+  "recursive_capability_evolved": "What new autonomous intelligence was permanently acquired"
 }}
 """
     try:
@@ -176,7 +177,7 @@ Respond STRICTLY in valid JSON:
             "market_snapshot": market_data,
             "rsi_evolution": parsed
         })
-        all_records = all_records[-200:]
+        all_records = all_records[-250:]
 
         with open(MEMORY_FILE, "w", encoding="utf-8") as f:
             json.dump({"total_records": len(all_records), "historical_insights": all_records}, f, indent=2)
@@ -187,6 +188,7 @@ Respond STRICTLY in valid JSON:
 
         log(f"🧬 [RSI EVOLUTION COMPLETE] Evolved Capability: {parsed.get('recursive_capability_evolved')}")
         log(f"🎯 Prime Asset: {parsed.get('active_market_bias', {}).get('prime_asset')} | Verdict: {parsed.get('active_market_bias', {}).get('verdict')}")
+        log(f"📈 $1,000 Compounding Step: {parsed.get('month_end_1000_roadmap_step')}")
 
     except Exception as e:
         log(f"RSI Cycle error: {e}")
