@@ -2,7 +2,7 @@ name: Titan Autonomous LLM Evolution Engine (Turbo Edition)
 
 on:
   schedule:
-    # 24/7/365 UNSTOPPABLE SELF-LEARNING & RESEARCH (Runs every 30 minutes non-stop)
+    # 24/7/365 UNSTOPPABLE SELF-LEARNING & CODE-LEVEL MUTATION (Every 30 minutes)
     - cron: '*/30 * * * *'
   workflow_dispatch:
 
@@ -25,15 +25,15 @@ jobs:
         run: |
           pip install yfinance pandas requests google-genai
 
-      - name: Execute Titan Self-Evolution & Market Analysis
+      - name: Execute Titan Dynamic Self-Improvement & Strategy Evolution
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
           python titan_brain_core.py
 
-      - name: Commit Evolved Knowledge & Memory
+      - name: Commit All Evolved Knowledge, Memory & Code Mutations
         run: |
           git config --local user.email "titan-brain@ai.quant"
           git config --local user.name "Titan-Autonomous-Brain"
-          git add brain_vault/
-          git diff --staged --quiet || (git commit -m "Auto-evolve Titan LLM Brain & Audit [$(date -u)]" && git push)
+          git add brain_vault/ titan_brain_core.py cloud_mt5_executor.py
+          git diff --staged --quiet || (git commit -m "Dynamic AGI Self-Improvement & Code Mutation [$(date -u)]" && git push)
