@@ -1,6 +1,8 @@
 """
 TITAN RECURSIVE BRAIN EXECUTOR - BULLETPROOF CRYPTO, FOREX & GOLD STOP DISTANCE
-WITH POSITION LIMIT GUARD: Avoids duplicate trades if an active position is already running!
+WITH POSITION LIMIT GUARD & DYNAMIC TRAILING BREAKEVEN ENGINE!
+1. Trailing Breakeven: When floating profit >= 1:2 RR (or >= $1.50 profit), SL moves to entry + tiny buffer (Risk = $0.00).
+2. Position Limit Guard: Prevents duplicate positions, single-bullet risk cap ($2.50 max portfolio risk).
 """
 
 import os
@@ -64,18 +66,51 @@ def calculate_symbol_stops(sym, price, is_buy):
 
     return lot, sl, tp
 
+def manage_active_trailing_breakeven(open_positions):
+    """
+    Scans active positions. If profit exceeds threshold ($1.50+), locks SL to Entry (Risk-Free Trade).
+    """
+    for p in open_positions:
+        log(f"Inspecting Position #{p.ticket} on {p.symbol}: Entry={p.price_open}, Current={p.price_current}, SL={p.sl}, Profit=${p.profit:.2f}")
+        
+        is_buy = (p.type == mt5.ORDER_TYPE_BUY)
+        # Check if already at or beyond breakeven
+        if is_buy and p.sl >= p.price_open:
+            log(f"  -> Position #{p.ticket} already at Breakeven/Profit lock. Skipping.")
+            continue
+        if (not is_buy) and p.sl > 0 and p.sl <= p.price_open:
+            log(f"  -> Position #{p.ticket} already at Breakeven/Profit lock. Skipping.")
+            continue
+
+        # If trade is in profit by >= $1.50 (more than half the risk distance), move SL to entry + 1 pip
+        if p.profit >= 1.50:
+            buffer = 0.10 if ("XAU" in p.symbol or "BTC" in p.symbol) else 0.0001
+            new_sl = round(p.price_open + (buffer if is_buy else -buffer), 2 if ("XAU" in p.symbol or "BTC" in p.symbol) else 5)
+            
+            req = {
+                "action": mt5.TRADE_ACTION_SLTP,
+                "position": p.ticket,
+                "symbol": p.symbol,
+                "sl": new_sl,
+                "tp": p.tp
+            }
+            res = mt5.order_send(req)
+            if res and res.retcode == mt5.TRADE_RETCODE_DONE:
+                log(f"🎯 [TRAILING BREAKEVEN LOCKED] Position #{p.ticket} SL moved to {new_sl} (Risk-Free Trade)!")
+            else:
+                log(f"Failed to trail SL: retcode={getattr(res, 'retcode', None)} | comment={getattr(res, 'comment', None)}")
+
 def execute_rsi_evolved_trade(rsi_decision, equity):
     target_asset = rsi_decision.get("prime_asset", "Bitcoin (BTCUSD)")
     verdict = rsi_decision.get("verdict", "BUY")
 
     log(f"Received Evolved RSI Order Request: {verdict} on {target_asset}")
 
-    # Check for active open positions to avoid stacking duplicate risk
+    # Check for active open positions
     open_positions = mt5.positions_get()
     if open_positions and len(open_positions) > 0:
         log(f"ACTIVE POSITION GUARD: {len(open_positions)} position(s) already running on broker.")
-        for p in open_positions:
-            log(f"  -> Ticket #{p.ticket} | {p.symbol} | Volume: {p.volume} | Profit: ${p.profit:.2f}")
+        manage_active_trailing_breakeven(open_positions)
         log("Skipping new order to preserve asymmetric single-bullet risk cap ($2.50 max total portfolio risk).")
         return
 
