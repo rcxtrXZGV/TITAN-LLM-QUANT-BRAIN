@@ -284,10 +284,16 @@ def main():
     acc = mt5.account_info()
     log(f"BROKER CONNECTED: {acc.name} | Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f}")
 
-    execute_rsi_evolved_trade(rsi_decision, acc.equity)
+    # 3-Minute Continuous Real-Time Tick Sniping Loop
+    log("Starting 3-Minute Continuous Microsecond Tick Sniping Window...")
+    end_time = time.time() + 180  # 3 minutes continuous scanning
+    while time.time() < end_time:
+        acc = mt5.account_info()
+        execute_rsi_evolved_trade(rsi_decision, acc.equity)
+        time.sleep(10)  # Check ticks and trailing stops every 10 seconds
 
     mt5.shutdown()
-    log("RSI Execution cycle successfully finalized.")
+    log("RSI 3-Minute Sniper Execution cycle successfully finalized.")
 
 if __name__ == "__main__":
     main()
