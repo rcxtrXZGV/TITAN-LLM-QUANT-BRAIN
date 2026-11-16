@@ -1,17 +1,24 @@
-name: Titan Cloud Autonomous MT5 Executor (24/7 Continuous Sniper)
+name: Titan Cloud Autonomous MT5 Executor (24/7 Perpetual Cloud Loop)
 
 on:
   schedule:
-    # 1. Weekdays: Every 5 minutes during London & New York Active Sessions (07:00 to 22:00 UTC / 12:30 PM to 03:30 AM IST)
-    - cron: '*/5 7-22 * * 1-5'
-    # 2. Weekdays Off-Hours (Asian Session): Every 15 minutes
-    - cron: '*/15 0-6,23 * * 1-5'
-    # 3. Weekends: Every 15 minutes 24/7 Continuous Crypto (BTC, ETH, SOL)
-    - cron: '*/15 * * * 0,6'
+    # Fail-safe backup trigger: Fires every 30 minutes in case any loop is interrupted
+    - cron: '*/30 * * * *'
   workflow_dispatch:
+    inputs:
+      iteration:
+        description: 'Current loop iteration count'
+        required: false
+        default: '1'
+        type: string
+
+concurrency:
+  group: titan-continuous-runner
+  cancel-in-progress: false
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   cloud-trade:
@@ -58,10 +65,33 @@ jobs:
           Copy-Item -Path "$appdataDir\*" -Destination $targetDir -Recurse -Force
           Write-Host "MT5 runtime successfully prepared and saved to high-speed cache!"
 
-      - name: Execute High-Volume Sniper Trading Cycle
+      - name: Execute High-Volume Continuous Sniper Trading Session
         env:
           MT5_LOGIN: ${{ secrets.MT5_LOGIN }}
           MT5_PASSWORD: ${{ secrets.MT5_PASSWORD }}
           MT5_SERVER: ${{ secrets.MT5_SERVER }}
         run: |
           python cloud_mt5_executor.py
+
+      - name: Recursive Self-Dispatch (Perpetual 24/7 Continuous Loop)
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const currentIteration = parseInt("${{ inputs.iteration || '1' }}");
+            const nextIteration = currentIteration + 1;
+            console.log(`[PERPETUAL DISPATCH] Spawning next autonomous continuous loop iteration: ${nextIteration}...`);
+            
+            try {
+              await github.rest.actions.createWorkflowDispatch({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                workflow_id: 'cloud_mt5_runner.yml',
+                ref: 'main',
+                inputs: {
+                  iteration: nextIteration.toString()
+                }
+              });
+              console.log('[PERPETUAL DISPATCH] Successfully triggered next continuous cycle.');
+            } catch (err) {
+              console.log('[PERPETUAL DISPATCH] Trigger completed or caught by concurrency limiter:', err.message);
+            }
