@@ -106,13 +106,23 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
 
     log(f"Received Evolved RSI Order Request: {verdict} on {target_asset}")
 
-    # Check for active open positions
+    # Check active open positions and manage trailing breakeven
     open_positions = mt5.positions_get()
     if open_positions and len(open_positions) > 0:
-        log(f"ACTIVE POSITION GUARD: {len(open_positions)} position(s) already running on broker.")
+        log(f"ACTIVE POSITION MANAGER: Managing {len(open_positions)} open position(s) on broker.")
         manage_active_trailing_breakeven(open_positions)
-        log("Skipping new order to preserve asymmetric single-bullet risk cap ($2.50 max total portfolio risk).")
-        return
+        
+        # Guard 1: Prevent duplicate stacking on the EXACT same asset
+        target_sym_base = "XAUUSD" if ("Gold" in target_asset or "XAU" in target_asset) else ("BTCUSD" if "BTC" in target_asset else ("EURUSD" if "EUR" in target_asset else "USDJPY"))
+        for p in open_positions:
+            if target_sym_base in p.symbol:
+                log(f"Already holding active position on {p.symbol} (Ticket #{p.ticket}). Skipping duplicate entry on same asset.")
+                return
+        
+        # Guard 2: Allow multi-asset diversification up to 3 uncorrelated trades ($2.00 risk each)
+        if len(open_positions) >= 3:
+            log(f"Max multi-asset portfolio capacity reached ({len(open_positions)}/3). Preserving margin buffer.")
+            return
 
     sym = "BTCUSD"
     if "Gold" in target_asset or "XAU" in target_asset:
