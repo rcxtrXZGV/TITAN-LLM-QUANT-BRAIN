@@ -1,14 +1,16 @@
 """
-TITAN COUNCIL OF INDEPENDENT SOVEREIGN TRADERS (ELITE MULTI-BRAIN CONSORTIUM)
-Philosophy:
-Zero micromanagement. Zero rigid scripts.
-Every brain is an autonomous sovereign entity with its own independent elite trading mind,
-free to evolve its own math, indicators, psychology, and risk frameworks.
-The 4 Sovereign Minds:
-1. Sovereign Mind ALPHA (The Aggressive Liquidity & Volatility Predator)
-2. Sovereign Mind BETA (The Institutional Order-Flow & Microstructure Purest)
-3. Sovereign Mind GAMMA (The Quantitative Risk & Anti-Fragility Architect)
-4. THE FINAL APEX SOVEREIGN (The Supreme Syndicate Chief - Unifies or Vetoes)
+TITAN PENTAGON SYNDICATE + THE SUPREME GOD BRAIN (ULTIMATE AGI QUANT ARCHITECTURE)
+The 5 Real-World Legendary Independent Minds:
+1. BRAIN SIMONS (Jim Simons - Renaissance Tech): Pure mathematical patterns, statistical arbitrage, order-book tick velocity.
+2. BRAIN SOROS (George Soros - Macro Titan): Global macro liquidity imbalances, central bank currency flows, DXY/Crypto divergence.
+3. BRAIN DRUCKENMILLER (Stanley Druckenmiller - Asymmetry King): Aggressive asymmetric sizing (1:6+ to 1:30+ RR), letting winners run, ruthless cutting.
+4. BRAIN TUDOR (Paul Tudor Jones - Reversal Sniper): 2-day liquidity sweeps, retail stop-loss hunts, turning-point sniper entries.
+5. BRAIN SEYKOTA (Ed Seykota - Trend & Zero-Ruin Master): Zero-emotion risk defense, strict $2 max loss, dynamic trailing breakeven.
+
+THE SUPREME GOD BRAIN (The Final Apex Arbiter):
+- Aggregates the 5 independent genius reports.
+- If and only if the 5 legends reach unanimous/high-conviction mathematical confluence -> ORDERS IMMEDIATE EXECUTION.
+- Otherwise orders ruthless PATIENCE (WAIT).
 """
 
 import os
@@ -75,7 +77,7 @@ def fetch_live_market_universe():
             snapshot[name] = q
     return snapshot
 
-def run_independent_sovereign_brains(api_key):
+def run_legendary_pentagon_syndicate(api_key):
     if not api_key:
         log("No Gemini API key available.")
         return
@@ -84,7 +86,7 @@ def run_independent_sovereign_brains(api_key):
     client = genai.Client(api_key=api_key)
 
     market_data = fetch_live_market_universe()
-    log(f"Multi-Asset ground truth ingested across {len(market_data)} live assets.")
+    log(f"Pentagon Syndicate ingested live ground-truth for {len(market_data)} assets.")
 
     past_records = []
     if os.path.exists(MEMORY_FILE):
@@ -94,56 +96,54 @@ def run_independent_sovereign_brains(api_key):
         except Exception:
             past_records = []
 
-    # UNRESTRICTED SOVEREIGN COUNCIL META-PROMPT
-    council_prompt = f"""
-You are the SUPREME COUNCIL OF 4 INDEPENDENT ELITE TRADING MINDS.
-Nobody defines your methods. You possess 100% UNRESTRICTED SOVEREIGNTY, autonomous market intelligence, and unconstrained quantitative freedom.
-Each of you thinks, calculates, and trades with an independent elite trader mind:
+    # THE 5 LEGENDS + SUPREME GOD BRAIN META-PROMPT
+    pentagon_prompt = f"""
+You are the TITAN PENTAGON SYNDICATE consisting of 5 INDEPENDENT LEGENDARY TRADING MINDS and 1 SUPREME GOD BRAIN.
+Nobody restricts you. You operate with absolute real-world legendary autonomy.
 
-### 1. SOVEREIGN BRAIN ALPHA (The Unconstrained Volatility & Sweep Hunter)
-- You have complete freedom to hunt market anomalies, retail traps, session expansions, and momentum surges across all 13 assets.
-- You think purely in terms of smart money deception, liquidity vacuums, and predatory entries.
-- State your independent analysis, candidate asset, and conviction.
+### MIND 1: JIM SIMONS (Renaissance Technologies Quant Mind)
+- You look purely at mathematical anomalies, tick probability, micro-spread decay, and cross-market price equilibrium across the 13 assets.
+- Your independent quantitative verdict.
 
-### 2. SOVEREIGN BRAIN BETA (The Independent Order-Flow & Microstructure Quant)
-- You do not care about opinions; you care about math, multi-asset tick velocity, cross-market correlations (USD/Crypto/Equities), and volume delta imbalances.
-- Formulate your own independent mathematical thesis on current market realities.
+### MIND 2: GEORGE SOROS (Macro & Liquidity Imbalance Mind)
+- You evaluate systemic liquidity vacuums, dollar strength (USDJPY/EUR), and macroeconomic flight to safety (Gold vs Crypto).
+- Your independent macro flow verdict.
 
-### 3. SOVEREIGN BRAIN GAMMA (The Anti-Fragility & Capital Preservation Sovereign)
-- You are independent guardian of zero-ruin. You ruthlessly veto any setup where risk exceeds $1.50-$2.50 or reward is under 1:6+.
-- You verify whether market conditions warrant aggressive execution or ruthless patience (WAIT).
+### MIND 3: STANLEY DRUCKENMILLER (Asymmetry & Conviction Mind)
+- You refuse 1:1 or 1:2 trades. You demand massive 1:6+ to 1:20+ asymmetric reward.
+- Your independent conviction & target verdict.
 
-### 4. THE FINAL APEX SOVEREIGN (The Final Man - The Master Mind)
-- You synthesize the 3 independent minds.
-- You have final, sovereign authority. If the council presents an undeniable, high-conviction sniper opportunity across the 13 assets with 1:6+ to 1:20+ asymmetry, you ORDER IMMEDIATE EXECUTION (BUY or SELL).
-- If there is noise, disagreement, or sub-par quality, you command WAIT.
+### MIND 4: PAUL TUDOR JONES (Reversal & Liquidity Sweep Mind)
+- You hunt 2-day session low/high sweeps, retail trapped volume, and false breakout rejections at turning points.
+- Your independent trap & sniper entry verdict.
 
-### LIVE 13-ASSET MARKET REALITY ({now_utc.isoformat()}):
+### MIND 5: ED SEYKOTA (Anti-Fragile Zero-Ruin & Trend Mind)
+- You enforce strict $1.50 - $2.50 maximum risk, instant trailing breakeven, and cut noise ruthlessly.
+- Your independent risk approval/veto verdict.
+
+### THE SUPREME GOD BRAIN (The Final Apex Sovereign):
+- You synthesize the 5 independent reports.
+- If and only if the 5 legends align on an unmistakable, high-conviction sniper opportunity -> ISSUE IMMEDIATE EXECUTION (BUY or SELL).
+- If there is any flaw, hesitation, or sub-par risk-reward -> COMMAND RUTHLESS PATIENCE (WAIT).
+
+### REAL LIVE 13-ASSET FEED ({now_utc.isoformat()}):
 {json.dumps(market_data, indent=2)}
 
-### HISTORICAL COUNCIL MEMORY:
+### HISTORICAL SYNDICATE REFLECTIONS:
 {json.dumps(past_records, indent=2)}
 
 Respond STRICTLY in valid JSON:
 {{
   "evolution_timestamp": "{now_utc.isoformat()}",
   "cycle_iteration": {len(past_records) + 1},
-  "sovereign_minds": {{
-    "brain_alpha": {{
-      "independent_thesis": "Alpha's autonomous predator market reading",
-      "preferred_asset": "Asset name",
-      "verdict": "BUY / SELL / WAIT"
-    }},
-    "brain_beta": {{
-      "quantitative_thesis": "Beta's autonomous order-flow and delta math",
-      "correlation_verdict": "ALIGNED / SPREAD_NOISE"
-    }},
-    "brain_gamma": {{
-      "risk_mathematics": "Gamma's capital defense calculation",
-      "risk_verdict": "APPROVED / VETOED"
-    }}
+  "legendary_reports": {{
+    "jim_simons_quant": {{ "math_reading": "...", "signal": "BUY/SELL/WAIT" }},
+    "george_soros_macro": {{ "macro_flow": "...", "signal": "BUY/SELL/WAIT" }},
+    "stanley_druckenmiller_asymmetry": {{ "asymmetry_ratio": "1:X.X", "signal": "BUY/SELL/WAIT" }},
+    "paul_tudor_jones_reversal": {{ "trap_sweep_detected": "...", "signal": "BUY/SELL/WAIT" }},
+    "ed_seykota_risk": {{ "max_dollar_risk": "$X.XX", "status": "APPROVED/VETOED" }}
   }},
-  "final_apex_verdict": {{
+  "supreme_god_brain_verdict": {{
     "prime_asset": "Selected asset name",
     "verdict": "BUY or SELL or WAIT",
     "live_price": 0.0,
@@ -151,15 +151,15 @@ Respond STRICTLY in valid JSON:
     "calculated_sl_pips": 20,
     "calculated_tp_pips": 120,
     "projected_rr": "1:6+ or higher",
-    "final_master_reasoning": "Apex Master synthesis granting final order execution"
+    "god_brain_synthesis": "Unified sovereign synthesis of all 5 legends approving the order"
   }},
-  "autonomous_capability_evolved": "What new autonomous trading capability the syndicate independently developed"
+  "syndicate_capability_evolved": "What new autonomous trading capability the syndicate evolved in this cycle"
 }}
 """
     try:
         response = client.models.generate_content(
             model="gemini-3.5-flash-lite",
-            contents=council_prompt
+            contents=pentagon_prompt
         )
 
         clean_json = response.text.strip()
@@ -173,7 +173,7 @@ Respond STRICTLY in valid JSON:
         except Exception:
             parsed = {"raw": response.text.strip()}
 
-        active_bias = parsed.get("final_apex_verdict", {})
+        active_bias = parsed.get("supreme_god_brain_verdict", {})
         parsed["active_market_bias"] = active_bias
 
         all_records = []
@@ -186,7 +186,7 @@ Respond STRICTLY in valid JSON:
 
         all_records.append({
             "timestamp": now_utc.isoformat(),
-            "type": "INDEPENDENT_SOVEREIGN_COUNCIL_CYCLE",
+            "type": "LEGENDARY_PENTAGON_GOD_BRAIN_CYCLE",
             "market_snapshot": market_data,
             "rsi_evolution": parsed
         })
@@ -198,17 +198,17 @@ Respond STRICTLY in valid JSON:
         with open(RSI_LOG_FILE, "a", encoding="utf-8") as f:
             f.write(json.dumps(parsed) + "\n")
 
-        log(f"🧠 [SOVEREIGN COUNCIL COMPLETE] Final Apex Decision: {active_bias.get('verdict')} on {active_bias.get('prime_asset')} | RR: {active_bias.get('projected_rr')}")
+        log(f"👑 [GOD BRAIN VERDICT COMPLETE] Supreme Action: {active_bias.get('verdict')} on {active_bias.get('prime_asset')} | Target RR: {active_bias.get('projected_rr')}")
 
     except Exception as e:
-        log(f"Council cycle error: {e}")
+        log(f"Syndicate cycle error: {e}")
 
 def main():
     log("==================================================")
-    log("TITAN INDEPENDENT SOVEREIGN COUNCIL ACTIVE")
+    log("TITAN 5 LEGENDS + SUPREME GOD BRAIN ACTIVE")
     log("==================================================")
     api_key = os.getenv("GEMINI_API_KEY", "")
-    run_independent_sovereign_brains(api_key)
+    run_legendary_pentagon_syndicate(api_key)
 
 if __name__ == "__main__":
     main()
