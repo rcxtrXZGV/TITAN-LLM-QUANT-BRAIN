@@ -1,12 +1,13 @@
-name: Titan Cloud Autonomous MT5 Executor (Sniper New York Session)
+name: Titan Cloud Autonomous MT5 Executor (24/7 Continuous Sniper)
 
 on:
   schedule:
-    # 1. Weekdays (Monday-Friday): New York High-Volume Session (12:00 - 18:00 UTC / 5:30 PM - 11:30 PM IST)
-    # Fires every 15 minutes during peak liquidity
-    - cron: '*/15 12-18 * * 1-5'
-    # 2. Weekends (Saturday-Sunday): 24/7 High-Volume Crypto (BTCUSD, ETHUSD)
-    - cron: '*/30 * * * 0,6'
+    # 1. Weekdays: Every 5 minutes during London & New York Active Sessions (07:00 to 22:00 UTC / 12:30 PM to 03:30 AM IST)
+    - cron: '*/5 7-22 * * 1-5'
+    # 2. Weekdays Off-Hours (Asian Session): Every 15 minutes
+    - cron: '*/15 0-6,23 * * 1-5'
+    # 3. Weekends: Every 15 minutes 24/7 Continuous Crypto (BTC, ETH, SOL)
+    - cron: '*/15 * * * 0,6'
   workflow_dispatch:
 
 permissions:
