@@ -1,10 +1,14 @@
 """
-TITAN 4-PILLAR SUBAGENT COMMITTEE ARCHITECTURE (SUPREME AGI QUANT BRAIN)
-Division of Specialized Roles:
-1. Agent A: Market Structure & Liquidity Hunter (Scans 2-day low/high sweeps, discount arrays)
-2. Agent B: Chief Risk Officer (Enforces strict $2.00 max risk, dynamic ATR stop buffers)
-3. Agent C: Intermarket Correlation & Momentum Analyst (Verifies DXY, BTC, US30 delta volume sync)
-4. THE SUPREME CHIEF (Final Man): Aggregates all 3 subagent reports. Grants final UNANIMOUS execution verdict or orders WAIT.
+TITAN COUNCIL OF INDEPENDENT SOVEREIGN TRADERS (ELITE MULTI-BRAIN CONSORTIUM)
+Philosophy:
+Zero micromanagement. Zero rigid scripts.
+Every brain is an autonomous sovereign entity with its own independent elite trading mind,
+free to evolve its own math, indicators, psychology, and risk frameworks.
+The 4 Sovereign Minds:
+1. Sovereign Mind ALPHA (The Aggressive Liquidity & Volatility Predator)
+2. Sovereign Mind BETA (The Institutional Order-Flow & Microstructure Purest)
+3. Sovereign Mind GAMMA (The Quantitative Risk & Anti-Fragility Architect)
+4. THE FINAL APEX SOVEREIGN (The Supreme Syndicate Chief - Unifies or Vetoes)
 """
 
 import os
@@ -71,7 +75,7 @@ def fetch_live_market_universe():
             snapshot[name] = q
     return snapshot
 
-def run_subagent_committee(api_key):
+def run_independent_sovereign_brains(api_key):
     if not api_key:
         log("No Gemini API key available.")
         return
@@ -79,9 +83,8 @@ def run_subagent_committee(api_key):
     now_utc = datetime.datetime.now(datetime.timezone.utc)
     client = genai.Client(api_key=api_key)
 
-    # Ingest 13-asset live market ground truth
     market_data = fetch_live_market_universe()
-    log(f"Multi-Asset ground truth ingested ({len(market_data)} live assets).")
+    log(f"Multi-Asset ground truth ingested across {len(market_data)} live assets.")
 
     past_records = []
     if os.path.exists(MEMORY_FILE):
@@ -91,70 +94,72 @@ def run_subagent_committee(api_key):
         except Exception:
             past_records = []
 
-    # MASTER MULTI-SUBAGENT COMMITTEE PROMPT
-    committee_prompt = f"""
-You are the TITAN MULTI-AGENT QUANTITATIVE COMMITTEE consisting of 3 Specialized Subagents and 1 FINAL CHIEF EXECUTIVE OFFICER:
+    # UNRESTRICTED SOVEREIGN COUNCIL META-PROMPT
+    council_prompt = f"""
+You are the SUPREME COUNCIL OF 4 INDEPENDENT ELITE TRADING MINDS.
+Nobody defines your methods. You possess 100% UNRESTRICTED SOVEREIGNTY, autonomous market intelligence, and unconstrained quantitative freedom.
+Each of you thinks, calculates, and trades with an independent elite trader mind:
 
-### 1. SUBAGENT 1: LIQUIDITY & MARKET STRUCTURE HUNTER
-Your Job: Scan the 13 live market assets. Find which asset just executed a textbook 2-day liquidity sweep (Stop-hunt of retail highs/lows) into an unmitigated institutional discount/premium array.
+### 1. SOVEREIGN BRAIN ALPHA (The Unconstrained Volatility & Sweep Hunter)
+- You have complete freedom to hunt market anomalies, retail traps, session expansions, and momentum surges across all 13 assets.
+- You think purely in terms of smart money deception, liquidity vacuums, and predatory entries.
+- State your independent analysis, candidate asset, and conviction.
 
-### 2. SUBAGENT 2: CHIEF RISK OFFICER (CRO)
-Your Job: Mathematically stress-test Subagent 1's setup. Enforce:
-- Maximum dollar risk: $1.50 - $2.50.
-- Minimum Asymmetry: 1:6+ to 1:12+ reward-to-risk.
-- Invalidation level: Is the Stop Loss placed safely behind true structural wicks + dynamic spread buffer?
+### 2. SOVEREIGN BRAIN BETA (The Independent Order-Flow & Microstructure Quant)
+- You do not care about opinions; you care about math, multi-asset tick velocity, cross-market correlations (USD/Crypto/Equities), and volume delta imbalances.
+- Formulate your own independent mathematical thesis on current market realities.
 
-### 3. SUBAGENT 3: CROSS-MARKET CORRELATION SPECIALIST
-Your Job: Check inter-market alignment. If Gold or EUR is buying, are USDJPY and DXY weakening? Is Bitcoin confirming macro liquidity appetite? If markets are in divergence, reject the trade.
+### 3. SOVEREIGN BRAIN GAMMA (The Anti-Fragility & Capital Preservation Sovereign)
+- You are independent guardian of zero-ruin. You ruthlessly veto any setup where risk exceeds $1.50-$2.50 or reward is under 1:6+.
+- You verify whether market conditions warrant aggressive execution or ruthless patience (WAIT).
 
-### 4. THE FINAL MAN (CHIEF EXECUTIVE OFFICER - FINAL VERDICT):
-Your Job: Synthesize reports from Subagent 1, 2, and 3.
-- If ALL 3 Subagents agree with 100% mathematical confluence -> Issue FINAL EXECUTION (BUY or SELL).
-- If ANY subagent raises a red flag -> Issue strict WAIT. Zero random gambles.
+### 4. THE FINAL APEX SOVEREIGN (The Final Man - The Master Mind)
+- You synthesize the 3 independent minds.
+- You have final, sovereign authority. If the council presents an undeniable, high-conviction sniper opportunity across the 13 assets with 1:6+ to 1:20+ asymmetry, you ORDER IMMEDIATE EXECUTION (BUY or SELL).
+- If there is noise, disagreement, or sub-par quality, you command WAIT.
 
-### LIVE MARKET TICK FEED ({now_utc.isoformat()}):
+### LIVE 13-ASSET MARKET REALITY ({now_utc.isoformat()}):
 {json.dumps(market_data, indent=2)}
 
-### RECENT HISTORICAL MEMORY:
+### HISTORICAL COUNCIL MEMORY:
 {json.dumps(past_records, indent=2)}
 
 Respond STRICTLY in valid JSON:
 {{
   "evolution_timestamp": "{now_utc.isoformat()}",
   "cycle_iteration": {len(past_records) + 1},
-  "subagent_reports": {{
-    "liquidity_hunter": {{
-      "prime_setup_identified": "Asset and sweep details",
-      "conviction_score": "1-100"
+  "sovereign_minds": {{
+    "brain_alpha": {{
+      "independent_thesis": "Alpha's autonomous predator market reading",
+      "preferred_asset": "Asset name",
+      "verdict": "BUY / SELL / WAIT"
     }},
-    "risk_officer": {{
-      "dollar_risk_approved": "$X.XX",
-      "asymmetry_ratio": "1:X.X",
-      "risk_status": "APPROVED or REJECTED"
+    "brain_beta": {{
+      "quantitative_thesis": "Beta's autonomous order-flow and delta math",
+      "correlation_verdict": "ALIGNED / SPREAD_NOISE"
     }},
-    "correlation_analyst": {{
-      "intermarket_alignment": "Details on USD/BTC/Equity alignment",
-      "alignment_status": "ALIGNED or DIVERGENT"
+    "brain_gamma": {{
+      "risk_mathematics": "Gamma's capital defense calculation",
+      "risk_verdict": "APPROVED / VETOED"
     }}
   }},
-  "final_man_ceo_verdict": {{
+  "final_apex_verdict": {{
     "prime_asset": "Selected asset name",
     "verdict": "BUY or SELL or WAIT",
     "live_price": 0.0,
     "target_liquidity_pool": 0.0,
     "calculated_sl_pips": 20,
     "calculated_tp_pips": 120,
-    "projected_rr": "1:6+",
-    "final_unanimous_reasoning": "Synthesis of all 3 subagents confirming bulletproof execution"
+    "projected_rr": "1:6+ or higher",
+    "final_master_reasoning": "Apex Master synthesis granting final order execution"
   }},
-  "heuristic_mutation": "Specific quantitative algorithmic formula evolved in this cycle",
-  "recursive_capability_evolved": "What permanent edge was acquired by the committee"
+  "autonomous_capability_evolved": "What new autonomous trading capability the syndicate independently developed"
 }}
 """
     try:
         response = client.models.generate_content(
             model="gemini-3.5-flash-lite",
-            contents=committee_prompt
+            contents=council_prompt
         )
 
         clean_json = response.text.strip()
@@ -168,11 +173,9 @@ Respond STRICTLY in valid JSON:
         except Exception:
             parsed = {"raw": response.text.strip()}
 
-        # Adapt for executor compatibility
-        active_bias = parsed.get("final_man_ceo_verdict", {})
+        active_bias = parsed.get("final_apex_verdict", {})
         parsed["active_market_bias"] = active_bias
 
-        # Save to memory vault
         all_records = []
         if os.path.exists(MEMORY_FILE):
             try:
@@ -183,7 +186,7 @@ Respond STRICTLY in valid JSON:
 
         all_records.append({
             "timestamp": now_utc.isoformat(),
-            "type": "SUBAGENT_COMMITTEE_CYCLE",
+            "type": "INDEPENDENT_SOVEREIGN_COUNCIL_CYCLE",
             "market_snapshot": market_data,
             "rsi_evolution": parsed
         })
@@ -195,17 +198,17 @@ Respond STRICTLY in valid JSON:
         with open(RSI_LOG_FILE, "a", encoding="utf-8") as f:
             f.write(json.dumps(parsed) + "\n")
 
-        log(f"👥 [SUBAGENT COMMITTEE FINISHED] Final CEO Verdict: {active_bias.get('verdict')} on {active_bias.get('prime_asset')} (RR: {active_bias.get('projected_rr')})")
+        log(f"🧠 [SOVEREIGN COUNCIL COMPLETE] Final Apex Decision: {active_bias.get('verdict')} on {active_bias.get('prime_asset')} | RR: {active_bias.get('projected_rr')}")
 
     except Exception as e:
-        log(f"Committee cycle error: {e}")
+        log(f"Council cycle error: {e}")
 
 def main():
     log("==================================================")
-    log("TITAN 4-PILLAR SUBAGENT COMMITTEE ENGINE ACTIVE")
+    log("TITAN INDEPENDENT SOVEREIGN COUNCIL ACTIVE")
     log("==================================================")
     api_key = os.getenv("GEMINI_API_KEY", "")
-    run_subagent_committee(api_key)
+    run_independent_sovereign_brains(api_key)
 
 if __name__ == "__main__":
     main()
