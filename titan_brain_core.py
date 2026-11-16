@@ -55,11 +55,18 @@ def fetch_ticker_quote(ticker):
 def fetch_live_market_universe():
     symbols = {
         'Gold (XAUUSD)': 'GC=F',
+        'Silver (XAGUSD)': 'SI=F',
+        'Crude Oil (USOIL)': 'CL=F',
+        'Nasdaq 100 (NAS100)': 'NQ=F',
+        'US30 (Dow Jones)': '^DJI',
+        'Bitcoin (BTCUSD)': 'BTC-USD',
+        'Ethereum (ETHUSD)': 'ETH-USD',
+        'Solana (SOLUSD)': 'SOL-USD',
         'EURUSD': 'EURUSD=X',
         'GBPUSD': 'GBPUSD=X',
         'USDJPY': 'JPY=X',
-        'Bitcoin (BTCUSD)': 'BTC-USD',
-        'US30 (Dow Jones)': '^DJI'
+        'AUDUSD': 'AUDUSD=X',
+        'USDCAD': 'CAD=X'
     }
     snapshot = {}
     for name, sym in symbols.items():
