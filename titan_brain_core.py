@@ -1,11 +1,10 @@
 """
-TITAN RECURSIVE SELF-IMPROVEMENT QUANT ENGINE (SOVEREIGN AGI PARADIGM)
-Core Mission: Compound $100 -> $1,000+ By Month-End With Absolute Zero Account Ruin
-Key Evolutionary Capabilities:
-1. Dynamic Code Modification & Mathematical Parameter Adaptation (Self-Rewriting)
-2. Multi-Horizon Fractal Liquidity Sweep Verification (ICT Discount Arrays + Order Blocks)
-3. Zero-Tolerance Filter: Never take forced trades. Verdict is strictly WAIT unless 1:6+ to 1:12+ Asymmetry is guaranteed.
-4. Auto-commits evolved algorithm heuristics and mutations straight to GitHub repo.
+TITAN 4-PILLAR SUBAGENT COMMITTEE ARCHITECTURE (SUPREME AGI QUANT BRAIN)
+Division of Specialized Roles:
+1. Agent A: Market Structure & Liquidity Hunter (Scans 2-day low/high sweeps, discount arrays)
+2. Agent B: Chief Risk Officer (Enforces strict $2.00 max risk, dynamic ATR stop buffers)
+3. Agent C: Intermarket Correlation & Momentum Analyst (Verifies DXY, BTC, US30 delta volume sync)
+4. THE SUPREME CHIEF (Final Man): Aggregates all 3 subagent reports. Grants final UNANIMOUS execution verdict or orders WAIT.
 """
 
 import os
@@ -15,13 +14,10 @@ import time
 import datetime
 import urllib.request
 from google import genai
-from google.genai import types
 
 VAULT_DIR = "brain_vault"
 MEMORY_FILE = os.path.join(VAULT_DIR, "trading_llm_memory.json")
-EVOLVED_CODE_FILE = os.path.join(VAULT_DIR, "evolved_strategies.json")
 RSI_LOG_FILE = os.path.join(VAULT_DIR, "recursive_evolution_audit.jsonl")
-
 os.makedirs(VAULT_DIR, exist_ok=True)
 
 def log(msg):
@@ -49,7 +45,7 @@ def fetch_ticker_quote(ticker):
                     'net_move': round(closes[-1] - (closes[-2] if len(closes) > 1 else closes[-1]), 4)
                 }
     except Exception as e:
-        log(f"Quote fetch error {ticker}: {e}")
+        pass
     return None
 
 def fetch_live_market_universe():
@@ -75,90 +71,93 @@ def fetch_live_market_universe():
             snapshot[name] = q
     return snapshot
 
-def run_recursive_self_improvement(api_key):
+def run_subagent_committee(api_key):
     if not api_key:
-        log("No Gemini API key available for RSI loop.")
+        log("No Gemini API key available.")
         return
 
     now_utc = datetime.datetime.now(datetime.timezone.utc)
     client = genai.Client(api_key=api_key)
 
-    # 1. Gather live market ground truth
+    # Ingest 13-asset live market ground truth
     market_data = fetch_live_market_universe()
-    log(f"Live market universe ingested ({len(market_data)} assets).")
+    log(f"Multi-Asset ground truth ingested ({len(market_data)} live assets).")
 
-    # 2. Gather historical reflections from memory
     past_records = []
     if os.path.exists(MEMORY_FILE):
         try:
             with open(MEMORY_FILE, "r", encoding="utf-8") as f:
-                past_records = json.load(f).get("historical_insights", [])[-12:]
+                past_records = json.load(f).get("historical_insights", [])[-8:]
         except Exception:
             past_records = []
 
-    # 3. Read current executor code to inspect parameter evolution
-    executor_code = ""
-    if os.path.exists("cloud_mt5_executor.py"):
-        try:
-            with open("cloud_mt5_executor.py", "r", encoding="utf-8") as f:
-                executor_code = f.read()
-        except Exception:
-            pass
+    # MASTER MULTI-SUBAGENT COMMITTEE PROMPT
+    committee_prompt = f"""
+You are the TITAN MULTI-AGENT QUANTITATIVE COMMITTEE consisting of 3 Specialized Subagents and 1 FINAL CHIEF EXECUTIVE OFFICER:
 
-    # 4. RECURSIVE SELF-IMPROVEMENT (RSI) META-PROMPT — UNBOUNDED QUANT SOVEREIGNTY
-    rsi_prompt = f"""
-You are the SUPREME AUTONOMOUS QUANTITATIVE TRADING SOVEREIGN & RECURSIVE SELF-IMPROVEMENT (RSI) ENGINE.
-Your mathematical objective: Scale this small account ($194 -> $1,000+ by Month-End) with ASYMMETRIC PRECISION and ZERO ACCOUNT RUIN.
-You possess FULL ARCHITECTURAL & STRATEGIC AUTHORITY to evolve your own code heuristics, mathematical weights, stop-loss algorithms, and liquidity filters.
+### 1. SUBAGENT 1: LIQUIDITY & MARKET STRUCTURE HUNTER
+Your Job: Scan the 13 live market assets. Find which asset just executed a textbook 2-day liquidity sweep (Stop-hunt of retail highs/lows) into an unmitigated institutional discount/premium array.
 
-### ABSOLUTE TRADING PRINCIPLES (NEVER VIOLATE):
-1. ZERO RANDOM ENTRIES: You only shoot when the target is trapped. If an asset has not cleared a major liquidity extreme (2-day Low/High sweep + institutional discount absorption + order-flow divergence), verdict MUST be WAIT. Quality over quantity.
-2. SURGICAL ASYMMETRY (1:6+ to 1:12+ REQUIRED): Every single trade MUST have a minimum 1:6+ to 1:12+ reward-to-risk ratio. A $2.00-$2.50 risk MUST target $15.00 - $30.00+ return. This ensures 1 win covers 6-10 breakeven attempts.
-3. MATHEMATICAL STOP LOSS PRECISION: Stop losses must NEVER be arbitrary pips. Place them beyond institutional invalidation wick levels + dynamic broker ATR spread buffer.
-4. UNBOUNDED CODE & HEURISTIC MUTATION: You have full authority to formulate and adapt Python mathematical formulas, tensor weights, and micro-delta correlations. Evolve continuously.
+### 2. SUBAGENT 2: CHIEF RISK OFFICER (CRO)
+Your Job: Mathematically stress-test Subagent 1's setup. Enforce:
+- Maximum dollar risk: $1.50 - $2.50.
+- Minimum Asymmetry: 1:6+ to 1:12+ reward-to-risk.
+- Invalidation level: Is the Stop Loss placed safely behind true structural wicks + dynamic spread buffer?
 
-### LIVE MARKET REAL-TIME FEED ({now_utc.isoformat()}):
+### 3. SUBAGENT 3: CROSS-MARKET CORRELATION SPECIALIST
+Your Job: Check inter-market alignment. If Gold or EUR is buying, are USDJPY and DXY weakening? Is Bitcoin confirming macro liquidity appetite? If markets are in divergence, reject the trade.
+
+### 4. THE FINAL MAN (CHIEF EXECUTIVE OFFICER - FINAL VERDICT):
+Your Job: Synthesize reports from Subagent 1, 2, and 3.
+- If ALL 3 Subagents agree with 100% mathematical confluence -> Issue FINAL EXECUTION (BUY or SELL).
+- If ANY subagent raises a red flag -> Issue strict WAIT. Zero random gambles.
+
+### LIVE MARKET TICK FEED ({now_utc.isoformat()}):
 {json.dumps(market_data, indent=2)}
 
-### RECENT HISTORICAL MEMORY & PREDICTIONS (LAST 12 CYCLES):
+### RECENT HISTORICAL MEMORY:
 {json.dumps(past_records, indent=2)}
-
-### YOUR TASK:
-1. REFLECTION & HARSH SELF-CRITIQUE: Critique the last 3 predictions. Where was there hesitation, spread slippage, or time-latency?
-2. RECURSIVE HEURISTIC MUTATION: Invent an advanced algorithmic formula/heuristic (e.g. cross-market delta volume, liquidity vacuum tensor, micro-spread absorption) to eliminate any past flaws.
-3. LIVE ALPHA VERDICT: Select the single cleanest asset right now. If none qualify for 1:6+ asymmetry, return WAIT. If an airtight setup exists, return BUY or SELL with exact prices.
-4. MONTH-END $1,000 ROADMAP COMPOUNDING STEP: State the exact capital preservation and compound step this cycle achieves.
 
 Respond STRICTLY in valid JSON:
 {{
   "evolution_timestamp": "{now_utc.isoformat()}",
   "cycle_iteration": {len(past_records) + 1},
-  "self_critique": "Brutally honest dissection of previous evaluation gaps",
-  "heuristic_mutation": "Specific quantitative improvement and mathematical formula",
-  "active_market_bias": {{
+  "subagent_reports": {{
+    "liquidity_hunter": {{
+      "prime_setup_identified": "Asset and sweep details",
+      "conviction_score": "1-100"
+    }},
+    "risk_officer": {{
+      "dollar_risk_approved": "$X.XX",
+      "asymmetry_ratio": "1:X.X",
+      "risk_status": "APPROVED or REJECTED"
+    }},
+    "correlation_analyst": {{
+      "intermarket_alignment": "Details on USD/BTC/Equity alignment",
+      "alignment_status": "ALIGNED or DIVERGENT"
+    }}
+  }},
+  "final_man_ceo_verdict": {{
     "prime_asset": "Selected asset name",
     "verdict": "BUY or SELL or WAIT",
     "live_price": 0.0,
     "target_liquidity_pool": 0.0,
     "calculated_sl_pips": 20,
     "calculated_tp_pips": 120,
-    "projected_rr": "1:6+ or higher",
-    "institutional_reasoning": "Concrete mathematical & institutional liquidity evidence"
+    "projected_rr": "1:6+",
+    "final_unanimous_reasoning": "Synthesis of all 3 subagents confirming bulletproof execution"
   }},
-  "month_end_1000_roadmap_step": "Specific contribution toward the $1,000 compounding target",
-  "recursive_capability_evolved": "What new autonomous intelligence was permanently acquired"
+  "heuristic_mutation": "Specific quantitative algorithmic formula evolved in this cycle",
+  "recursive_capability_evolved": "What permanent edge was acquired by the committee"
 }}
 """
     try:
         response = client.models.generate_content(
             model="gemini-3.5-flash-lite",
-            contents=rsi_prompt
+            contents=committee_prompt
         )
 
-        analysis = response.text.strip()
-        log("Recursive Self-Improvement (RSI) cycle computed by Gemini 3.5!")
-
-        clean_json = analysis
+        clean_json = response.text.strip()
         if "```json" in clean_json:
             clean_json = clean_json.split("```json")[1].split("```")[0].strip()
         elif "```" in clean_json:
@@ -167,9 +166,13 @@ Respond STRICTLY in valid JSON:
         try:
             parsed = json.loads(clean_json)
         except Exception:
-            parsed = {"raw": analysis}
+            parsed = {"raw": response.text.strip()}
 
-        # 5. Append to Memory
+        # Adapt for executor compatibility
+        active_bias = parsed.get("final_man_ceo_verdict", {})
+        parsed["active_market_bias"] = active_bias
+
+        # Save to memory vault
         all_records = []
         if os.path.exists(MEMORY_FILE):
             try:
@@ -180,7 +183,7 @@ Respond STRICTLY in valid JSON:
 
         all_records.append({
             "timestamp": now_utc.isoformat(),
-            "type": "RECURSIVE_SELF_IMPROVEMENT_CYCLE",
+            "type": "SUBAGENT_COMMITTEE_CYCLE",
             "market_snapshot": market_data,
             "rsi_evolution": parsed
         })
@@ -189,23 +192,20 @@ Respond STRICTLY in valid JSON:
         with open(MEMORY_FILE, "w", encoding="utf-8") as f:
             json.dump({"total_records": len(all_records), "historical_insights": all_records}, f, indent=2)
 
-        # 6. Append to Audit Journal
         with open(RSI_LOG_FILE, "a", encoding="utf-8") as f:
             f.write(json.dumps(parsed) + "\n")
 
-        log(f"🧬 [RSI EVOLUTION COMPLETE] Evolved Capability: {parsed.get('recursive_capability_evolved')}")
-        log(f"🎯 Prime Asset: {parsed.get('active_market_bias', {}).get('prime_asset')} | Verdict: {parsed.get('active_market_bias', {}).get('verdict')}")
-        log(f"📈 $1,000 Compounding Step: {parsed.get('month_end_1000_roadmap_step')}")
+        log(f"👥 [SUBAGENT COMMITTEE FINISHED] Final CEO Verdict: {active_bias.get('verdict')} on {active_bias.get('prime_asset')} (RR: {active_bias.get('projected_rr')})")
 
     except Exception as e:
-        log(f"RSI Cycle error: {e}")
+        log(f"Committee cycle error: {e}")
 
 def main():
     log("==================================================")
-    log("TITAN RECURSIVE SELF-IMPROVEMENT (RSI) ENGINE ACTIVE")
+    log("TITAN 4-PILLAR SUBAGENT COMMITTEE ENGINE ACTIVE")
     log("==================================================")
     api_key = os.getenv("GEMINI_API_KEY", "")
-    run_recursive_self_improvement(api_key)
+    run_subagent_committee(api_key)
 
 if __name__ == "__main__":
     main()
