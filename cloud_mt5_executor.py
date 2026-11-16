@@ -41,20 +41,44 @@ def calculate_symbol_stops(sym, price, is_buy):
     Computes broker-compliant SL & TP satisfying broker stops_level.
     """
     if "BTC" in sym:
-        sl_dist = 250.0   # $250 stop on Bitcoin
-        tp_dist = 1800.0  # $1,800 TP (1:7.2 Asymmetric)
+        sl_dist = 250.0
+        tp_dist = 1800.0
+        lot = 0.01
+    elif "ETH" in sym:
+        sl_dist = 25.0
+        tp_dist = 180.0
+        lot = 0.01
+    elif "SOL" in sym:
+        sl_dist = 2.0
+        tp_dist = 15.0
         lot = 0.01
     elif "XAU" in sym or "GOLD" in sym:
-        sl_dist = 2.50    # 25 pips on Gold
-        tp_dist = 18.00   # 180 pips (1:7.2 Asymmetric)
+        sl_dist = 2.50
+        tp_dist = 18.00
+        lot = 0.01
+    elif "XAG" in sym or "SILVER" in sym:
+        sl_dist = 0.30
+        tp_dist = 2.20
+        lot = 0.01
+    elif "OIL" in sym or "WTI" in sym or "CL" in sym:
+        sl_dist = 0.60
+        tp_dist = 4.50
+        lot = 0.01
+    elif "NAS" in sym or "USTEC" in sym or "100" in sym:
+        sl_dist = 20.0
+        tp_dist = 150.0
+        lot = 0.01
+    elif "US30" in sym or "DJ" in sym:
+        sl_dist = 30.0
+        tp_dist = 220.0
         lot = 0.01
     elif "JPY" in sym:
-        sl_dist = 0.25    # 25 pips on JPY
-        tp_dist = 1.80    # 180 pips
+        sl_dist = 0.25
+        tp_dist = 1.80
         lot = 0.02
     else:
-        sl_dist = 0.0025  # 25 pips on EUR/GBP
-        tp_dist = 0.0180  # 180 pips
+        sl_dist = 0.0025
+        tp_dist = 0.0180
         lot = 0.01
 
     if is_buy:
@@ -127,14 +151,28 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
     sym = "BTCUSD"
     if "Gold" in target_asset or "XAU" in target_asset:
         sym = "XAUUSD"
+    elif "Silver" in target_asset or "XAG" in target_asset:
+        sym = "XAGUSD"
+    elif "Oil" in target_asset or "USOIL" in target_asset:
+        sym = "USOIL"
+    elif "Nasdaq" in target_asset or "NAS100" in target_asset or "USTEC" in target_asset:
+        sym = "USTEC"
+    elif "US30" in target_asset:
+        sym = "US30"
+    elif "ETH" in target_asset:
+        sym = "ETHUSD"
+    elif "SOL" in target_asset:
+        sym = "SOLUSD"
     elif "EUR" in target_asset:
         sym = "EURUSD"
     elif "GBP" in target_asset:
         sym = "GBPUSD"
     elif "JPY" in target_asset:
         sym = "USDJPY"
-    elif "US30" in target_asset:
-        sym = "US30"
+    elif "AUD" in target_asset:
+        sym = "AUDUSD"
+    elif "CAD" in target_asset:
+        sym = "USDCAD"
 
     if not mt5.symbol_select(sym, True):
         for alt in [f"{sym}.", f"{sym}+", f"{sym}m"]:
