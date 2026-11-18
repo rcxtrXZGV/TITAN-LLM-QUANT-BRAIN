@@ -92,45 +92,35 @@ def calculate_symbol_stops(sym, price, is_buy):
 
 def manage_active_trailing_breakeven(open_positions):
     """
-    Scans active positions. If profit exceeds threshold ($1.50+), locks SL to Entry (Risk-Free Trade).
+    Pure Autonomous Management: Let the trade breathe and execute freely.
+    Only shifts SL to Breakeven once the market clearly protects entry, giving the trade full freedom to run to the target.
     """
     for p in open_positions:
         log(f"Inspecting Position #{p.ticket} on {p.symbol}: Entry={p.price_open}, Current={p.price_current}, SL={p.sl}, Profit=${p.profit:.2f}")
         
         is_buy = (p.type == mt5.ORDER_TYPE_BUY)
-        # Check if already at or beyond breakeven
+        # If already secured, don't intervene
         if is_buy and p.sl >= p.price_open:
-            log(f"  -> Position #{p.ticket} already at Breakeven/Profit lock. Skipping.")
             continue
         if (not is_buy) and p.sl > 0 and p.sl <= p.price_open:
-            log(f"  -> Position #{p.ticket} already at Breakeven/Profit lock. Skipping.")
             continue
 
-        # Dynamic Profit Guardian: Lock breakeven at $1.50+, and trail profit at $5.00+
-        if p.profit >= 1.50:
+        # Zero manual interference: Only protect capital once in comfortable profit
+        if p.profit > 0 and (p.price_current > p.price_open if is_buy else p.price_current < p.price_open):
+            # Move to entry smoothly so trade has 100% room to hit the full God Brain target
             buffer = 0.10 if ("XAU" in p.symbol or "BTC" in p.symbol) else 0.0001
-            # If in strong profit ($5.00+), trail stop loss behind price to bank profit!
-            if p.profit >= 5.00:
-                trail_dist = 2.0 if ("XAU" in p.symbol) else (200.0 if "BTC" in p.symbol else 0.0020)
-                new_sl = round(p.price_current - trail_dist if is_buy else p.price_current + trail_dist, 2 if ("XAU" in p.symbol or "BTC" in p.symbol) else 5)
-            else:
-                new_sl = round(p.price_open + (buffer if is_buy else -buffer), 2 if ("XAU" in p.symbol or "BTC" in p.symbol) else 5)
-
-            # Ensure new_sl improves existing sl
-            should_update = (is_buy and new_sl > p.sl) or ((not is_buy) and (p.sl == 0 or new_sl < p.sl))
-            if should_update:
-                req = {
-                    "action": mt5.TRADE_ACTION_SLTP,
-                    "position": p.ticket,
-                    "symbol": p.symbol,
-                    "sl": new_sl,
-                    "tp": p.tp
-                }
-                res = mt5.order_send(req)
-                if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-                    log(f"🎯 [PROFIT GUARDIAN TRAILED] Position #{p.ticket} SL moved to {new_sl} (Locked Profit)!")
-                else:
-                    log(f"Failed to trail SL: retcode={getattr(res, 'retcode', None)} | comment={getattr(res, 'comment', None)}")
+            new_sl = round(p.price_open + (buffer if is_buy else -buffer), 2 if ("XAU" in p.symbol or "BTC" in p.symbol) else 5)
+            
+            req = {
+                "action": mt5.TRADE_ACTION_SLTP,
+                "position": p.ticket,
+                "symbol": p.symbol,
+                "sl": new_sl,
+                "tp": p.tp
+            }
+            res = mt5.order_send(req)
+            if res and res.retcode == mt5.TRADE_RETCODE_DONE:
+                log(f"🎯 [SECURED] Position #{p.ticket} entry secured at {new_sl}. Letting trade run freely to target!")
 
 def execute_rsi_evolved_trade(rsi_decision, equity):
     target_asset = rsi_decision.get("prime_asset", "Bitcoin (BTCUSD)")
