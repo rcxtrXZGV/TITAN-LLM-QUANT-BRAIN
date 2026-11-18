@@ -1,0 +1,53 @@
+name: Audit Trade History Deals
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  check-history:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install MT5
+        run: |
+          pip install MetaTrader5
+
+      - name: Restore MT5 Cache
+        id: cache-mt5
+        uses: actions/cache@v4
+        with:
+          path: |
+            C:\MT5
+            C:\Users\runneradmin\AppData\Roaming\MetaQuotes\Terminal\D0E8209F77C8CF37AD8BF550E51FF075
+          key: titan-mt5-runtime-v1
+
+      - name: Fetch History Deals From Broker
+        env:
+          MT5_LOGIN: ${{ secrets.MT5_LOGIN }}
+          MT5_PASSWORD: ${{ secrets.MT5_PASSWORD }}
+          MT5_SERVER: ${{ secrets.MT5_SERVER }}
+        run: |
+          python fetch_history_deals.py
+
+      - name: Commit Deal History
+        shell: bash
+        run: |
+          git config --global user.email "titan-telemetry@ai.quant"
+          git config --global user.name "Titan-Telemetry"
+          if [ -f "brain_vault/broker_deal_history.json" ]; then
+            git add -f brain_vault/broker_deal_history.json
+            git commit -m "audit: exact deal history breakdown [skip ci]" || true
+            git push origin main || true
+          fi
