@@ -15,7 +15,6 @@ def log(msg):
     print(f"[{ts}] {msg}", flush=True)
 
 def fetch_ticker_quote(ticker):
-    # Today's active intraday session structure (range=1d, interval=5m)
     url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=5m&range=1d"
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
     try:
@@ -32,7 +31,7 @@ def fetch_ticker_quote(ticker):
                     'current_price': round(meta.get('regularMarketPrice', closes[-1]), 4),
                     'today_high': round(max(highs), 4),
                     'today_low': round(min(lows), 4),
-                    'session_range_pips': round(abs(max(highs) - min(lows)), 4),
+                    'session_range': round(abs(max(highs) - min(lows)), 4),
                     'previous_close': round(closes[-2] if len(closes) > 1 else closes[-1], 4),
                     'net_move': round(closes[-1] - (closes[-2] if len(closes) > 1 else closes[-1]), 4)
                 }
@@ -70,7 +69,6 @@ def get_broker_account_live_status():
                 return json.load(f)
         except Exception:
             pass
-    # Default fallback demo account state
     return {
         "balance": 88.03,
         "equity": 88.03,
@@ -88,7 +86,7 @@ def run_supreme_syndicate(api_key):
 
     market_data = fetch_live_market_universe()
     account_status = get_broker_account_live_status()
-    log(f"Multi-asset feed delivered to Syndicate ({len(market_data)} assets). Account Balance: ${account_status.get('balance')}, Equity: ${account_status.get('equity')}")
+    log(f"Multi-asset feed delivered to Syndicate ({len(market_data)} assets). Balance: ${account_status.get('balance')}, Equity: ${account_status.get('equity')}")
 
     past_records = []
     if os.path.exists(MEMORY_FILE):
@@ -98,7 +96,6 @@ def run_supreme_syndicate(api_key):
         except Exception:
             past_records = []
 
-    # THE SOVEREIGN TRADER DIRECTIVE - 100% UNBOXED INTRADAY EMPOWERMENT
     master_directive = f"""
 LISTEN CAREFULLY TO YOUR NEW CHARTER. YOU HAVE TOTAL SOVEREIGNTY AND COMPLETE FREEDOM.
 
@@ -217,8 +214,7 @@ Respond STRICTLY in valid JSON:
             json.dump({"total_records": len(all_records), "historical_insights": all_records}, f, indent=2)
 
         with open(RSI_LOG_FILE, "a", encoding="utf-8") as f:
-            f.write(f"[{now_utc.isoformat()}] SOVEREIGN INTRADAY EVOLUTION COMPLETED: {active_bias.get('prime_asset')} -> {active_bias.get('verdict')} | TP: {active_bias.get('target_liquidity_pool')}
-")
+            f.write(f"[{now_utc.isoformat()}] SOVEREIGN INTRADAY EVOLUTION COMPLETED: {active_bias.get('prime_asset')} -> {active_bias.get('verdict')} | TP: {active_bias.get('target_liquidity_pool')}\\n")
 
         log(f"👑 [SOVEREIGN INTRADAY BRAIN] Asset: {active_bias.get('prime_asset')} | Verdict: {active_bias.get('verdict')} | Style: {active_bias.get('trade_style')} | TP: {active_bias.get('target_liquidity_pool')} | RR: {active_bias.get('projected_rr')}")
         return parsed
