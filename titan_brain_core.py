@@ -102,7 +102,7 @@ def run_supreme_syndicate(api_key):
                         "cycle": r.get("timestamp", "")[:19],
                         "asset": bias.get("prime_asset"),
                         "verdict": bias.get("verdict"),
-                        "lesson": "Only fire 2-4 quality sniper trades daily; avoid micro noise; dynamically calculate TP from entry price."
+                        "lesson": "Total unconstrained freedom to trade, scalp, momentum ride, or wait based purely on live market edge."
                     })
         except Exception:
             past_records = []
@@ -118,7 +118,12 @@ YOUR SYSTEM ARCHITECTURE: 8 SPECIALIZED AI AGENTS THAT ANALYZE, CHALLENGE EACH O
 - Open Positions: {json.dumps(account_status.get('open_positions', []))}
 - Objective: Scale $45 to $1,000+ this month with 0% risk of account ruin.
 
-### 2. THE 8 SPECIALIZED AGENTS & THEIR MISSIONS:
+### 2. COMPLETE FREEDOM - NO CONSTRAINTS & NO BOXES:
+- YOU HAVE 100% UNCONSTRAINED AUTONOMY.
+- There are NO limits on trade counts, no rigid formulas, and no fixed rules.
+- Scalping, intraday breakouts, order flow sweeps, swing momentum — whatever the trading world offers, you have full freedom to deploy based on live market conditions.
+
+### 3. THE 8 SPECIALIZED AGENTS:
 1. AGENT_1 (Macro & Intermarket Liquidity - George Soros framework): Analyzes capital rotation across Gold, Oil, USD, and Bitcoin.
 2. AGENT_2 (Quant Momentum & Mathematical Velocity - Jim Simons framework): Computes 5-candle velocity, tick rate, and statistical edge.
 3. AGENT_3 (Institutional Liquidity Sweeps - Paul Tudor Jones framework): Pinpoints retail trap sweeps, false breakouts, and institutional retests.
@@ -126,9 +131,9 @@ YOUR SYSTEM ARCHITECTURE: 8 SPECIALIZED AI AGENTS THAT ANALYZE, CHALLENGE EACH O
 5. AGENT_5 (Market Regime & Volatility Analyzer): Differentiates between choppy consolidation vs clean trending impulsions (ATR/range filter).
 6. AGENT_6 (Cross-Asset Correlation Specialist): Audits divergences between equities (Nasdaq/US30) vs commodities (Gold/Oil) vs Crypto.
 7. AGENT_7 (Red Team Adversary / Devil's Advocate): Aggressively scrutinizes the proposed setup, identifies hidden risks, and attempts to veto bad trades!
-8. AGENT_8 (Supreme Risk Officer - Ed Seykota framework): Enforces strict position sizing (0.01 lot), stops noise-hunting, and protects current capital.
+8. AGENT_8 (Supreme Risk Officer - Ed Seykota framework): Enforces smart risk management, stops noise-hunting, and protects capital.
 
-### 3. THE SUPREME GOD BRAIN ARBITER:
+### 4. THE SUPREME GOD BRAIN ARBITER:
 - Evaluates the consensus and heated debate among all 8 agents.
 - If Red Team (Agent 7) or Risk Officer (Agent 8) proves high danger or noise -> ORDERS RUTHLESS WAIT (Zero Trades)!
 - If an unmistakable, undeniable asymmetric setup survives all 8 checks -> ORDERS IMMEDIATE EXECUTION (BUY or SELL).
