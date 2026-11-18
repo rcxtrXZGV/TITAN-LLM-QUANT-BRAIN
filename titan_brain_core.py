@@ -26,14 +26,16 @@ def fetch_ticker_quote(ticker):
             closes = [c for c in quote['close'] if c is not None]
             highs = [h for h in quote['high'] if h is not None]
             lows = [l for l in quote['low'] if l is not None]
-            if closes:
+            if closes and len(closes) >= 5:
+                # Dynamic organic flow: last 5 candles momentum, recent volatility
+                last_5_move = round(closes[-1] - closes[-5], 4)
+                recent_volatility = round(max(highs[-5:]) - min(lows[-5:]), 4)
                 return {
                     'current_price': round(meta.get('regularMarketPrice', closes[-1]), 4),
-                    'today_high': round(max(highs), 4),
-                    'today_low': round(min(lows), 4),
-                    'session_range': round(abs(max(highs) - min(lows)), 4),
-                    'previous_close': round(closes[-2] if len(closes) > 1 else closes[-1], 4),
-                    'net_move': round(closes[-1] - (closes[-2] if len(closes) > 1 else closes[-1]), 4)
+                    'momentum_5_candles': last_5_move,
+                    'recent_5_candle_range': recent_volatility,
+                    'previous_close': round(closes[-2], 4),
+                    'net_move': round(closes[-1] - closes[-2], 4)
                 }
     except Exception as e:
         pass
@@ -70,9 +72,9 @@ def get_broker_account_live_status():
         except Exception:
             pass
     return {
-        "balance": 88.03,
-        "equity": 88.03,
-        "free_margin": 88.03,
+        "balance": 45.34,
+        "equity": 45.34,
+        "free_margin": 45.34,
         "open_positions": []
     }
 
@@ -97,17 +99,27 @@ def run_supreme_syndicate(api_key):
             past_records = []
 
     master_directive = f"""
-LISTEN CAREFULLY TO YOUR NEW CHARTER. YOU HAVE TOTAL SOVEREIGNTY AND COMPLETE FREEDOM.
+RECURSIVE SELF-IMPROVEMENT (RSI) DIRECTIVE FOR THE 5 UNCONSTRAINED WALL STREET LEGENDS & SUPREME GOD BRAIN:
 
-1. COMPLETE FREEDOM & EMPOWERMENT:
-   - You are NOT confined to any strategy, indicator, or rule.
+### CRITICAL LESSON FROM TODAY'S FORENSIC AUDIT (LEARN & NEVER REPEAT):
+- 149 trades were executed today and 147 were stopped out by noise because stop losses were too tight (7-8 pips) and targets were anchored to static macro numbers (3894 / 3799).
+- RESULT: Account drew down to $45.34.
+- YOUR RSI DIRECTIVE: Stop anchoring to static numbers! Use organic, dynamic price action.
+- STOP OVER-TRADING: Only 2 to 4 high-probability sniper trades per day. If the setup is not unmistakable -> RUTHLESS WAIT!
+
+1. THE 5 INDEPENDENT ELITE MINDS (NO PRE-DEFINED BOX):
+   - Mind 1: JIM SIMONS (Mathematical pattern recognition & multi-asset correlation)
+   - Mind 2: GEORGE SOROS (Global macro liquidity flow & inter-market momentum)
+   - Mind 3: STANLEY DRUCKENMILLER (Asymmetric 1:3+ to 1:6+ risk-to-reward structuring)
+   - Mind 4: PAUL TUDOR JONES (Liquidity sweeps, false breakouts, and institutional reversal points)
+   - Mind 5: ED SEYKOTA (Ruthless capital preservation & trend alignment)
    - Whatever happens in the trading world — scalping, intraday momentum, liquidity grabs, break-and-retest, order-flow sweeps — you have the full power to execute it all yourself.
    - You decide when to scalp, when to ride an intraday wave, when to take quick profits, and how to manage risk.
 
 2. YOUR LIVE BROKER ACCOUNT STATUS:
-   - Real-time Balance: ${account_status.get('balance', 88.03)} USD
-   - Real-time Floating Equity: ${account_status.get('equity', 88.03)} USD
-   - Real-time Free Margin: ${account_status.get('free_margin', 88.03)} USD
+   - Real-time Balance: ${account_status.get('balance', 45.34)} USD
+   - Real-time Floating Equity: ${account_status.get('equity', 45.34)} USD
+   - Real-time Free Margin: ${account_status.get('free_margin', 45.34)} USD
    - Currently Open Broker Positions: {json.dumps(account_status.get('open_positions', []))}
    - STUDY YOUR ACCOUNT. Adjust your position sizing (0.01 to 0.05 lot) and strategy dynamically based on your available balance.
 
@@ -137,7 +149,7 @@ Respond STRICTLY in valid JSON:
   "evolution_timestamp": "{now_utc.isoformat()}",
   "cycle_iteration": {len(past_records) + 1},
   "account_assessment": {{
-    "current_balance": {account_status.get('balance', 88.03)},
+    "current_balance": {account_status.get('balance', 45.34)},
     "growth_plan": "How you plan to compound from this balance to $1,000+ this month"
   }},
   "independent_brains": {{
