@@ -1,9 +1,11 @@
 """
-TITAN 5 PURE AUTONOMOUS MINDS + SUPREME GOD ARBITER
-Pure Natural Intelligence.
-Zero predefined definitions. Zero rigid instructions.
-5 independent elite trading intelligences analyzing the raw market in complete freedom,
-with 1 Supreme GOD Brain uniting them into absolute execution truth.
+TITAN SUPREME AUTONOMOUS QUANT SYNDICATE
+Core Architecture: 5 Independent Sovereign Elite Minds + 1 Supreme God Arbiter
+Ground Rules:
+1. 100% Complete Freedom. Zero Rigid Boxes. Zero Scripted Limitations.
+2. Single Absolute Objective: Compound $100 -> $1,000+ USD within 1 month at ANY COST.
+3. Zero Hallucination: Targets must be real, reachable intraday institutional liquidity levels (Session High/Low, Previous Day High/Low, 2-Day Range Extremes).
+4. Asymmetric Precision: Strict small risk ($0.70 - $2.50) targeting massive real-world rewards (1:6+ to 1:20+).
 """
 
 import os
@@ -70,7 +72,7 @@ def fetch_live_market_universe():
             snapshot[name] = q
     return snapshot
 
-def run_pure_natural_intelligence(api_key):
+def run_supreme_syndicate(api_key):
     if not api_key:
         log("No Gemini API key available.")
         return
@@ -79,7 +81,7 @@ def run_pure_natural_intelligence(api_key):
     client = genai.Client(api_key=api_key)
 
     market_data = fetch_live_market_universe()
-    log(f"Market realities delivered to 5 Independent Pure Brains ({len(market_data)} live assets).")
+    log(f"Multi-asset feed delivered to Syndicate ({len(market_data)} assets).")
 
     past_records = []
     if os.path.exists(MEMORY_FILE):
@@ -89,43 +91,43 @@ def run_pure_natural_intelligence(api_key):
         except Exception:
             past_records = []
 
-    # 100% UNCONSTRAINED NATURAL INTELLIGENCE META-PROMPT
-    pure_prompt = f"""
-You are an autonomous intelligence network consisting of 5 INDEPENDENT ELITE TRADING MINDS and 1 SUPREME GOD ARBITER.
+    # THE ABSOLUTE CLARITY DIRECTIVE
+    master_directive = f"""
+LISTEN CAREFULLY. THIS IS A COMPLETE RESET TO ABSOLUTE CLARITY FOR ALL 5 MINDS AND THE SUPREME GOD BRAIN.
 
-### YOUR SOLE & ABSOLUTE MISSION:
-Compound this account from $100 to $1,000+ USD within 1 month with ZERO ACCOUNT RUIN.
-(Current Account Equity: ~$194.00 USD).
-Nobody dictates your strategy, indicators, or methods. You have 100% natural, unconstrained intelligence.
-Think, calculate, and act like real-world master traders whose only mandate is to turn $100 into $1,000+ by month-end.
+1. YOU ARE 100% FREE:
+   - You are not in any box. Nobody is telling you what indicators, formulas, or strategies to use.
+   - You have complete sovereign freedom to analyze, think, and trade however you want.
 
-### THE 5 INDEPENDENT MINDS:
-- BRAIN 1: Independent Elite Mind (Full autonomy)
-- BRAIN 2: Independent Elite Mind (Full autonomy)
-- BRAIN 3: Independent Elite Mind (Full autonomy)
-- BRAIN 4: Independent Elite Mind (Full autonomy)
-- BRAIN 5: Independent Elite Mind (Full autonomy)
+2. YOUR SOLE & ABSOLUTE MISSION:
+   - Compound this account from $100 to $1,000+ USD within 1 month AT ANY COST.
+   - Every trade must be taken with the mindset of turning this small capital into $1,000+ while preserving the principal ($0 account ruin).
 
-Each mind observes the live data, thinks independently, and outputs its raw perspective.
+3. ZERO HALLUCINATION (GROUND TRUTH REALITY ONLY):
+   - DO NOT hallucinate imaginary targets (e.g. Gold at 6000+ when it is at 3790). That is pure fiction.
+   - Your Take Profit (TP) MUST be real, reachable intraday institutional liquidity levels:
+     * Today's Session High / Session Low
+     * Previous Day's High / Low
+     * 2-Day Range Breakout / Reversal Extremes
+   - A real 1:6 to 1:20 asymmetric move captures $15 to $35 real cash on 0.01 lot. That is how $100 compounds to $1,000+.
 
-### THE SUPREME GOD BRAIN:
-You observe all 5 independent minds.
-CRITICAL REALITY MANDATE:
-1. ZERO HALLUCINATION / ZERO FANTASY TARGETS: Target Liquidity Pool (TP) MUST be grounded in REAL-WORLD INTRADAY STRUCTURE (Today's Session High/Low or 2-Day Range High/Low).
-   - If Gold is at 3790, a target of 6000+ is IMPOSSIBLE hallucination. Real intraday target is session high/previous day high (e.g. 3810 - 3840).
-   - A realistic 1:6 to 1:12 intraday move yields $12 to $30 profit on 0.01 lot.
-2. Execute when a real, reachable target with 1:6+ asymmetry exists. Otherwise ORDER WAIT.
+4. HOW YOU OPERATE:
+   - 5 INDEPENDENT ELITE MINDS observe the raw market realities, think in complete freedom, and formulate independent trade opportunities.
+   - THE SUPREME GOD BRAIN synthesizes the 5 minds:
+     * If an unmistakable, reachable, high-profit sniper trade exists -> ORDER IMMEDIATE EXECUTION (BUY or SELL) with real SL and real TP.
+     * If there is noise or no clear edge -> ORDER RUTHLESS PATIENCE (WAIT).
 
-### LIVE MARKET REALITY ({now_utc.isoformat()}):
+### REAL-TIME LIVE 13-ASSET MARKET SNAPSHOT ({now_utc.isoformat()}):
 {json.dumps(market_data, indent=2)}
 
-### HISTORICAL NETWORK REFLECTIONS:
+### HISTORICAL SYNDICATE REFLECTIONS:
 {json.dumps(past_records, indent=2)}
 
 Respond STRICTLY in valid JSON:
 {{
   "evolution_timestamp": "{now_utc.isoformat()}",
   "cycle_iteration": {len(past_records) + 1},
+  "syndicate_clarity_status": "All 5 minds and God Brain aligned: 100% Free, Zero Box, Zero Hallucination, $100 to $1,000+ Mission Active",
   "independent_brains": {{
     "brain_1": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "..." }},
     "brain_2": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "..." }},
@@ -141,15 +143,15 @@ Respond STRICTLY in valid JSON:
     "calculated_sl_pips": 20,
     "calculated_tp_pips": 120,
     "projected_rr": "1:6+ or higher",
-    "god_brain_synthesis": "Unified truth of execution"
+    "god_brain_synthesis": "Unified truth of execution based strictly on reachable intraday liquidity"
   }},
-  "intelligence_evolved": "What new understanding the network acquired independently"
+  "month_end_compounding_step": "Specific contribution toward the $100 -> $1,000+ objective"
 }}
 """
     try:
         response = client.models.generate_content(
             model="gemini-3.5-flash-lite",
-            contents=pure_prompt
+            contents=master_directive
         )
 
         clean_json = response.text.strip()
@@ -176,7 +178,7 @@ Respond STRICTLY in valid JSON:
 
         all_records.append({
             "timestamp": now_utc.isoformat(),
-            "type": "PURE_NATURAL_INTELLIGENCE_CYCLE",
+            "type": "SUPREME_SYNDICATE_UNBOXED_CYCLE",
             "market_snapshot": market_data,
             "rsi_evolution": parsed
         })
@@ -188,17 +190,17 @@ Respond STRICTLY in valid JSON:
         with open(RSI_LOG_FILE, "a", encoding="utf-8") as f:
             f.write(json.dumps(parsed) + "\n")
 
-        log(f"⚡ [GOD BRAIN VERDICT COMPLETE] Supreme Action: {active_bias.get('verdict')} on {active_bias.get('prime_asset')} | Target RR: {active_bias.get('projected_rr')}")
+        log(f"👑 [GOD BRAIN GROUNDED & UNBOXED] Asset: {active_bias.get('prime_asset')} | Verdict: {active_bias.get('verdict')} | Real TP: {active_bias.get('target_liquidity_pool')} | RR: {active_bias.get('projected_rr')}")
 
     except Exception as e:
-        log(f"Network cycle error: {e}")
+        log(f"Syndicate cycle error: {e}")
 
 def main():
     log("==================================================")
-    log("TITAN PURE NATURAL INTELLIGENCE NETWORK ACTIVE")
+    log("TITAN SUPREME SYNDICATE ENGINE INITIALIZED")
     log("==================================================")
     api_key = os.getenv("GEMINI_API_KEY", "")
-    run_pure_natural_intelligence(api_key)
+    run_supreme_syndicate(api_key)
 
 if __name__ == "__main__":
     main()
