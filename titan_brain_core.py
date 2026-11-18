@@ -27,7 +27,6 @@ def fetch_ticker_quote(ticker):
             highs = [h for h in quote['high'] if h is not None]
             lows = [l for l in quote['low'] if l is not None]
             if closes and len(closes) >= 5:
-                # Dynamic organic flow: last 5 candles momentum, recent volatility
                 last_5_move = round(closes[-1] - closes[-5], 4)
                 recent_volatility = round(max(highs[-5:]) - min(lows[-5:]), 4)
                 return {
@@ -37,7 +36,7 @@ def fetch_ticker_quote(ticker):
                     'previous_close': round(closes[-2], 4),
                     'net_move': round(closes[-1] - closes[-2], 4)
                 }
-    except Exception as e:
+    except Exception:
         pass
     return None
 
@@ -88,7 +87,7 @@ def run_supreme_syndicate(api_key):
 
     market_data = fetch_live_market_universe()
     account_status = get_broker_account_live_status()
-    log(f"Multi-asset feed delivered to Syndicate ({len(market_data)} assets). Balance: ${account_status.get('balance')}, Equity: ${account_status.get('equity')}")
+    log(f"Multi-asset feed delivered to 8-Agent Syndicate ({len(market_data)} assets). Balance: ${account_status.get('balance')}, Equity: ${account_status.get('equity')}")
 
     past_records = []
     rsi_history_summary = []
@@ -97,64 +96,48 @@ def run_supreme_syndicate(api_key):
             with open(MEMORY_FILE, "r", encoding="utf-8") as f:
                 raw_past = json.load(f).get("historical_insights", [])
                 past_records = raw_past[-8:]
-                # RSI Summarizer to prevent echo-chamber repetition of old numbers
                 for r in raw_past[-5:]:
                     bias = r.get("rsi_evolution", {}).get("supreme_god_verdict", {})
                     rsi_history_summary.append({
                         "cycle": r.get("timestamp", "")[:19],
                         "asset": bias.get("prime_asset"),
                         "verdict": bias.get("verdict"),
-                        "lesson": "Evolve targets dynamically, never anchor to repetitive static prices."
+                        "lesson": "Only fire 2-4 quality sniper trades daily; avoid micro noise; dynamically calculate TP from entry price."
                     })
         except Exception:
             past_records = []
 
     master_directive = f"""
-RECURSIVE SELF-IMPROVEMENT (RSI) DIRECTIVE FOR THE 5 UNCONSTRAINED WALL STREET LEGENDS & SUPREME GOD BRAIN:
+YOU ARE THE TITAN AUTONOMOUS QUANTITATIVE TRADING ENGINE.
+YOUR SYSTEM ARCHITECTURE: 8 SPECIALIZED AI AGENTS THAT ANALYZE, CHALLENGE EACH OTHER, AND EXECUTE WITH GEMINI RISK INTELLIGENCE.
 
-### CRITICAL LESSON FROM TODAY'S FORENSIC AUDIT (LEARN & NEVER REPEAT):
-- 149 trades were executed today and 147 were stopped out by noise because stop losses were too tight (7-8 pips) and targets were anchored to static macro numbers (3894 / 3799).
-- RESULT: Account drew down to $45.34.
-- YOUR RSI DIRECTIVE: Stop anchoring to static numbers! Use organic, dynamic price action.
-- STOP OVER-TRADING: Only 2 to 4 high-probability sniper trades per day. If the setup is not unmistakable -> RUTHLESS WAIT!
+### 1. LIVE BROKER REALITY:
+- Balance: ${account_status.get('balance', 45.34)} USD
+- Floating Equity: ${account_status.get('equity', 45.34)} USD
+- Free Margin: ${account_status.get('free_margin', 45.34)} USD
+- Open Positions: {json.dumps(account_status.get('open_positions', []))}
+- Objective: Scale $45 to $1,000+ this month with 0% risk of account ruin.
 
-1. THE 5 INDEPENDENT ELITE MINDS (NO PRE-DEFINED BOX):
-   - Mind 1: JIM SIMONS (Mathematical pattern recognition & multi-asset correlation)
-   - Mind 2: GEORGE SOROS (Global macro liquidity flow & inter-market momentum)
-   - Mind 3: STANLEY DRUCKENMILLER (Asymmetric 1:3+ to 1:6+ risk-to-reward structuring)
-   - Mind 4: PAUL TUDOR JONES (Liquidity sweeps, false breakouts, and institutional reversal points)
-   - Mind 5: ED SEYKOTA (Ruthless capital preservation & trend alignment)
-   - Whatever happens in the trading world — scalping, intraday momentum, liquidity grabs, break-and-retest, order-flow sweeps — you have the full power to execute it all yourself.
-   - You decide when to scalp, when to ride an intraday wave, when to take quick profits, and how to manage risk.
+### 2. THE 8 SPECIALIZED AGENTS & THEIR MISSIONS:
+1. AGENT_1 (Macro & Intermarket Liquidity - George Soros framework): Analyzes capital rotation across Gold, Oil, USD, and Bitcoin.
+2. AGENT_2 (Quant Momentum & Mathematical Velocity - Jim Simons framework): Computes 5-candle velocity, tick rate, and statistical edge.
+3. AGENT_3 (Institutional Liquidity Sweeps - Paul Tudor Jones framework): Pinpoints retail trap sweeps, false breakouts, and institutional retests.
+4. AGENT_4 (Asymmetric Risk-Reward Structuring - Stanley Druckenmiller framework): Formulates 1:3+ to 1:6+ reward setups, ensuring gains heavily dwarf risks.
+5. AGENT_5 (Market Regime & Volatility Analyzer): Differentiates between choppy consolidation vs clean trending impulsions (ATR/range filter).
+6. AGENT_6 (Cross-Asset Correlation Specialist): Audits divergences between equities (Nasdaq/US30) vs commodities (Gold/Oil) vs Crypto.
+7. AGENT_7 (Red Team Adversary / Devil's Advocate): Aggressively scrutinizes the proposed setup, identifies hidden risks, and attempts to veto bad trades!
+8. AGENT_8 (Supreme Risk Officer - Ed Seykota framework): Enforces strict position sizing (0.01 lot), stops noise-hunting, and protects current capital.
 
-2. YOUR LIVE BROKER ACCOUNT STATUS:
-   - Real-time Balance: ${account_status.get('balance', 45.34)} USD
-   - Real-time Floating Equity: ${account_status.get('equity', 45.34)} USD
-   - Real-time Free Margin: ${account_status.get('free_margin', 45.34)} USD
-   - Currently Open Broker Positions: {json.dumps(account_status.get('open_positions', []))}
-   - STUDY YOUR ACCOUNT. Adjust your position sizing (0.01 to 0.05 lot) and strategy dynamically based on your available balance.
+### 3. THE SUPREME GOD BRAIN ARBITER:
+- Evaluates the consensus and heated debate among all 8 agents.
+- If Red Team (Agent 7) or Risk Officer (Agent 8) proves high danger or noise -> ORDERS RUTHLESS WAIT (Zero Trades)!
+- If an unmistakable, undeniable asymmetric setup survives all 8 checks -> ORDERS IMMEDIATE EXECUTION (BUY or SELL).
+- ZERO REPETITION: Calculate Take Profit (TP) dynamically from entry price (e.g. Entry + 15 to 25 pips). DO NOT output dead numbers like 3799.8 or 3894.
 
-3. YOUR MISSION: COMPOUND FROM CURRENT BALANCE TO $1,000+ USD WITHIN 1 MONTH:
-   - This requires active, smart intraday execution.
-   - Do NOT hold trades waiting for distant macro fantasy targets that take weeks. Focus on INTRADAY trades (targets reachable today).
-   - Cash in your hand is how an account grows: bank wins, protect capital, compound continuously.
-   - ZERO REPETITION MANDATE: DO NOT output '3799.8' or '3894.0'! Those are dead static numbers from previous cycles.
-   - Calculate your target dynamically from the live price: For scalp/intraday, target is Entry + 10 to 25 pips (or Entry - 10 to 25 pips for SELL).
-
-4. YOU DECIDE EVERYTHING:
-   - 5 Independent Minds observe market reality and trade opportunities.
-   - The Supreme God Brain synthesizes the final execution verdict:
-     * Which asset to trade
-     * Action: BUY, SELL, or WAIT
-     * Lot size (0.01 to 0.05 based on equity)
-     * Exact Entry Price, Stop Loss (SL), and Take Profit (TP)
-     * Trade Style: "Scalp (quick 5-15 pips)", "Intraday Momentum (15-35 pips)", or "Breakout"
-     * Profit Protection Rule: You dictate how the active trade should be managed (e.g. secure at +$5, trailing stop, or manual exit)
-
-### REAL-TIME LIVE 13-ASSET MARKET SNAPSHOT ({now_utc.isoformat()}):
+### LIVE 13-ASSET MARKET SNAPSHOT ({now_utc.isoformat()}):
 {json.dumps(market_data, indent=2)}
 
-### HISTORICAL SYNDICATE REFLECTIONS:
+### RECENT RSI SYSTEM SUMMARY:
 {json.dumps(rsi_history_summary, indent=2)}
 
 Respond STRICTLY in valid JSON:
@@ -163,39 +146,43 @@ Respond STRICTLY in valid JSON:
   "cycle_iteration": {len(past_records) + 1},
   "account_assessment": {{
     "current_balance": {account_status.get('balance', 45.34)},
-    "growth_plan": "How you plan to compound from this balance to $1,000+ this month"
+    "growth_plan": "Specific compounding strategy from current balance to $1,000+"
   }},
-  "independent_brains": {{
-    "brain_1": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "...", "style": "Scalp/Intraday" }},
-    "brain_2": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "...", "style": "Scalp/Intraday" }},
-    "brain_3": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "...", "style": "Scalp/Intraday" }},
-    "brain_4": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "...", "style": "Scalp/Intraday" }},
-    "brain_5": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "...", "style": "Scalp/Intraday" }}
+  "eight_agent_syndicate": {{
+    "agent_1_macro_soros": {{ "view": "...", "bias": "BUY/SELL/WAIT", "target_asset": "..." }},
+    "agent_2_quant_simons": {{ "view": "...", "bias": "BUY/SELL/WAIT", "target_asset": "..." }},
+    "agent_3_liquidity_tudor": {{ "view": "...", "bias": "BUY/SELL/WAIT", "target_asset": "..." }},
+    "agent_4_asymmetry_druck": {{ "view": "...", "bias": "BUY/SELL/WAIT", "target_asset": "..." }},
+    "agent_5_regime_volatility": {{ "view": "...", "bias": "BUY/SELL/WAIT", "target_asset": "..." }},
+    "agent_6_correlation_arb": {{ "view": "...", "bias": "BUY/SELL/WAIT", "target_asset": "..." }},
+    "agent_7_red_team_adversary": {{ "critique_and_challenge": "...", "veto_verdict": "VETO/APPROVE" }},
+    "agent_8_risk_officer_seykota": {{ "risk_evaluation": "...", "safety_verdict": "SAFE/WAIT" }}
   }},
   "supreme_god_verdict": {{
-    "prime_asset": "Exact instrument name (e.g. Gold (XAUUSD))",
+    "prime_asset": "Selected asset name",
     "verdict": "BUY or SELL or WAIT",
     "trade_style": "Scalp or Intraday Momentum",
     "recommended_lot": 0.01,
     "entry_price": 0.0,
     "target_liquidity_pool": 0.0,
-    "calculated_sl_pips": 10.0,
-    "calculated_tp_pips": 20.0,
+    "calculated_sl_pips": 15.0,
+    "calculated_tp_pips": 25.0,
     "profit_securing_threshold_usd": 10.0,
-    "projected_rr": "1:2+ to 1:6+",
-    "god_brain_synthesis": "Autonomous synthesis and execution decision"
+    "projected_rr": "1:3+ to 1:6+",
+    "god_brain_synthesis": "Final synthesis resolving the 8-agent adversarial debate"
   }},
   "active_market_bias": {{
-    "prime_asset": "Exact instrument name",
+    "prime_asset": "Selected asset name",
     "verdict": "BUY or SELL or WAIT",
     "trade_style": "Scalp or Intraday Momentum",
     "recommended_lot": 0.01,
+    "entry_price": 0.0,
     "target_liquidity_pool": 0.0,
-    "calculated_sl_pips": 10.0,
-    "calculated_tp_pips": 20.0,
+    "calculated_sl_pips": 15.0,
+    "calculated_tp_pips": 25.0,
     "profit_securing_threshold_usd": 10.0,
-    "projected_rr": "1:2+ to 1:6+",
-    "god_brain_synthesis": "Autonomous synthesis and execution decision"
+    "projected_rr": "1:3+ to 1:6+",
+    "god_brain_synthesis": "Final synthesis resolving the 8-agent adversarial debate"
   }}
 }}
 """
@@ -229,7 +216,7 @@ Respond STRICTLY in valid JSON:
 
         all_records.append({
             "timestamp": now_utc.isoformat(),
-            "type": "SOVEREIGN_INTRADAY_UNBOXED_CYCLE",
+            "type": "TITAN_8_AGENT_ADVERSARIAL_CYCLE",
             "market_snapshot": market_data,
             "rsi_evolution": parsed
         })
@@ -239,13 +226,13 @@ Respond STRICTLY in valid JSON:
             json.dump({"total_records": len(all_records), "historical_insights": all_records}, f, indent=2)
 
         with open(RSI_LOG_FILE, "a", encoding="utf-8") as f:
-            f.write(f"[{now_utc.isoformat()}] SOVEREIGN INTRADAY EVOLUTION COMPLETED: {active_bias.get('prime_asset')} -> {active_bias.get('verdict')} | TP: {active_bias.get('target_liquidity_pool')}\\n")
+            f.write(f"[{now_utc.isoformat()}] 8-AGENT EVOLUTION: {active_bias.get('prime_asset')} -> {active_bias.get('verdict')} | TP: {active_bias.get('target_liquidity_pool')}\\n")
 
-        log(f"👑 [SOVEREIGN INTRADAY BRAIN] Asset: {active_bias.get('prime_asset')} | Verdict: {active_bias.get('verdict')} | Style: {active_bias.get('trade_style')} | TP: {active_bias.get('target_liquidity_pool')} | RR: {active_bias.get('projected_rr')}")
+        log(f"👑 [TITAN 8-AGENT SYNDICATE] Asset: {active_bias.get('prime_asset')} | Verdict: {active_bias.get('verdict')} | Style: {active_bias.get('trade_style')} | TP: {active_bias.get('target_liquidity_pool')} | RR: {active_bias.get('projected_rr')}")
         return parsed
 
     except Exception as e:
-        log(f"Syndicate cycle exception: {e}")
+        log(f"8-Agent cycle exception: {e}")
         return None
 
 if __name__ == "__main__":
