@@ -93,8 +93,8 @@ def calculate_symbol_stops(sym, price, is_buy):
 def manage_active_trailing_breakeven(open_positions, rsi_decision=None):
     """
     Pure Autonomous Management:
-    1. Instantly update active position TP to God Brain's target.
-    2. Shift SL to Breakeven / Profit Lock to ensure zero ruin and protect gains.
+    1. Instantly update active position TP to realistic intraday target (3782.0 - 3785.0).
+    2. Dynamic Profit Lock: If profit >= $8, lock SL into guaranteed green profit!
     """
     brain_target = 0.0
     if rsi_decision:
@@ -102,47 +102,50 @@ def manage_active_trailing_breakeven(open_positions, rsi_decision=None):
             brain_target = float(rsi_decision.get("target_liquidity_pool", 0) or 0)
         except Exception:
             brain_target = 0.0
+            
+    # Realistic Intraday Target Fallback:
+    if brain_target == 0 or brain_target > 3790.0:
+        brain_target = 3782.50
 
     for p in open_positions:
         log(f"Inspecting Position #{p.ticket} on {p.symbol}: Entry={p.price_open}, Current={p.price_current}, SL={p.sl}, TP={p.tp}, Profit=${p.profit:.2f}")
         
-        # Real-Time TP Synchronization: Overwrite old 3894 TP to brain_target
+        is_buy = (p.type == mt5.ORDER_TYPE_BUY)
+        buffer = 0.10 if ("XAU" in p.symbol or "BTC" in p.symbol) else 0.0001
+        
+        # Step 1: Real-Time TP Synchronization: Overwrite 3799/3894 to realistic target
+        current_sl = p.sl
+        target_tp = brain_target
+        need_mod = False
+        
         if brain_target > 0 and abs(p.tp - brain_target) > 0.5:
-            log(f"Syncing Position #{p.ticket} TP from {p.tp} to AI Brain target {brain_target}...")
+            target_tp = brain_target
+            need_mod = True
+            
+        # Step 2: Dynamic Profit Lock (If floating profit >= $8, lock guaranteed profit into SL!)
+        if p.profit >= 8.0:
+            locked_sl = round(p.price_open + (3.0 if is_buy else -3.0), 2 if "XAU" in p.symbol else 5)
+            if (is_buy and locked_sl > p.sl) or ((not is_buy) and (p.sl == 0 or locked_sl < p.sl)):
+                current_sl = locked_sl
+                need_mod = True
+                log(f"💰 [GUARANTEED PROFIT LOCK] Position #{p.ticket} is up +${p.profit:.2f}! Moving SL to {locked_sl} to lock in cash!")
+        elif p.profit > 0 and (current_sl < p.price_open if is_buy else (current_sl == 0 or current_sl > p.price_open)):
+            # Move to Breakeven
+            current_sl = round(p.price_open + (buffer if is_buy else -buffer), 2 if "XAU" in p.symbol else 5)
+            need_mod = True
+            log(f"🎯 [BREAKEVEN] Position #{p.ticket} secured at {current_sl}!")
+            
+        if need_mod:
             mod_req = {
                 "action": mt5.TRADE_ACTION_SLTP,
                 "position": p.ticket,
                 "symbol": p.symbol,
-                "sl": p.sl,
-                "tp": brain_target
+                "sl": current_sl,
+                "tp": target_tp
             }
-            res_tp = mt5.order_send(mod_req)
-            if res_tp and res_tp.retcode == mt5.TRADE_RETCODE_DONE:
-                log(f"SUCCESS: Position #{p.ticket} TP updated to {brain_target}!")
-        
-        is_buy = (p.type == mt5.ORDER_TYPE_BUY)
-        # If already secured, don't intervene
-        if is_buy and p.sl >= p.price_open:
-            continue
-        if (not is_buy) and p.sl > 0 and p.sl <= p.price_open:
-            continue
-
-        # Zero manual interference: Only protect capital once in comfortable profit
-        if p.profit > 0 and (p.price_current > p.price_open if is_buy else p.price_current < p.price_open):
-            # Move to entry smoothly so trade has 100% room to hit the full God Brain target
-            buffer = 0.10 if ("XAU" in p.symbol or "BTC" in p.symbol) else 0.0001
-            new_sl = round(p.price_open + (buffer if is_buy else -buffer), 2 if ("XAU" in p.symbol or "BTC" in p.symbol) else 5)
-            
-            req = {
-                "action": mt5.TRADE_ACTION_SLTP,
-                "position": p.ticket,
-                "symbol": p.symbol,
-                "sl": new_sl,
-                "tp": p.tp
-            }
-            res = mt5.order_send(req)
-            if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-                log(f"🎯 [SECURED] Position #{p.ticket} entry secured at {new_sl}. Letting trade run freely to target!")
+            res_mod = mt5.order_send(mod_req)
+            if res_mod and res_mod.retcode == mt5.TRADE_RETCODE_DONE:
+                log(f"✅ Position #{p.ticket} updated! SL={current_sl} | TP={target_tp}!")
 
 def execute_rsi_evolved_trade(rsi_decision, equity):
     target_asset = rsi_decision.get("prime_asset", "Gold (XAUUSD)")
