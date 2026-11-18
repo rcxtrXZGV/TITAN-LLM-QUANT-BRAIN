@@ -106,23 +106,31 @@ def manage_active_trailing_breakeven(open_positions):
             log(f"  -> Position #{p.ticket} already at Breakeven/Profit lock. Skipping.")
             continue
 
-        # If trade is in profit by >= $1.50 (more than half the risk distance), move SL to entry + 1 pip
+        # Dynamic Profit Guardian: Lock breakeven at $1.50+, and trail profit at $5.00+
         if p.profit >= 1.50:
             buffer = 0.10 if ("XAU" in p.symbol or "BTC" in p.symbol) else 0.0001
-            new_sl = round(p.price_open + (buffer if is_buy else -buffer), 2 if ("XAU" in p.symbol or "BTC" in p.symbol) else 5)
-            
-            req = {
-                "action": mt5.TRADE_ACTION_SLTP,
-                "position": p.ticket,
-                "symbol": p.symbol,
-                "sl": new_sl,
-                "tp": p.tp
-            }
-            res = mt5.order_send(req)
-            if res and res.retcode == mt5.TRADE_RETCODE_DONE:
-                log(f"🎯 [TRAILING BREAKEVEN LOCKED] Position #{p.ticket} SL moved to {new_sl} (Risk-Free Trade)!")
+            # If in strong profit ($5.00+), trail stop loss behind price to bank profit!
+            if p.profit >= 5.00:
+                trail_dist = 2.0 if ("XAU" in p.symbol) else (200.0 if "BTC" in p.symbol else 0.0020)
+                new_sl = round(p.price_current - trail_dist if is_buy else p.price_current + trail_dist, 2 if ("XAU" in p.symbol or "BTC" in p.symbol) else 5)
             else:
-                log(f"Failed to trail SL: retcode={getattr(res, 'retcode', None)} | comment={getattr(res, 'comment', None)}")
+                new_sl = round(p.price_open + (buffer if is_buy else -buffer), 2 if ("XAU" in p.symbol or "BTC" in p.symbol) else 5)
+
+            # Ensure new_sl improves existing sl
+            should_update = (is_buy and new_sl > p.sl) or ((not is_buy) and (p.sl == 0 or new_sl < p.sl))
+            if should_update:
+                req = {
+                    "action": mt5.TRADE_ACTION_SLTP,
+                    "position": p.ticket,
+                    "symbol": p.symbol,
+                    "sl": new_sl,
+                    "tp": p.tp
+                }
+                res = mt5.order_send(req)
+                if res and res.retcode == mt5.TRADE_RETCODE_DONE:
+                    log(f"🎯 [PROFIT GUARDIAN TRAILED] Position #{p.ticket} SL moved to {new_sl} (Locked Profit)!")
+                else:
+                    log(f"Failed to trail SL: retcode={getattr(res, 'retcode', None)} | comment={getattr(res, 'comment', None)}")
 
 def execute_rsi_evolved_trade(rsi_decision, equity):
     target_asset = rsi_decision.get("prime_asset", "Bitcoin (BTCUSD)")
@@ -198,7 +206,29 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
 
     is_buy = (verdict in ["BUY", "WAIT"])
     price = tick.ask if is_buy else tick.bid
-    lot, sl, tp = calculate_symbol_stops(sym, price, is_buy)
+    # Pure Autonomous Execution: Read EXACT Target Pool & Calculated SL from Supreme God Brain
+    brain_target_pool = float(rsi_decision.get("target_liquidity_pool", 0) or 0)
+    brain_sl_pips = float(rsi_decision.get("calculated_sl_pips", 0) or 0)
+    
+    # Calculate fallback standard stops
+    fallback_lot, fallback_sl, fallback_tp = calculate_symbol_stops(sym, price, is_buy)
+    lot = fallback_lot
+    
+    # Use God Brain's exact target if valid, otherwise fallback
+    if brain_target_pool > 0:
+        tp = round(brain_target_pool, 2 if ("BTC" in sym or "XAU" in sym or "XAG" in sym) else 5)
+        log(f"🧠 [GOD BRAIN TARGET UNLOCKED] Using Autonomous Liquidity Target: {tp}")
+    else:
+        tp = fallback_tp
+
+    # Use God Brain's calculated structural SL if provided and respects minimum broker stops
+    if brain_sl_pips > 0:
+        multiplier = 0.10 if ("XAU" in sym or "BTC" in sym) else 0.0001
+        sl_distance = brain_sl_pips * multiplier
+        sl = round(price - sl_distance if is_buy else price + sl_distance, 2 if ("BTC" in sym or "XAU" in sym) else 5)
+        log(f"🧠 [GOD BRAIN SL UNLOCKED] Using Autonomous Structural SL: {sl} (dist: {sl_distance})")
+    else:
+        sl = fallback_sl
     filling_mode = choose_filling_mode(sinfo)
 
     order_type = mt5.ORDER_TYPE_BUY if is_buy else mt5.ORDER_TYPE_SELL
