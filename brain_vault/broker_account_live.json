@@ -1,6 +1,15 @@
 {
-  "balance": 43.53,
-  "equity": 43.53,
-  "free_margin": 43.53,
-  "open_positions": []
+  "balance": 41.18,
+  "equity": 49.9,
+  "free_margin": 46.14,
+  "open_positions": [
+    {
+      "ticket": 2099145808,
+      "symbol": "XAUUSD",
+      "volume": 0.01,
+      "sl": 3759.53,
+      "tp": 3799.8,
+      "profit": 8.72
+    }
+  ]
 }
