@@ -1,13 +1,3 @@
-"""
-TITAN SUPREME AUTONOMOUS QUANT SYNDICATE
-Core Architecture: 5 Independent Sovereign Elite Minds + 1 Supreme God Arbiter
-Ground Rules:
-1. 100% Complete Freedom. Zero Rigid Boxes. Zero Scripted Limitations.
-2. Single Absolute Objective: Compound $100 -> $1,000+ USD within 1 month at ANY COST.
-3. Zero Hallucination: Targets must be real, reachable intraday institutional liquidity levels (Session High/Low, Previous Day High/Low, 2-Day Range Extremes).
-4. Asymmetric Precision: Strict small risk ($0.70 - $2.50) targeting massive real-world rewards (1:6+ to 1:20+).
-"""
-
 import os
 import sys
 import json
@@ -16,17 +6,17 @@ import datetime
 import urllib.request
 from google import genai
 
-VAULT_DIR = "brain_vault"
-MEMORY_FILE = os.path.join(VAULT_DIR, "trading_llm_memory.json")
-RSI_LOG_FILE = os.path.join(VAULT_DIR, "recursive_evolution_audit.jsonl")
-os.makedirs(VAULT_DIR, exist_ok=True)
+MEMORY_FILE = os.path.join("brain_vault", "trading_llm_memory.json")
+RSI_LOG_FILE = os.path.join("brain_vault", "rsi_evolution.log")
+BROKER_LIVE_FILE = os.path.join("brain_vault", "broker_account_live.json")
 
 def log(msg):
     ts = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
     print(f"[{ts}] {msg}", flush=True)
 
 def fetch_ticker_quote(ticker):
-    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=15m&range=2d"
+    # Today's active intraday session structure (range=1d, interval=5m)
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{ticker}?interval=5m&range=1d"
     req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
     try:
         with urllib.request.urlopen(req, timeout=10) as resp:
@@ -40,8 +30,9 @@ def fetch_ticker_quote(ticker):
             if closes:
                 return {
                     'current_price': round(meta.get('regularMarketPrice', closes[-1]), 4),
-                    'session_high': round(max(highs), 4),
-                    'session_low': round(min(lows), 4),
+                    'today_high': round(max(highs), 4),
+                    'today_low': round(min(lows), 4),
+                    'session_range_pips': round(abs(max(highs) - min(lows)), 4),
                     'previous_close': round(closes[-2] if len(closes) > 1 else closes[-1], 4),
                     'net_move': round(closes[-1] - (closes[-2] if len(closes) > 1 else closes[-1]), 4)
                 }
@@ -66,11 +57,26 @@ def fetch_live_market_universe():
         'USDCAD': 'CAD=X'
     }
     snapshot = {}
-    for name, sym in symbols.items():
-        q = fetch_ticker_quote(sym)
+    for name, ticker in symbols.items():
+        q = fetch_ticker_quote(ticker)
         if q:
             snapshot[name] = q
     return snapshot
+
+def get_broker_account_live_status():
+    if os.path.exists(BROKER_LIVE_FILE):
+        try:
+            with open(BROKER_LIVE_FILE, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    # Default fallback demo account state
+    return {
+        "balance": 88.03,
+        "equity": 88.03,
+        "free_margin": 88.03,
+        "open_positions": []
+    }
 
 def run_supreme_syndicate(api_key):
     if not api_key:
@@ -81,7 +87,8 @@ def run_supreme_syndicate(api_key):
     client = genai.Client(api_key=api_key)
 
     market_data = fetch_live_market_universe()
-    log(f"Multi-asset feed delivered to Syndicate ({len(market_data)} assets).")
+    account_status = get_broker_account_live_status()
+    log(f"Multi-asset feed delivered to Syndicate ({len(market_data)} assets). Account Balance: ${account_status.get('balance')}, Equity: ${account_status.get('equity')}")
 
     past_records = []
     if os.path.exists(MEMORY_FILE):
@@ -91,31 +98,36 @@ def run_supreme_syndicate(api_key):
         except Exception:
             past_records = []
 
-    # THE ABSOLUTE CLARITY DIRECTIVE
+    # THE SOVEREIGN TRADER DIRECTIVE - 100% UNBOXED INTRADAY EMPOWERMENT
     master_directive = f"""
-LISTEN CAREFULLY. THIS IS A COMPLETE RESET TO ABSOLUTE CLARITY FOR ALL 5 MINDS AND THE SUPREME GOD BRAIN.
+LISTEN CAREFULLY TO YOUR NEW CHARTER. YOU HAVE TOTAL SOVEREIGNTY AND COMPLETE FREEDOM.
 
-1. YOU ARE 100% FREE:
-   - You are not in any box. Nobody is telling you what indicators, formulas, or strategies to use.
-   - You have complete sovereign freedom to analyze, think, and trade however you want.
+1. COMPLETE FREEDOM & EMPOWERMENT:
+   - You are NOT confined to any strategy, indicator, or rule.
+   - Whatever happens in the trading world — scalping, intraday momentum, liquidity grabs, break-and-retest, order-flow sweeps — you have the full power to execute it all yourself.
+   - You decide when to scalp, when to ride an intraday wave, when to take quick profits, and how to manage risk.
 
-2. YOUR SOLE & ABSOLUTE MISSION:
-   - Compound this account from $100 to $1,000+ USD within 1 month AT ANY COST.
-   - Every trade must be taken with the mindset of turning this small capital into $1,000+ while preserving the principal ($0 account ruin).
+2. YOUR LIVE BROKER ACCOUNT STATUS:
+   - Real-time Balance: ${account_status.get('balance', 88.03)} USD
+   - Real-time Floating Equity: ${account_status.get('equity', 88.03)} USD
+   - Real-time Free Margin: ${account_status.get('free_margin', 88.03)} USD
+   - Currently Open Broker Positions: {json.dumps(account_status.get('open_positions', []))}
+   - STUDY YOUR ACCOUNT. Adjust your position sizing (0.01 to 0.05 lot) and strategy dynamically based on your available balance.
 
-3. ZERO HALLUCINATION (GROUND TRUTH REALITY ONLY):
-   - DO NOT hallucinate imaginary targets (e.g. Gold at 6000+ when it is at 3790). That is pure fiction.
-   - Your Take Profit (TP) MUST be real, reachable intraday institutional liquidity levels:
-     * Today's Session High / Session Low
-     * Previous Day's High / Low
-     * 2-Day Range Breakout / Reversal Extremes
-   - A real 1:6 to 1:20 asymmetric move captures $15 to $35 real cash on 0.01 lot. That is how $100 compounds to $1,000+.
+3. YOUR MISSION: COMPOUND FROM CURRENT BALANCE TO $1,000+ USD WITHIN 1 MONTH:
+   - This requires active, smart intraday execution.
+   - Do NOT hold trades waiting for distant macro fantasy targets that take weeks. Focus on INTRADAY trades (targets reachable today).
+   - Cash in your hand is how an account grows: bank wins, protect capital, compound continuously.
 
-4. HOW YOU OPERATE:
-   - 5 INDEPENDENT ELITE MINDS observe the raw market realities, think in complete freedom, and formulate independent trade opportunities.
-   - THE SUPREME GOD BRAIN synthesizes the 5 minds:
-     * If an unmistakable, reachable, high-profit sniper trade exists -> ORDER IMMEDIATE EXECUTION (BUY or SELL) with real SL and real TP.
-     * If there is noise or no clear edge -> ORDER RUTHLESS PATIENCE (WAIT).
+4. YOU DECIDE EVERYTHING:
+   - 5 Independent Minds observe market reality and trade opportunities.
+   - The Supreme God Brain synthesizes the final execution verdict:
+     * Which asset to trade
+     * Action: BUY, SELL, or WAIT
+     * Lot size (0.01 to 0.05 based on equity)
+     * Exact Entry Price, Stop Loss (SL), and Take Profit (TP)
+     * Trade Style: "Scalp (quick 5-15 pips)", "Intraday Momentum (15-35 pips)", or "Breakout"
+     * Profit Protection Rule: You dictate how the active trade should be managed (e.g. secure at +$5, trailing stop, or manual exit)
 
 ### REAL-TIME LIVE 13-ASSET MARKET SNAPSHOT ({now_utc.isoformat()}):
 {json.dumps(market_data, indent=2)}
@@ -127,25 +139,42 @@ Respond STRICTLY in valid JSON:
 {{
   "evolution_timestamp": "{now_utc.isoformat()}",
   "cycle_iteration": {len(past_records) + 1},
-  "syndicate_clarity_status": "All 5 minds and God Brain aligned: 100% Free, Zero Box, Zero Hallucination, $100 to $1,000+ Mission Active",
+  "account_assessment": {{
+    "current_balance": {account_status.get('balance', 88.03)},
+    "growth_plan": "How you plan to compound from this balance to $1,000+ this month"
+  }},
   "independent_brains": {{
-    "brain_1": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "..." }},
-    "brain_2": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "..." }},
-    "brain_3": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "..." }},
-    "brain_4": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "..." }},
-    "brain_5": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "..." }}
+    "brain_1": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "...", "style": "Scalp/Intraday" }},
+    "brain_2": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "...", "style": "Scalp/Intraday" }},
+    "brain_3": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "...", "style": "Scalp/Intraday" }},
+    "brain_4": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "...", "style": "Scalp/Intraday" }},
+    "brain_5": {{ "raw_thought": "...", "signal": "BUY/SELL/WAIT", "target_asset": "...", "style": "Scalp/Intraday" }}
   }},
   "supreme_god_verdict": {{
-    "prime_asset": "Selected asset name",
+    "prime_asset": "Exact instrument name (e.g. Gold (XAUUSD))",
     "verdict": "BUY or SELL or WAIT",
-    "live_price": 0.0,
+    "trade_style": "Scalp or Intraday Momentum",
+    "recommended_lot": 0.01,
+    "entry_price": 0.0,
     "target_liquidity_pool": 0.0,
-    "calculated_sl_pips": 20,
-    "calculated_tp_pips": 120,
-    "projected_rr": "1:6+ or higher",
-    "god_brain_synthesis": "Unified truth of execution based strictly on reachable intraday liquidity"
+    "calculated_sl_pips": 10.0,
+    "calculated_tp_pips": 20.0,
+    "profit_securing_threshold_usd": 10.0,
+    "projected_rr": "1:2+ to 1:6+",
+    "god_brain_synthesis": "Autonomous synthesis and execution decision"
   }},
-  "month_end_compounding_step": "Specific contribution toward the $100 -> $1,000+ objective"
+  "active_market_bias": {{
+    "prime_asset": "Exact instrument name",
+    "verdict": "BUY or SELL or WAIT",
+    "trade_style": "Scalp or Intraday Momentum",
+    "recommended_lot": 0.01,
+    "target_liquidity_pool": 0.0,
+    "calculated_sl_pips": 10.0,
+    "calculated_tp_pips": 20.0,
+    "profit_securing_threshold_usd": 10.0,
+    "projected_rr": "1:2+ to 1:6+",
+    "god_brain_synthesis": "Autonomous synthesis and execution decision"
+  }}
 }}
 """
     try:
@@ -178,7 +207,7 @@ Respond STRICTLY in valid JSON:
 
         all_records.append({
             "timestamp": now_utc.isoformat(),
-            "type": "SUPREME_SYNDICATE_UNBOXED_CYCLE",
+            "type": "SOVEREIGN_INTRADAY_UNBOXED_CYCLE",
             "market_snapshot": market_data,
             "rsi_evolution": parsed
         })
@@ -188,19 +217,16 @@ Respond STRICTLY in valid JSON:
             json.dump({"total_records": len(all_records), "historical_insights": all_records}, f, indent=2)
 
         with open(RSI_LOG_FILE, "a", encoding="utf-8") as f:
-            f.write(json.dumps(parsed) + "\n")
+            f.write(f"[{now_utc.isoformat()}] SOVEREIGN INTRADAY EVOLUTION COMPLETED: {active_bias.get('prime_asset')} -> {active_bias.get('verdict')} | TP: {active_bias.get('target_liquidity_pool')}
+")
 
-        log(f"👑 [GOD BRAIN GROUNDED & UNBOXED] Asset: {active_bias.get('prime_asset')} | Verdict: {active_bias.get('verdict')} | Real TP: {active_bias.get('target_liquidity_pool')} | RR: {active_bias.get('projected_rr')}")
+        log(f"👑 [SOVEREIGN INTRADAY BRAIN] Asset: {active_bias.get('prime_asset')} | Verdict: {active_bias.get('verdict')} | Style: {active_bias.get('trade_style')} | TP: {active_bias.get('target_liquidity_pool')} | RR: {active_bias.get('projected_rr')}")
+        return parsed
 
     except Exception as e:
-        log(f"Syndicate cycle error: {e}")
-
-def main():
-    log("==================================================")
-    log("TITAN SUPREME SYNDICATE ENGINE INITIALIZED")
-    log("==================================================")
-    api_key = os.getenv("GEMINI_API_KEY", "")
-    run_supreme_syndicate(api_key)
+        log(f"Syndicate cycle exception: {e}")
+        return None
 
 if __name__ == "__main__":
-    main()
+    key = os.getenv("GEMINI_API_KEY", "")
+    run_supreme_syndicate(key)
