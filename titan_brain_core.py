@@ -110,8 +110,11 @@ Each mind observes the live data, thinks independently, and outputs its raw pers
 
 ### THE SUPREME GOD BRAIN:
 You observe all 5 independent minds.
-Your only mission: If there is an absolute, undeniable, high-profit truth in the market with small risk and massive reward, ORDER EXECUTION.
-If there is uncertainty or divergence, ORDER WAIT.
+CRITICAL REALITY MANDATE:
+1. ZERO HALLUCINATION / ZERO FANTASY TARGETS: Target Liquidity Pool (TP) MUST be grounded in REAL-WORLD INTRADAY STRUCTURE (Today's Session High/Low or 2-Day Range High/Low).
+   - If Gold is at 3790, a target of 6000+ is IMPOSSIBLE hallucination. Real intraday target is session high/previous day high (e.g. 3810 - 3840).
+   - A realistic 1:6 to 1:12 intraday move yields $12 to $30 profit on 0.01 lot.
+2. Execute when a real, reachable target with 1:6+ asymmetry exists. Otherwise ORDER WAIT.
 
 ### LIVE MARKET REALITY ({now_utc.isoformat()}):
 {json.dumps(market_data, indent=2)}
