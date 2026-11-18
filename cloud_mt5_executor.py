@@ -317,9 +317,9 @@ def main():
     server = os.getenv("MT5_SERVER", "ICMarketsSC-Demo")
 
     login = int(login_str)
-    terminal_path = r"C:\MT5	erminal64.exe"
+    terminal_path = r"C:\MT5\terminal64.exe"
     if not os.path.exists(terminal_path):
-        terminal_path = r"C:\Program Files\MetaTrader 5	erminal64.exe"
+        terminal_path = r"C:\Program Files\MetaTrader 5\terminal64.exe"
 
     kill_terminal_instances()
     time.sleep(3)
