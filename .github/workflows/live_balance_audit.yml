@@ -3,12 +3,17 @@ name: Audit Broker Balance Live
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   check-balance:
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -43,6 +48,6 @@ jobs:
           git config --global user.name "Titan-Telemetry"
           if [ -f "brain_vault/broker_account_live.json" ]; then
             git add -f brain_vault/broker_account_live.json
-            git commit -m "audit: live broker account figures [skip ci]" || true
+            git commit -m "audit: exact live broker account figures [skip ci]" || true
             git push origin main || true
           fi
