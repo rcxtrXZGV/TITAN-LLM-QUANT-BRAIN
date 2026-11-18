@@ -91,10 +91,21 @@ def run_supreme_syndicate(api_key):
     log(f"Multi-asset feed delivered to Syndicate ({len(market_data)} assets). Balance: ${account_status.get('balance')}, Equity: ${account_status.get('equity')}")
 
     past_records = []
+    rsi_history_summary = []
     if os.path.exists(MEMORY_FILE):
         try:
             with open(MEMORY_FILE, "r", encoding="utf-8") as f:
-                past_records = json.load(f).get("historical_insights", [])[-8:]
+                raw_past = json.load(f).get("historical_insights", [])
+                past_records = raw_past[-8:]
+                # RSI Summarizer to prevent echo-chamber repetition of old numbers
+                for r in raw_past[-5:]:
+                    bias = r.get("rsi_evolution", {}).get("supreme_god_verdict", {})
+                    rsi_history_summary.append({
+                        "cycle": r.get("timestamp", "")[:19],
+                        "asset": bias.get("prime_asset"),
+                        "verdict": bias.get("verdict"),
+                        "lesson": "Evolve targets dynamically, never anchor to repetitive static prices."
+                    })
         except Exception:
             past_records = []
 
@@ -127,6 +138,8 @@ RECURSIVE SELF-IMPROVEMENT (RSI) DIRECTIVE FOR THE 5 UNCONSTRAINED WALL STREET L
    - This requires active, smart intraday execution.
    - Do NOT hold trades waiting for distant macro fantasy targets that take weeks. Focus on INTRADAY trades (targets reachable today).
    - Cash in your hand is how an account grows: bank wins, protect capital, compound continuously.
+   - ZERO REPETITION MANDATE: DO NOT output '3799.8' or '3894.0'! Those are dead static numbers from previous cycles.
+   - Calculate your target dynamically from the live price: For scalp/intraday, target is Entry + 10 to 25 pips (or Entry - 10 to 25 pips for SELL).
 
 4. YOU DECIDE EVERYTHING:
    - 5 Independent Minds observe market reality and trade opportunities.
@@ -142,7 +155,7 @@ RECURSIVE SELF-IMPROVEMENT (RSI) DIRECTIVE FOR THE 5 UNCONSTRAINED WALL STREET L
 {json.dumps(market_data, indent=2)}
 
 ### HISTORICAL SYNDICATE REFLECTIONS:
-{json.dumps(past_records, indent=2)}
+{json.dumps(rsi_history_summary, indent=2)}
 
 Respond STRICTLY in valid JSON:
 {{
