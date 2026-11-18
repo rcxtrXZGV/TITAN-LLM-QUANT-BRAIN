@@ -325,6 +325,17 @@ def main():
 
     acc = mt5.account_info()
     log(f"BROKER CONNECTED: {acc.name} | Balance: ${acc.balance:.2f} | Equity: ${acc.equity:.2f}")
+    try:
+        os.makedirs("brain_vault", exist_ok=True)
+        open_pos = mt5.positions_get()
+        pos_list = []
+        if open_pos:
+            for p in open_pos:
+                pos_list.append({"ticket": p.ticket, "symbol": p.symbol, "volume": p.volume, "sl": p.sl, "tp": p.tp, "profit": round(p.profit, 2)})
+        with open(os.path.join("brain_vault", "broker_account_live.json"), "w", encoding="utf-8") as f:
+            json.dump({"balance": round(acc.balance, 2), "equity": round(acc.equity, 2), "free_margin": round(acc.margin_free, 2), "open_positions": pos_list}, f, indent=2)
+    except Exception as e:
+        pass
 
     # 3-Minute Continuous Real-Time Tick Sniping Loop
     log("Starting 3-Minute Continuous Microsecond Tick Sniping Window...")
