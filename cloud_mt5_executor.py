@@ -79,14 +79,31 @@ def calculate_symbol_stops(sym, price, is_buy):
 def manage_active_positions_and_trailing(open_positions, rsi_decision):
     """
     Sovereign Trade & Profit Management:
-    1. If profit is positive, secure Breakeven (Zero Risk).
-    2. Dynamic Profit Locking: When profit reaches AI target threshold (e.g. $10+ / $15+),
-       trail SL to protect 50%+ of accumulated gains so $20 never evaporates to $0!
+    1. Synchronize TP with AI Brain target (instant update of old TP).
+    2. Secure Breakeven (Zero Risk) once in profit.
+    3. Dynamic Profit Locking: When profit reaches AI target threshold (e.g. $5+ / $10+),
+       trail SL to protect 50%+ of accumulated gains so profit never evaporates to $0!
     """
-    threshold_usd = float(rsi_decision.get("profit_securing_threshold_usd", 10.0) or 10.0)
+    threshold_usd = float(rsi_decision.get("profit_securing_threshold_usd", 5.0) or 5.0)
+    brain_target = float(rsi_decision.get("target_liquidity_pool", 0) or 0)
     
     for p in open_positions:
         log(f"Inspecting Position #{p.ticket} on {p.symbol}: Entry={p.price_open}, Current={p.price_current}, SL={p.sl}, TP={p.tp}, Floating Profit=${p.profit:.2f}")
+        
+        # Step 0: Real-Time TP Synchronization with Supreme God Brain Target
+        if brain_target > 0 and abs(p.tp - brain_target) > 0.5:
+            log(f"🔄 Syncing Position #{p.ticket} TP from {p.tp} to AI Brain target {brain_target}...")
+            mod_req = {
+                "action": mt5.TRADE_ACTION_SLTP,
+                "position": p.ticket,
+                "symbol": p.symbol,
+                "sl": p.sl,
+                "tp": brain_target
+            }
+            res_tp = mt5.order_send(mod_req)
+            if res_tp and res_tp.retcode == mt5.TRADE_RETCODE_DONE:
+                p_tp = brain_target
+                log(f"✅ Position #{p.ticket} TP successfully updated to {brain_target}!")
         
         is_buy = (p.type == mt5.ORDER_TYPE_BUY)
         buffer = 0.10 if ("XAU" in p.symbol or "BTC" in p.symbol) else 0.0001
