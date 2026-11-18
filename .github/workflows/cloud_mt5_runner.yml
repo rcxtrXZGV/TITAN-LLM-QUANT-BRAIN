@@ -78,10 +78,13 @@ jobs:
       - name: Commit Live Broker Telemetry
         shell: bash
         run: |
-          git config --local user.email "titan-telemetry@ai.quant"
-          git config --local user.name "Titan-Telemetry"
-          git add brain_vault/broker_account_live.json
-          git diff --staged --quiet || (git commit -m "telemetry: live broker update" && git push)
+          git config --global user.email "titan-telemetry@ai.quant"
+          git config --global user.name "Titan-Telemetry"
+          if [ -f "brain_vault/broker_account_live.json" ]; then
+            git add -f brain_vault/broker_account_live.json
+            git commit -m "telemetry: live broker update [skip ci]" || true
+            git push origin main || true
+          fi
 
 
       - name: Recursive Self-Dispatch (Perpetual 24/7 Continuous Loop)
