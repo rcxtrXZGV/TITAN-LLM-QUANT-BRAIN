@@ -145,10 +145,15 @@ def manage_active_trailing_breakeven(open_positions, rsi_decision=None):
                 log(f"🎯 [SECURED] Position #{p.ticket} entry secured at {new_sl}. Letting trade run freely to target!")
 
 def execute_rsi_evolved_trade(rsi_decision, equity):
-    target_asset = rsi_decision.get("prime_asset", "Bitcoin (BTCUSD)")
-    verdict = rsi_decision.get("verdict", "BUY")
+    target_asset = rsi_decision.get("prime_asset", "Gold (XAUUSD)")
+    verdict = rsi_decision.get("verdict", "WAIT")
 
     log(f"Received Evolved RSI Order Request: {verdict} on {target_asset}")
+
+    # RUTHLESS WAIT DISCIPLINE: Only execute on crystal-clear BUY or SELL!
+    if verdict not in ["BUY", "SELL"]:
+        log(f"🛡️ [STANDBY] Supreme God Brain verdict is '{verdict}'. Preserving capital with ZERO trade exposure.")
+        return
 
     # Check active open positions and manage trailing breakeven
     open_positions = mt5.positions_get()
@@ -216,7 +221,7 @@ def execute_rsi_evolved_trade(rsi_decision, equity):
                 log(f"Pivoted to high-liquidity active symbol: {sym}")
                 break
 
-    is_buy = (verdict in ["BUY", "WAIT"])
+    is_buy = (verdict == "BUY")
     price = tick.ask if is_buy else tick.bid
     # Pure Autonomous Execution: Read EXACT Target Pool & Calculated SL from Supreme God Brain
     brain_target_pool = float(rsi_decision.get("target_liquidity_pool", 0) or 0)
