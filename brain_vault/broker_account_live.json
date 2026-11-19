@@ -1,15 +1,6 @@
 {
-  "balance": 1.74,
-  "equity": 2.45,
-  "free_margin": 1.2,
-  "open_positions": [
-    {
-      "ticket": 2101876736,
-      "symbol": "BTCUSD",
-      "volume": 0.01,
-      "sl": 62551.05,
-      "tp": 62977.94,
-      "profit": 0.71
-    }
-  ]
+  "balance": 1.25,
+  "equity": 1.25,
+  "free_margin": 1.25,
+  "open_positions": []
 }
