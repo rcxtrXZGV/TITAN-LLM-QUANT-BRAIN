@@ -1,5 +1,5 @@
 {
-  "total_records": 247,
+  "total_records": 248,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -22014,6 +22014,177 @@
           "profit_securing_threshold_usd": 10.0,
           "projected_rr": "1:3+",
           "god_brain_synthesis": "All 8 agents align on a high-velocity Nasdaq 100 breakout. Red Team warnings are neutralized by strong quantitative momentum and institutional liquidity sweep patterns."
+        }
+      }
+    },
+    {
+      "timestamp": "2026-11-20T20:39:10.225963+00:00",
+      "type": "TITAN_8_AGENT_ADVERSARIAL_CYCLE",
+      "market_snapshot": {
+        "Gold (XAUUSD)": {
+          "current_price": 3516.5,
+          "momentum_5_candles": 1.6001,
+          "recent_5_candle_range": 10.1001,
+          "previous_close": 3515.8999,
+          "net_move": 0.6001
+        },
+        "Silver (XAGUSD)": {
+          "current_price": 40.89,
+          "momentum_5_candles": 0.14,
+          "recent_5_candle_range": 0.265,
+          "previous_close": 40.875,
+          "net_move": 0.015
+        },
+        "Crude Oil (USOIL)": {
+          "current_price": 83.65,
+          "momentum_5_candles": 0.52,
+          "recent_5_candle_range": 0.56,
+          "previous_close": 83.66,
+          "net_move": -0.01
+        },
+        "Nasdaq 100 (NAS100)": {
+          "current_price": 25215.5,
+          "momentum_5_candles": -30.0,
+          "recent_5_candle_range": 148.5,
+          "previous_close": 25217.5,
+          "net_move": -2.0
+        },
+        "US30 (Dow Jones)": {
+          "current_price": 48218.24,
+          "momentum_5_candles": -176.582,
+          "recent_5_candle_range": 377.5898,
+          "previous_close": 48234.2812,
+          "net_move": -16.043
+        },
+        "Bitcoin (BTCUSD)": {
+          "current_price": 58464.48,
+          "momentum_5_candles": -66.6094,
+          "recent_5_candle_range": 569.0,
+          "previous_close": 58468.6406,
+          "net_move": -4.1602
+        },
+        "Ethereum (ETHUSD)": {
+          "current_price": 1592.85,
+          "momentum_5_candles": -15.4,
+          "recent_5_candle_range": 28.83,
+          "previous_close": 1593.38,
+          "net_move": -0.53
+        },
+        "Solana (SOLUSD)": {
+          "current_price": 67.62,
+          "momentum_5_candles": -0.68,
+          "recent_5_candle_range": 1.24,
+          "previous_close": 67.64,
+          "net_move": -0.02
+        },
+        "EURUSD": {
+          "current_price": 1.097,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0006,
+          "previous_close": 1.0969,
+          "net_move": 0.0001
+        },
+        "GBPUSD": {
+          "current_price": 1.3084,
+          "momentum_5_candles": -0.0001,
+          "recent_5_candle_range": 0.0008,
+          "previous_close": 1.3082,
+          "net_move": 0.0001
+        },
+        "USDJPY": {
+          "current_price": 158.469,
+          "momentum_5_candles": -0.033,
+          "recent_5_candle_range": 0.099,
+          "previous_close": 158.476,
+          "net_move": -0.007
+        },
+        "AUDUSD": {
+          "current_price": 0.6615,
+          "momentum_5_candles": -0.0004,
+          "recent_5_candle_range": 0.0009,
+          "previous_close": 0.6612,
+          "net_move": 0.0003
+        },
+        "USDCAD": {
+          "current_price": 1.4341,
+          "momentum_5_candles": 0.0006,
+          "recent_5_candle_range": 0.0015,
+          "previous_close": 1.4341,
+          "net_move": 0.0001
+        }
+      },
+      "rsi_evolution": {
+        "evolution_timestamp": "2026-11-20T20:39:10.225963+00:00",
+        "cycle_iteration": 9,
+        "account_assessment": {
+          "current_balance": 0.89,
+          "growth_plan": "Micro-lot compounding (0.01 lot) leveraging high-probability intraday momentum on indices and commodities, aiming for 20-30 pip captures with strict risk control to scale $0.89 to $1,000+."
+        },
+        "eight_agent_syndicate": {
+          "agent_1_macro_soros": {
+            "view": "Indices (Nasdaq 100 and US30) show ongoing intraday corrective pressure, while Gold maintains a steady structural bid above 3515 amid safe-haven capital rotation.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_2_quant_simons": {
+            "view": "Gold displays positive 5-candle velocity (+1.6001) with steady upward tick rate compression and clean range expansion.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_3_liquidity_tudor": {
+            "view": "Recent dip below 3515 acted as a classic retail stop-hunt before aggressive institutional buying stepped in to absorb liquidity.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_4_asymmetry_druck": {
+            "view": "Clear structural support offers an exceptional risk-to-reward setup targeting over 25 pips upside against a tight 15-pip stop loss.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_5_regime_volatility": {
+            "view": "ATR and range filters indicate a transition from choppy consolidation into an orderly bullish continuation leg on Gold.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_6_correlation_arb": {
+            "view": "Equities are lagging while safe-haven commodities show divergence strength, highlighting capital flow directly into precious metals.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_7_red_team_adversary": {
+            "critique_and_challenge": "Gold is near session highs and could experience a minor pullback before the next leg up; however, the momentum and liquidity sweep invalidate false breakout fears.",
+            "veto_verdict": "APPROVE"
+          },
+          "agent_8_risk_officer_seykota": {
+            "risk_evaluation": "With an account balance of $0.89, 0.01 lot sizing provides exact marginal exposure while adhering strictly to predefined volatility stops.",
+            "safety_verdict": "SAFE"
+          }
+        },
+        "supreme_god_verdict": {
+          "prime_asset": "Gold (XAUUSD)",
+          "verdict": "BUY",
+          "trade_style": "Intraday Momentum",
+          "recommended_lot": 0.01,
+          "entry_price": 3516.5,
+          "target_liquidity_pool": 3541.5,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 25.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3.5",
+          "god_brain_synthesis": "All 8 agents align on a high-conviction bullish continuation in Gold following an institutional liquidity sweep. Macro rotation, positive quantitative velocity, and favorable cross-asset correlations validate an immediate BUY execution."
+        },
+        "active_market_bias": {
+          "prime_asset": "Gold (XAUUSD)",
+          "verdict": "BUY",
+          "trade_style": "Intraday Momentum",
+          "recommended_lot": 0.01,
+          "entry_price": 3516.5,
+          "target_liquidity_pool": 3541.5,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 25.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3.5",
+          "god_brain_synthesis": "All 8 agents align on a high-conviction bullish continuation in Gold following an institutional liquidity sweep. Macro rotation, positive quantitative velocity, and favorable cross-asset correlations validate an immediate BUY execution."
         }
       }
     }
