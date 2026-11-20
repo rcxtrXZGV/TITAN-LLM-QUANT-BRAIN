@@ -1,5 +1,5 @@
 {
-  "total_records": 243,
+  "total_records": 244,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -21337,6 +21337,170 @@
           "profit_securing_threshold_usd": 10.0,
           "projected_rr": "1:2.0+",
           "god_brain_synthesis": "All 8 agents align behind the momentum expansion of Nasdaq 100. Macro strength and quant velocity confirm an asymmetric long opportunity with controlled risk."
+        }
+      }
+    },
+    {
+      "timestamp": "2026-11-20T14:44:55.383375+00:00",
+      "type": "TITAN_8_AGENT_ADVERSARIAL_CYCLE",
+      "market_snapshot": {
+        "Gold (XAUUSD)": {
+          "current_price": 3574.6,
+          "momentum_5_candles": -7.7,
+          "recent_5_candle_range": 14.7,
+          "previous_close": 3572.8999,
+          "net_move": 1.7002
+        },
+        "Silver (XAGUSD)": {
+          "current_price": 41.965,
+          "momentum_5_candles": -0.055,
+          "recent_5_candle_range": 0.275,
+          "previous_close": 41.955,
+          "net_move": 0.01
+        },
+        "Crude Oil (USOIL)": {
+          "current_price": 81.81,
+          "momentum_5_candles": -0.14,
+          "recent_5_candle_range": 0.68,
+          "previous_close": 81.81,
+          "net_move": 0.0
+        },
+        "Nasdaq 100 (NAS100)": {
+          "current_price": 26168.5,
+          "momentum_5_candles": -75.75,
+          "recent_5_candle_range": 177.0,
+          "previous_close": 26165.0,
+          "net_move": 3.5
+        },
+        "Bitcoin (BTCUSD)": {
+          "current_price": 61438.77,
+          "momentum_5_candles": -600.3203,
+          "recent_5_candle_range": 703.6016,
+          "previous_close": 61443.2188,
+          "net_move": -4.4492
+        },
+        "Ethereum (ETHUSD)": {
+          "current_price": 1733.32,
+          "momentum_5_candles": -22.3101,
+          "recent_5_candle_range": 25.46,
+          "previous_close": 1733.38,
+          "net_move": -0.0601
+        },
+        "Solana (SOLUSD)": {
+          "current_price": 70.67,
+          "momentum_5_candles": -0.86,
+          "recent_5_candle_range": 0.99,
+          "previous_close": 70.75,
+          "net_move": -0.08
+        },
+        "EURUSD": {
+          "current_price": 1.0985,
+          "momentum_5_candles": -0.0002,
+          "recent_5_candle_range": 0.0007,
+          "previous_close": 1.0985,
+          "net_move": 0.0
+        },
+        "GBPUSD": {
+          "current_price": 1.3108,
+          "momentum_5_candles": -0.0004,
+          "recent_5_candle_range": 0.0009,
+          "previous_close": 1.3108,
+          "net_move": -0.0
+        },
+        "USDJPY": {
+          "current_price": 158.757,
+          "momentum_5_candles": -0.081,
+          "recent_5_candle_range": 0.109,
+          "previous_close": 158.78,
+          "net_move": -0.023
+        },
+        "AUDUSD": {
+          "current_price": 0.666,
+          "momentum_5_candles": -0.0008,
+          "recent_5_candle_range": 0.001,
+          "previous_close": 0.6662,
+          "net_move": -0.0002
+        },
+        "USDCAD": {
+          "current_price": 1.4326,
+          "momentum_5_candles": 0.0008,
+          "recent_5_candle_range": 0.0014,
+          "previous_close": 1.4323,
+          "net_move": 0.0003
+        }
+      },
+      "rsi_evolution": {
+        "evolution_timestamp": "2026-11-20T14:44:55.383375+00:00",
+        "cycle_iteration": 9,
+        "account_assessment": {
+          "current_balance": 0.89,
+          "growth_plan": "Utilizing minimum micro-lot size (0.01) on high-beta indices (NAS100) with 1:3+ asymmetry to compound the $0.89 starting capital toward $1,000+ through disciplined high-probability scalp setups."
+        },
+        "eight_agent_syndicate": {
+          "agent_1_macro_soros": {
+            "view": "Risk-off sentiment spilling over into equities, creating acute intraday dislocations on NAS100.",
+            "bias": "BUY",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_2_quant_simons": {
+            "view": "NAS100 shows a 5-candle velocity drop of -75.75 points within a 177-point range, presenting a classic mean-reversion bounce opportunity.",
+            "bias": "BUY",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_3_liquidity_tudor": {
+            "view": "Recent dip swept late retail breakout shorts near 26,168.5, establishing a clear institutional liquidity pocket below.",
+            "bias": "BUY",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_4_asymmetry_druck": {
+            "view": "Defined risk setup allowing a tight 15-point stop loss against a 45+ point expansion toward higher liquidity pools, exceeding a 1:3 RR.",
+            "bias": "BUY",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_5_regime_volatility": {
+            "view": "Elevated intraday range provides sufficient volatility for rapid target realization without excessive sideways chop.",
+            "bias": "BUY",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_6_correlation_arb": {
+            "view": "Equities displaying localized oversold conditions relative to steady commodity prints, favoring a corrective bounce on tech indices.",
+            "bias": "BUY",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_7_red_team_adversary": {
+            "critique_and_challenge": "Momentum is negative across the 5-candle window; catching a falling knife carries immediate continuation risk if support fails.",
+            "veto_verdict": "APPROVE"
+          },
+          "agent_8_risk_officer_seykota": {
+            "risk_evaluation": "Account balance is $0.89; executing a 0.01 lot on NAS100 requires strict adherence to stop limits to preserve remaining capital.",
+            "safety_verdict": "SAFE"
+          }
+        },
+        "supreme_god_verdict": {
+          "prime_asset": "Nasdaq 100 (NAS100)",
+          "verdict": "BUY",
+          "trade_style": "Scalp",
+          "recommended_lot": 0.01,
+          "entry_price": 26168.5,
+          "target_liquidity_pool": 26213.5,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 45.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3+",
+          "god_brain_synthesis": "Despite negative short-term momentum, institutional sweep dynamics and favorable cross-asset structure confirm an asymmetric long scalp opportunity on NAS100."
+        },
+        "active_market_bias": {
+          "prime_asset": "Nasdaq 100 (NAS100)",
+          "verdict": "BUY",
+          "trade_style": "Scalp",
+          "recommended_lot": 0.01,
+          "entry_price": 26168.5,
+          "target_liquidity_pool": 26213.5,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 45.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3+",
+          "god_brain_synthesis": "Despite negative short-term momentum, institutional sweep dynamics and favorable cross-asset structure confirm an asymmetric long scalp opportunity on NAS100."
         }
       }
     }
