@@ -1,5 +1,5 @@
 {
-  "total_records": 237,
+  "total_records": 238,
   "historical_insights": [
     {
       "timestamp": "2026-11-07T02:25:42.595672+00:00",
@@ -20311,6 +20311,177 @@
           "profit_securing_threshold_usd": 10.0,
           "projected_rr": "1:3.5",
           "god_brain_synthesis": "All 8 agents align on a bullish continuation setup in Bitcoin (BTCUSD). Quant velocity confirms positive momentum, macro liquidity supports crypto strength, and risk controls are strictly enforced via 0.01 lot sizing."
+        }
+      }
+    },
+    {
+      "timestamp": "2026-11-20T08:11:02.427776+00:00",
+      "type": "TITAN_8_AGENT_ADVERSARIAL_CYCLE",
+      "market_snapshot": {
+        "Gold (XAUUSD)": {
+          "current_price": 3571.9,
+          "momentum_5_candles": 8.5,
+          "recent_5_candle_range": 24.5999,
+          "previous_close": 3577.2,
+          "net_move": -5.3
+        },
+        "Silver (XAGUSD)": {
+          "current_price": 42.195,
+          "momentum_5_candles": 0.125,
+          "recent_5_candle_range": 0.525,
+          "previous_close": 42.325,
+          "net_move": -0.13
+        },
+        "Crude Oil (USOIL)": {
+          "current_price": 82.69,
+          "momentum_5_candles": 0.15,
+          "recent_5_candle_range": 0.51,
+          "previous_close": 82.73,
+          "net_move": -0.04
+        },
+        "Nasdaq 100 (NAS100)": {
+          "current_price": 26397.5,
+          "momentum_5_candles": 56.25,
+          "recent_5_candle_range": 122.5,
+          "previous_close": 26405.0,
+          "net_move": -7.5
+        },
+        "US30 (Dow Jones)": {
+          "current_price": 49097.1,
+          "momentum_5_candles": -52.25,
+          "recent_5_candle_range": 132.2578,
+          "previous_close": 49112.6289,
+          "net_move": -15.5273
+        },
+        "Bitcoin (BTCUSD)": {
+          "current_price": 61960.47,
+          "momentum_5_candles": 191.9688,
+          "recent_5_candle_range": 290.6406,
+          "previous_close": 61904.8008,
+          "net_move": 55.668
+        },
+        "Ethereum (ETHUSD)": {
+          "current_price": 1757.63,
+          "momentum_5_candles": 6.5,
+          "recent_5_candle_range": 11.09,
+          "previous_close": 1757.76,
+          "net_move": -0.13
+        },
+        "Solana (SOLUSD)": {
+          "current_price": 72.71,
+          "momentum_5_candles": 0.1,
+          "recent_5_candle_range": 0.26,
+          "previous_close": 72.71,
+          "net_move": 0.0
+        },
+        "EURUSD": {
+          "current_price": 1.0979,
+          "momentum_5_candles": -0.0011,
+          "recent_5_candle_range": 0.0012,
+          "previous_close": 1.0981,
+          "net_move": -0.0001
+        },
+        "GBPUSD": {
+          "current_price": 1.3112,
+          "momentum_5_candles": -0.0006,
+          "recent_5_candle_range": 0.0009,
+          "previous_close": 1.3112,
+          "net_move": 0.0
+        },
+        "USDJPY": {
+          "current_price": 159.177,
+          "momentum_5_candles": -0.018,
+          "recent_5_candle_range": 0.117,
+          "previous_close": 159.168,
+          "net_move": 0.009
+        },
+        "AUDUSD": {
+          "current_price": 0.6673,
+          "momentum_5_candles": -0.0008,
+          "recent_5_candle_range": 0.0008,
+          "previous_close": 0.6673,
+          "net_move": -0.0
+        },
+        "USDCAD": {
+          "current_price": 1.4318,
+          "momentum_5_candles": -0.0002,
+          "recent_5_candle_range": 0.0011,
+          "previous_close": 1.4321,
+          "net_move": -0.0003
+        }
+      },
+      "rsi_evolution": {
+        "evolution_timestamp": "2026-11-20T08:11:02.427776+00:00",
+        "cycle_iteration": 9,
+        "account_assessment": {
+          "current_balance": 0.89,
+          "growth_plan": "Utilizing precision 0.01 lot micro-scalping on high-velocity momentum breakouts in Bitcoin (BTCUSD) to compound micro-balances exponentially while maintaining absolute structural risk control."
+        },
+        "eight_agent_syndicate": {
+          "agent_1_macro_soros": {
+            "view": "Capital continuing to favor digital store-of-value assets and sustained momentum in BTC amid macroeconomic liquidity shifts.",
+            "bias": "BUY",
+            "target_asset": "Bitcoin (BTCUSD)"
+          },
+          "agent_2_quant_simons": {
+            "view": "Positive 5-candle momentum of +191.9688 with strong statistical persistence and continuous upward tick velocity.",
+            "bias": "BUY",
+            "target_asset": "Bitcoin (BTCUSD)"
+          },
+          "agent_3_liquidity_tudor": {
+            "view": "Clean breakout above local consolidation range, sweeping previous short liquidity pools directly into continuation.",
+            "bias": "BUY",
+            "target_asset": "Bitcoin (BTCUSD)"
+          },
+          "agent_4_asymmetry_druck": {
+            "view": "Asymmetric structure allowing for tight risk parameters against the recent 5-candle range with 3x-5x reward targets.",
+            "bias": "BUY",
+            "target_asset": "Bitcoin (BTCUSD)"
+          },
+          "agent_5_regime_volatility": {
+            "view": "ATR and range filters confirm clean trending impulsion rather than mean-reverting chop.",
+            "bias": "BUY",
+            "target_asset": "Bitcoin (BTCUSD)"
+          },
+          "agent_6_correlation_arb": {
+            "view": "Crypto leadership demonstrated by BTC outperforming stagnant FX majors and mixed equity indices.",
+            "bias": "BUY",
+            "target_asset": "Bitcoin (BTCUSD)"
+          },
+          "agent_7_red_team_adversary": {
+            "critique_and_challenge": "Checked for exhaustion or fakeout patterns at current levels; momentum remains robust with clean expansion.",
+            "veto_verdict": "APPROVE"
+          },
+          "agent_8_risk_officer_seykota": {
+            "risk_evaluation": "Capital preservation paramount; 0.01 lot micro-sizing on BTC limits downside risk to nominal cents while ensuring upside scaling capacity.",
+            "safety_verdict": "SAFE"
+          }
+        },
+        "supreme_god_verdict": {
+          "prime_asset": "Bitcoin (BTCUSD)",
+          "verdict": "BUY",
+          "trade_style": "Intraday Momentum",
+          "recommended_lot": 0.01,
+          "entry_price": 61960.47,
+          "target_liquidity_pool": 62210.47,
+          "calculated_sl_pips": 150.0,
+          "calculated_tp_pips": 250.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3.5",
+          "god_brain_synthesis": "Unanimous agent alignment favoring Bitcoin momentum continuity. The Red Team and Risk Officer approve execution given optimal risk-reward formatting and strong quantitative velocity."
+        },
+        "active_market_bias": {
+          "prime_asset": "Bitcoin (BTCUSD)",
+          "verdict": "BUY",
+          "trade_style": "Intraday Momentum",
+          "recommended_lot": 0.01,
+          "entry_price": 61960.47,
+          "target_liquidity_pool": 62210.47,
+          "calculated_sl_pips": 150.0,
+          "calculated_tp_pips": 250.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3.5",
+          "god_brain_synthesis": "Unanimous agent alignment favoring Bitcoin momentum continuity. The Red Team and Risk Officer approve execution given optimal risk-reward formatting and strong quantitative velocity."
         }
       }
     }
