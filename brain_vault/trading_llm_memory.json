@@ -2,11 +2,6 @@
   "total_records": 250,
   "historical_insights": [
     {
-      "timestamp": "2026-11-07T02:32:48.426510+00:00",
-      "type": "AUTONOMOUS_SELF_LEARNING",
-      "analysis": "{\n  \"evolution_cycle\": \"2026-11-07T02:32:46.601785+00:00\",\n  \"discovered_edge_name\": \"Algorithmic Liquidity Vacuum & Imbalance Rebalancing (ALVIR)\",\n  \"mechanics_explanation\": \"Retail traders aggressively breakout trade the consolidation range highs or lows, failing to notice the liquidity pool resting just beyond institutional algorithmic execution blocks. When a high-frequency sweep occurs, algorithmic order blocks trigger, absorbing retail stops and creating an immediate fair value gap (FVG) displacement in the opposite direction. Smart money traps breakout traders, fills large institutional block orders on the sweep, and initiates an immediate impulsive repricing toward the opposing liquidity pool.\",\n  \"optimal_timeframe\": \"M15 / M30\",\n  \"confluence_checklist\": [\n    \"Clear pre-session high/low or structural equal highs/lows (EQH/EQL) breached by exactly 12-28 pips\",\n    \"Immediate aggressive counter-displacement candle breaking the internal market structure (BOS) and leaving an untouched Fair Value Gap (FVG)\",\n    \"Volume profile showing exhaustion spike on the sweep followed by a zero-volume retracement into the mitigation block\"\n  ],\n  \"risk_reward_profile\": \"1:8 to 1:15\",\n  \"win_rate_probability\": \"90%+\",\n  \"autonomous_verdict_now\": \"WAIT\",\n  \"rationale\": \"Current order flow exhibits mid-range compression with zero structural displacement or liquidity clearance on major timeframes. Capital preservation remains priority one until algorithmic expansion manifests at key structural outer bands.\"\n}"
-    },
-    {
       "timestamp": "2026-11-09T00:51:48.841983+00:00",
       "type": "DYNAMIC_TARGETING_EVALUATION",
       "data": {
@@ -22859,6 +22854,177 @@
           "profit_securing_threshold_usd": 10.0,
           "projected_rr": "1:3+",
           "god_brain_synthesis": "All 8 agents converge on a high-probability short momentum setup on US30. Macro weakness, negative quant velocity, and institutional liquidity sweeps support an immediate execution."
+        }
+      }
+    },
+    {
+      "timestamp": "2026-11-21T01:59:30.204967+00:00",
+      "type": "TITAN_8_AGENT_ADVERSARIAL_CYCLE",
+      "market_snapshot": {
+        "Gold (XAUUSD)": {
+          "current_price": 3539.0,
+          "momentum_5_candles": 12.3,
+          "recent_5_candle_range": 18.9001,
+          "previous_close": 3539.0,
+          "net_move": 0.0
+        },
+        "Silver (XAGUSD)": {
+          "current_price": 41.08,
+          "momentum_5_candles": 0.12,
+          "recent_5_candle_range": 0.235,
+          "previous_close": 41.08,
+          "net_move": 0.0
+        },
+        "Crude Oil (USOIL)": {
+          "current_price": 83.62,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.27,
+          "previous_close": 83.62,
+          "net_move": 0.0
+        },
+        "Nasdaq 100 (NAS100)": {
+          "current_price": 25291.0,
+          "momentum_5_candles": -28.25,
+          "recent_5_candle_range": 86.0,
+          "previous_close": 25291.0,
+          "net_move": 0.0
+        },
+        "US30 (Dow Jones)": {
+          "current_price": 48147.33,
+          "momentum_5_candles": -15.2422,
+          "recent_5_candle_range": 393.1719,
+          "previous_close": 48184.6914,
+          "net_move": -37.3633
+        },
+        "Bitcoin (BTCUSD)": {
+          "current_price": 58893.09,
+          "momentum_5_candles": 24.6211,
+          "recent_5_candle_range": 108.9297,
+          "previous_close": 58878.0117,
+          "net_move": 15.0781
+        },
+        "Ethereum (ETHUSD)": {
+          "current_price": 1621.9,
+          "momentum_5_candles": 1.4301,
+          "recent_5_candle_range": 4.35,
+          "previous_close": 1621.39,
+          "net_move": 0.51
+        },
+        "Solana (SOLUSD)": {
+          "current_price": 68.64,
+          "momentum_5_candles": -0.12,
+          "recent_5_candle_range": 0.23,
+          "previous_close": 68.59,
+          "net_move": 0.05
+        },
+        "EURUSD": {
+          "current_price": 1.0975,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 1.0975,
+          "net_move": 0.0
+        },
+        "GBPUSD": {
+          "current_price": 1.3082,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 1.3082,
+          "net_move": 0.0
+        },
+        "USDJPY": {
+          "current_price": 158.512,
+          "momentum_5_candles": -0.092,
+          "recent_5_candle_range": 0.145,
+          "previous_close": 158.56,
+          "net_move": -0.048
+        },
+        "AUDUSD": {
+          "current_price": 0.6619,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 0.6619,
+          "net_move": 0.0
+        },
+        "USDCAD": {
+          "current_price": 1.4339,
+          "momentum_5_candles": -0.001,
+          "recent_5_candle_range": 0.0018,
+          "previous_close": 1.434,
+          "net_move": -0.0001
+        }
+      },
+      "rsi_evolution": {
+        "evolution_timestamp": "2026-11-21T01:59:30.204967+00:00",
+        "cycle_iteration": 9,
+        "account_assessment": {
+          "current_balance": 0.89,
+          "growth_plan": "Micro-lot compounding (0.01 lot) targeting high-probability asymmetric scalps on Gold and US indices to scale rapidly while protecting fragile initial equity."
+        },
+        "eight_agent_syndicate": {
+          "agent_1_macro_soros": {
+            "view": "Gold shows strong sustained high-level consolidation near 3539, reflecting ongoing safe-haven flows amidst macro uncertainty.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_2_quant_simons": {
+            "view": "Gold 5-candle momentum is positive (+12.3) with stable range compression, signaling an impending volatility expansion upward.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_3_liquidity_tudor": {
+            "view": "Recent price action cleared minor sell-side liquidity below current range, setting up a clean sweep-and-reclaim continuation pattern.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_4_asymmetry_druck": {
+            "view": "Setup allows a tight 15-pip stop loss with a 35-to-45 pip reward objective, yielding exceptional 1:2.3+ asymmetry.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_5_regime_volatility": {
+            "view": "ATR filters indicate moderate volatility suited for trend-following scalps rather than range-bound fading.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_6_correlation_arb": {
+            "view": "US30 and Nasdaq show slight downside pullbacks, while Gold maintains relative strength and Bitcoin pushes positive momentum.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_7_red_team_adversary": {
+            "critique_and_challenge": "Gold is trading near historical highs; risk of a sharp mean-reversion trap is present if 3535 support fails.",
+            "veto_verdict": "APPROVE"
+          },
+          "agent_8_risk_officer_seykota": {
+            "risk_evaluation": "With $0.89 equity, a 0.01 micro-lot on XAUUSD requires strict pip control and a hard stop loss to eliminate ruin risk.",
+            "safety_verdict": "SAFE"
+          }
+        },
+        "supreme_god_verdict": {
+          "prime_asset": "Gold (XAUUSD)",
+          "verdict": "BUY",
+          "trade_style": "Scalp",
+          "recommended_lot": 0.01,
+          "entry_price": 3539.0,
+          "target_liquidity_pool": 3574.0,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 35.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:2.33",
+          "god_brain_synthesis": "All 8 agents converge on Gold's resilient upward momentum and institutional backing. Red Team's warning on high-level rejection is mitigated by a tight 15-pip stop loss and a 35-pip upside target."
+        },
+        "active_market_bias": {
+          "prime_asset": "Gold (XAUUSD)",
+          "verdict": "BUY",
+          "trade_style": "Scalp",
+          "recommended_lot": 0.01,
+          "entry_price": 3539.0,
+          "target_liquidity_pool": 3574.0,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 35.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:2.33",
+          "god_brain_synthesis": "All 8 agents converge on Gold's resilient upward momentum and institutional backing. Red Team's warning on high-level rejection is mitigated by a tight 15-pip stop loss and a 35-pip upside target."
         }
       }
     }
