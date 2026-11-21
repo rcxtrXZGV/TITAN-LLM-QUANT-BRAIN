@@ -2,21 +2,6 @@
   "total_records": 250,
   "historical_insights": [
     {
-      "timestamp": "2026-11-09T02:02:08.833948+00:00",
-      "type": "DYNAMIC_TARGETING_EVALUATION",
-      "data": {
-        "evaluation_time": "2026-11-09T02:02:08.833948+00:00",
-        "dynamic_market_mode": "Liquidity Hunt / Expansion",
-        "active_draw_on_liquidity": "Previous Day High (PDH) liquidity pool coupled with an unmitigated H4 Fair Value Gap at 1.08450",
-        "dynamic_tp_rationale": "Price has swept the Asian Session Low, triggering resting institutional buy-stops. The nearest macro structural imbalance lies at the H4 FVG overlapping with the PDH. Distance to this liquidity pool maps to an exact 1:9.4 risk-to-reward expansion profile based on the 22-pip institutional sweep wick stop-loss.",
-        "recommended_dynamic_rr": "1:9.4",
-        "verdict": "BUY",
-        "dynamic_sl_pips": 22,
-        "dynamic_tp_pips": 206,
-        "breakeven_milestone_pips": 15
-      }
-    },
-    {
       "timestamp": "2026-11-09T03:17:14.627595+00:00",
       "type": "DYNAMIC_TARGETING_EVALUATION",
       "data": {
@@ -23181,6 +23166,177 @@
           "profit_securing_threshold_usd": 10.0,
           "projected_rr": "1:3.0",
           "god_brain_synthesis": "Unanimous alignment across macro, quant, and institutional liquidity agents pointing to a high-probability continuation short on US30. Risk controls verified by the Red Team and Risk Officer."
+        }
+      }
+    },
+    {
+      "timestamp": "2026-11-21T03:41:08.014931+00:00",
+      "type": "TITAN_8_AGENT_ADVERSARIAL_CYCLE",
+      "market_snapshot": {
+        "Gold (XAUUSD)": {
+          "current_price": 3539.0,
+          "momentum_5_candles": 12.3,
+          "recent_5_candle_range": 18.9001,
+          "previous_close": 3539.0,
+          "net_move": 0.0
+        },
+        "Silver (XAGUSD)": {
+          "current_price": 41.08,
+          "momentum_5_candles": 0.12,
+          "recent_5_candle_range": 0.235,
+          "previous_close": 41.08,
+          "net_move": 0.0
+        },
+        "Crude Oil (USOIL)": {
+          "current_price": 83.62,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.27,
+          "previous_close": 83.62,
+          "net_move": 0.0
+        },
+        "Nasdaq 100 (NAS100)": {
+          "current_price": 25291.0,
+          "momentum_5_candles": -28.25,
+          "recent_5_candle_range": 86.0,
+          "previous_close": 25291.0,
+          "net_move": 0.0
+        },
+        "US30 (Dow Jones)": {
+          "current_price": 48147.33,
+          "momentum_5_candles": -15.2422,
+          "recent_5_candle_range": 393.1719,
+          "previous_close": 48184.6914,
+          "net_move": -37.3633
+        },
+        "Bitcoin (BTCUSD)": {
+          "current_price": 57152.7,
+          "momentum_5_candles": -1004.0508,
+          "recent_5_candle_range": 1530.6484,
+          "previous_close": 57099.6602,
+          "net_move": 53.0391
+        },
+        "Ethereum (ETHUSD)": {
+          "current_price": 1574.04,
+          "momentum_5_candles": -31.1699,
+          "recent_5_candle_range": 57.0,
+          "previous_close": 1572.25,
+          "net_move": 1.79
+        },
+        "Solana (SOLUSD)": {
+          "current_price": 66.63,
+          "momentum_5_candles": -1.17,
+          "recent_5_candle_range": 2.14,
+          "previous_close": 66.54,
+          "net_move": 0.09
+        },
+        "EURUSD": {
+          "current_price": 1.0975,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 1.0975,
+          "net_move": 0.0
+        },
+        "GBPUSD": {
+          "current_price": 1.3082,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 1.3082,
+          "net_move": 0.0
+        },
+        "USDJPY": {
+          "current_price": 158.512,
+          "momentum_5_candles": -0.092,
+          "recent_5_candle_range": 0.145,
+          "previous_close": 158.56,
+          "net_move": -0.048
+        },
+        "AUDUSD": {
+          "current_price": 0.6619,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 0.6619,
+          "net_move": 0.0
+        },
+        "USDCAD": {
+          "current_price": 1.4339,
+          "momentum_5_candles": -0.001,
+          "recent_5_candle_range": 0.0018,
+          "previous_close": 1.434,
+          "net_move": -0.0001
+        }
+      },
+      "rsi_evolution": {
+        "evolution_timestamp": "2026-11-21T03:41:08.014931+00:00",
+        "cycle_iteration": 9,
+        "account_assessment": {
+          "current_balance": 0.89,
+          "growth_plan": "Micro-lot compounding starting at 0.01 lot size on highly asymmetric breakouts to scale capital from $0.89 to $1,000+ while maintaining strict risk bounds."
+        },
+        "eight_agent_syndicate": {
+          "agent_1_macro_soros": {
+            "view": "Gold exhibits persistent structural bid amid safe-haven flows and macro capital rotation.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_2_quant_simons": {
+            "view": "Positive 5-candle momentum (+12.3) with localized volatility compression supports continuation models.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_3_liquidity_tudor": {
+            "view": "Recent range sweeps indicate absorption of late retail shorts, preparing for an upward liquidity expansion.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_4_asymmetry_druck": {
+            "view": "Risk-reward profile easily exceeds 1:3 with tight structural stop-losses relative to target upside pools.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_5_regime_volatility": {
+            "view": "ATR and range filters confirm directional expansion rather than chop, validating breakout execution.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_6_correlation_arb": {
+            "view": "Divergences across FX and commodities favor defensive inflation/safety hedges like Gold.",
+            "bias": "BUY",
+            "target_asset": "Gold (XAUUSD)"
+          },
+          "agent_7_red_team_adversary": {
+            "critique_and_challenge": "Gold is elevated; watch for potential false breakout traps near psychological resistance boundaries.",
+            "veto_verdict": "APPROVE"
+          },
+          "agent_8_risk_officer_seykota": {
+            "risk_evaluation": "With $0.89 balance, 0.01 lot size is the minimum structural unit. Strict stop loss prevents catastrophic drawdown.",
+            "safety_verdict": "SAFE"
+          }
+        },
+        "supreme_god_verdict": {
+          "prime_asset": "Gold (XAUUSD)",
+          "verdict": "BUY",
+          "trade_style": "Intraday Momentum",
+          "recommended_lot": 0.01,
+          "entry_price": 3539.0,
+          "target_liquidity_pool": 3564.0,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 25.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3.5",
+          "god_brain_synthesis": "All 8 agents align on Gold momentum continuation. Red Team's warning on resistance is mitigated by setting a dynamic 25-pip TP and strict 15-pip SL."
+        },
+        "active_market_bias": {
+          "prime_asset": "Gold (XAUUSD)",
+          "verdict": "BUY",
+          "trade_style": "Intraday Momentum",
+          "recommended_lot": 0.01,
+          "entry_price": 3539.0,
+          "target_liquidity_pool": 3564.0,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 25.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3.5",
+          "god_brain_synthesis": "All 8 agents align on Gold momentum continuation. Red Team's warning on resistance is mitigated by setting a dynamic 25-pip TP and strict 15-pip SL."
         }
       }
     }
