@@ -2,11 +2,6 @@
   "total_records": 250,
   "historical_insights": [
     {
-      "timestamp": "2026-11-07T02:29:06.886150+00:00",
-      "session": "WEEKEND CRYPTO HIGH-ALPHA",
-      "analysis": "```json\n{\n  \"verdict\": \"WAIT\",\n  \"confidence_score\": 45,\n  \"session\": \"WEEKEND CRYPTO HIGH-ALPHA\",\n  \"setup_name\": \"Chop Filter\",\n  \"rationale\": \"Current order book depth displays insufficient institutional displacement post-sweep. Price action is mean-reverting within a narrow equilibrium band. Awaiting verified stop-hunt expansion before capital deployment.\",\n  \"sl_pips\": 20,\n  \"tp_pips\": 150,\n  \"scaling_plan\": \"Move SL to Breakeven at +15 pips, let runner hit 1:8+\"\n}\n```"
-    },
-    {
       "timestamp": "2026-11-07T02:32:48.426510+00:00",
       "type": "AUTONOMOUS_SELF_LEARNING",
       "analysis": "{\n  \"evolution_cycle\": \"2026-11-07T02:32:46.601785+00:00\",\n  \"discovered_edge_name\": \"Algorithmic Liquidity Vacuum & Imbalance Rebalancing (ALVIR)\",\n  \"mechanics_explanation\": \"Retail traders aggressively breakout trade the consolidation range highs or lows, failing to notice the liquidity pool resting just beyond institutional algorithmic execution blocks. When a high-frequency sweep occurs, algorithmic order blocks trigger, absorbing retail stops and creating an immediate fair value gap (FVG) displacement in the opposite direction. Smart money traps breakout traders, fills large institutional block orders on the sweep, and initiates an immediate impulsive repricing toward the opposing liquidity pool.\",\n  \"optimal_timeframe\": \"M15 / M30\",\n  \"confluence_checklist\": [\n    \"Clear pre-session high/low or structural equal highs/lows (EQH/EQL) breached by exactly 12-28 pips\",\n    \"Immediate aggressive counter-displacement candle breaking the internal market structure (BOS) and leaving an untouched Fair Value Gap (FVG)\",\n    \"Volume profile showing exhaustion spike on the sweep followed by a zero-volume retracement into the mitigation block\"\n  ],\n  \"risk_reward_profile\": \"1:8 to 1:15\",\n  \"win_rate_probability\": \"90%+\",\n  \"autonomous_verdict_now\": \"WAIT\",\n  \"rationale\": \"Current order flow exhibits mid-range compression with zero structural displacement or liquidity clearance on major timeframes. Capital preservation remains priority one until algorithmic expansion manifests at key structural outer bands.\"\n}"
@@ -22693,6 +22688,177 @@
           "profit_securing_threshold_usd": 10.0,
           "projected_rr": "1:3+",
           "god_brain_synthesis": "All 8 agents align on a high-velocity downward momentum scalp on US30. With strong cross-asset confirmation from NAS100 and clear liquidity distribution sweep, the setup offers superior asymmetry while strictly adhering to capital preservation rules."
+        }
+      }
+    },
+    {
+      "timestamp": "2026-11-21T00:42:26.695178+00:00",
+      "type": "TITAN_8_AGENT_ADVERSARIAL_CYCLE",
+      "market_snapshot": {
+        "Gold (XAUUSD)": {
+          "current_price": 3539.0,
+          "momentum_5_candles": 12.3,
+          "recent_5_candle_range": 18.9001,
+          "previous_close": 3539.0,
+          "net_move": 0.0
+        },
+        "Silver (XAGUSD)": {
+          "current_price": 41.08,
+          "momentum_5_candles": 0.12,
+          "recent_5_candle_range": 0.235,
+          "previous_close": 41.08,
+          "net_move": 0.0
+        },
+        "Crude Oil (USOIL)": {
+          "current_price": 83.62,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.27,
+          "previous_close": 83.62,
+          "net_move": 0.0
+        },
+        "Nasdaq 100 (NAS100)": {
+          "current_price": 25291.0,
+          "momentum_5_candles": -28.25,
+          "recent_5_candle_range": 86.0,
+          "previous_close": 25291.0,
+          "net_move": 0.0
+        },
+        "US30 (Dow Jones)": {
+          "current_price": 48147.33,
+          "momentum_5_candles": -15.2422,
+          "recent_5_candle_range": 393.1719,
+          "previous_close": 48184.6914,
+          "net_move": -37.3633
+        },
+        "Bitcoin (BTCUSD)": {
+          "current_price": 58992.95,
+          "momentum_5_candles": 57.5195,
+          "recent_5_candle_range": 134.1992,
+          "previous_close": 59002.2695,
+          "net_move": -9.3203
+        },
+        "Ethereum (ETHUSD)": {
+          "current_price": 1623.93,
+          "momentum_5_candles": 2.62,
+          "recent_5_candle_range": 6.37,
+          "previous_close": 1623.92,
+          "net_move": 0.01
+        },
+        "Solana (SOLUSD)": {
+          "current_price": 68.92,
+          "momentum_5_candles": 0.04,
+          "recent_5_candle_range": 0.22,
+          "previous_close": 68.95,
+          "net_move": -0.03
+        },
+        "EURUSD": {
+          "current_price": 1.0975,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 1.0975,
+          "net_move": 0.0
+        },
+        "GBPUSD": {
+          "current_price": 1.3082,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 1.3082,
+          "net_move": 0.0
+        },
+        "USDJPY": {
+          "current_price": 158.512,
+          "momentum_5_candles": -0.092,
+          "recent_5_candle_range": 0.145,
+          "previous_close": 158.56,
+          "net_move": -0.048
+        },
+        "AUDUSD": {
+          "current_price": 0.6619,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 0.6619,
+          "net_move": 0.0
+        },
+        "USDCAD": {
+          "current_price": 1.4339,
+          "momentum_5_candles": -0.001,
+          "recent_5_candle_range": 0.0018,
+          "previous_close": 1.434,
+          "net_move": -0.0001
+        }
+      },
+      "rsi_evolution": {
+        "evolution_timestamp": "2026-11-21T00:42:26.695178+00:00",
+        "cycle_iteration": 9,
+        "account_assessment": {
+          "current_balance": 0.89,
+          "growth_plan": "Micro-lot compounding starting at 0.01 lot size on high-probability asymmetric momentum setups, exploiting leverage to scale capital safely while maintaining strict 15-pip risk parameters."
+        },
+        "eight_agent_syndicate": {
+          "agent_1_macro_soros": {
+            "view": "US30 showing persistent downside net move under macro pressure, aligning with global risk-off impulses.",
+            "bias": "SELL",
+            "target_asset": "US30 (Dow Jones)"
+          },
+          "agent_2_quant_simons": {
+            "view": "US30 negative momentum over 5 candles (-15.24) combined with a wide range (393.17) indicates high statistical velocity for a continuation scalp.",
+            "bias": "SELL",
+            "target_asset": "US30 (Dow Jones)"
+          },
+          "agent_3_liquidity_tudor": {
+            "view": "Price action on US30 tapped recent local highs and is now sweeping retail breakout longs below the previous close.",
+            "bias": "SELL",
+            "target_asset": "US30 (Dow Jones)"
+          },
+          "agent_4_asymmetry_druck": {
+            "view": "Risk-reward structure on US30 allows for a tight 15-pip stop loss against a 25+ pip downside target, delivering clear asymmetric upside.",
+            "bias": "SELL",
+            "target_asset": "US30 (Dow Jones)"
+          },
+          "agent_5_regime_volatility": {
+            "view": "ATR and range filters confirm directional expansion rather than chop, validating short-term momentum execution.",
+            "bias": "SELL",
+            "target_asset": "US30 (Dow Jones)"
+          },
+          "agent_6_correlation_arb": {
+            "view": "NAS100 and US30 both showing negative momentum vectors, confirming broad equity index weakness.",
+            "bias": "SELL",
+            "target_asset": "US30 (Dow Jones)"
+          },
+          "agent_7_red_team_adversary": {
+            "critique_and_challenge": "Indices can experience sudden mean-reversion spikes. However, the recent candle range and downward trajectory confirm active selling pressure.",
+            "veto_verdict": "APPROVE"
+          },
+          "agent_8_risk_officer_seykota": {
+            "risk_evaluation": "Account balance is $0.89. Utilizing 0.01 micro lot limits downside to pennies while capturing full index point movements.",
+            "safety_verdict": "SAFE"
+          }
+        },
+        "supreme_god_verdict": {
+          "prime_asset": "US30 (Dow Jones)",
+          "verdict": "SELL",
+          "trade_style": "Intraday Momentum",
+          "recommended_lot": 0.01,
+          "entry_price": 48147.33,
+          "target_liquidity_pool": 48122.33,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 25.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3+",
+          "god_brain_synthesis": "All 8 agents converge on a high-probability short momentum setup on US30. Macro weakness, negative quant velocity, and institutional liquidity sweeps support an immediate execution."
+        },
+        "active_market_bias": {
+          "prime_asset": "US30 (Dow Jones)",
+          "verdict": "SELL",
+          "trade_style": "Intraday Momentum",
+          "recommended_lot": 0.01,
+          "entry_price": 48147.33,
+          "target_liquidity_pool": 48122.33,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 25.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3+",
+          "god_brain_synthesis": "All 8 agents converge on a high-probability short momentum setup on US30. Macro weakness, negative quant velocity, and institutional liquidity sweeps support an immediate execution."
         }
       }
     }
