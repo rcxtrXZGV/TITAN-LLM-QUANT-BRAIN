@@ -2,21 +2,6 @@
   "total_records": 250,
   "historical_insights": [
     {
-      "timestamp": "2026-11-09T09:54:23.458058+00:00",
-      "type": "DYNAMIC_TARGETING_EVALUATION",
-      "data": {
-        "evaluation_time": "2026-11-09T09:54:23.458058+00:00",
-        "dynamic_market_mode": "Liquidity Hunt / Expansion",
-        "active_draw_on_liquidity": "Unmitigated Daily H4 Fair Value Gap overlapping with Previous Day High",
-        "dynamic_tp_rationale": "Price has just executed an institutional stop-hunt below the Asian Session Low, sweeping resting retail longs. Market structure shift (MSS) confirmed on the M15 timeframe with displacement. The nearest unmitigated institutional liquidity pool resides at the daily resistance level 168 pips away, presenting a clean path with zero intermediate resistance blocks.",
-        "recommended_dynamic_rr": "1:7.8",
-        "verdict": "BUY",
-        "dynamic_sl_pips": 21.5,
-        "dynamic_tp_pips": 167.7,
-        "breakeven_milestone_pips": 18
-      }
-    },
-    {
       "timestamp": "2026-11-09T10:51:30.294129+00:00",
       "type": "DYNAMIC_TARGETING_EVALUATION",
       "data": {
@@ -24117,6 +24102,177 @@
           "profit_securing_threshold_usd": 10.0,
           "projected_rr": "1:1.67",
           "god_brain_synthesis": "All 8 specialized agents validate strong macro tailwinds, positive statistical velocity, and clear institutional demand for Gold. Red Team and Risk Officer sign off on the 0.01 lot micro-scalp setup."
+        }
+      }
+    },
+    {
+      "timestamp": "2026-11-21T10:13:39.672217+00:00",
+      "type": "TITAN_8_AGENT_ADVERSARIAL_CYCLE",
+      "market_snapshot": {
+        "Gold (XAUUSD)": {
+          "current_price": 3515.4,
+          "momentum_5_candles": -11.3,
+          "recent_5_candle_range": 28.9001,
+          "previous_close": 3535.1001,
+          "net_move": -19.7002
+        },
+        "Silver (XAGUSD)": {
+          "current_price": 41.07,
+          "momentum_5_candles": 0.12,
+          "recent_5_candle_range": 0.285,
+          "previous_close": 41.02,
+          "net_move": 0.05
+        },
+        "Crude Oil (USOIL)": {
+          "current_price": 83.41,
+          "momentum_5_candles": -0.23,
+          "recent_5_candle_range": 0.33,
+          "previous_close": 83.59,
+          "net_move": -0.18
+        },
+        "Nasdaq 100 (NAS100)": {
+          "current_price": 25126.5,
+          "momentum_5_candles": -186.75,
+          "recent_5_candle_range": 236.25,
+          "previous_close": 25300.75,
+          "net_move": -174.25
+        },
+        "US30 (Dow Jones)": {
+          "current_price": 48147.33,
+          "momentum_5_candles": -15.2422,
+          "recent_5_candle_range": 393.1719,
+          "previous_close": 48184.6914,
+          "net_move": -37.3633
+        },
+        "Bitcoin (BTCUSD)": {
+          "current_price": 57830.48,
+          "momentum_5_candles": -81.6484,
+          "recent_5_candle_range": 154.2695,
+          "previous_close": 57918.8789,
+          "net_move": -88.3984
+        },
+        "Ethereum (ETHUSD)": {
+          "current_price": 1632.09,
+          "momentum_5_candles": -4.0701,
+          "recent_5_candle_range": 5.55,
+          "previous_close": 1633.96,
+          "net_move": -1.87
+        },
+        "Solana (SOLUSD)": {
+          "current_price": 67.85,
+          "momentum_5_candles": -0.15,
+          "recent_5_candle_range": 0.22,
+          "previous_close": 67.95,
+          "net_move": -0.1
+        },
+        "EURUSD": {
+          "current_price": 1.0975,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 1.0975,
+          "net_move": 0.0
+        },
+        "GBPUSD": {
+          "current_price": 1.3082,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 1.3082,
+          "net_move": 0.0
+        },
+        "USDJPY": {
+          "current_price": 158.512,
+          "momentum_5_candles": -0.092,
+          "recent_5_candle_range": 0.145,
+          "previous_close": 158.56,
+          "net_move": -0.048
+        },
+        "AUDUSD": {
+          "current_price": 0.6619,
+          "momentum_5_candles": 0.0,
+          "recent_5_candle_range": 0.0,
+          "previous_close": 0.6619,
+          "net_move": 0.0
+        },
+        "USDCAD": {
+          "current_price": 1.434,
+          "momentum_5_candles": -0.001,
+          "recent_5_candle_range": 0.0018,
+          "previous_close": 1.434,
+          "net_move": -0.0001
+        }
+      },
+      "rsi_evolution": {
+        "evolution_timestamp": "2026-11-21T10:13:39.672217+00:00",
+        "cycle_iteration": 9,
+        "account_assessment": {
+          "current_balance": 0.89,
+          "growth_plan": "Aggressive high-leverage micro-lot scaling starting at 0.01 lots on asymmetric liquidity sweeps in Nasdaq 100 to compound rapidly toward $1,000."
+        },
+        "eight_agent_syndicate": {
+          "agent_1_macro_soros": {
+            "view": "Nasdaq 100 shows strong continuation of risk-off intraday liquidation with a net drop of -174.25 points, reflecting global capital flight from equities.",
+            "bias": "SELL",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_2_quant_simons": {
+            "view": "5-candle velocity on NAS100 registers at -186.75 with a high recent range of 236.25, confirming extreme directional momentum and statistical edge for short scalping.",
+            "bias": "SELL",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_3_liquidity_tudor": {
+            "view": "Price action on NAS100 just broke beneath the previous close of 25300.75, trapping early breakout buyers and offering a clean institutional liquidity sweep downwards.",
+            "bias": "SELL",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_4_asymmetry_druck": {
+            "view": "Structuring a short position with a tight 15-point stop-loss and a 45-point profit target yields an outstanding 1:3 asymmetric risk-reward profile.",
+            "bias": "SELL",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_5_regime_volatility": {
+            "view": "ATR and recent 5-candle range indicate an expanding volatility regime, favoring aggressive trend-following momentum over range-bound mean reversion.",
+            "bias": "SELL",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_6_correlation_arb": {
+            "view": "US30 and NAS100 are heavily aligned in negative momentum, corroborating broad-based equity weakness across major US indices.",
+            "bias": "SELL",
+            "target_asset": "Nasdaq 100 (NAS100)"
+          },
+          "agent_7_red_team_adversary": {
+            "critique_and_challenge": "The market could experience a sudden mean-reversion bounce if institutional buy-limits are triggered near whole-figure psychological levels.",
+            "veto_verdict": "APPROVE"
+          },
+          "agent_8_risk_officer_seykota": {
+            "risk_evaluation": "With a micro-balance of $0.89, strict 0.01 lot sizing ensures risk is bounded strictly to allowable parameters while targeting exponential compounding.",
+            "safety_verdict": "SAFE"
+          }
+        },
+        "supreme_god_verdict": {
+          "prime_asset": "Nasdaq 100 (NAS100)",
+          "verdict": "SELL",
+          "trade_style": "Intraday Momentum",
+          "recommended_lot": 0.01,
+          "entry_price": 25126.5,
+          "target_liquidity_pool": 25081.5,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 45.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3+",
+          "god_brain_synthesis": "Unanimous alignment across macro capital flight, quantitative velocity, and institutional liquidity sweeps points directly to a high-probability short scalp on Nasdaq 100."
+        },
+        "active_market_bias": {
+          "prime_asset": "Nasdaq 100 (NAS100)",
+          "verdict": "SELL",
+          "trade_style": "Intraday Momentum",
+          "recommended_lot": 0.01,
+          "entry_price": 25126.5,
+          "target_liquidity_pool": 25081.5,
+          "calculated_sl_pips": 15.0,
+          "calculated_tp_pips": 45.0,
+          "profit_securing_threshold_usd": 10.0,
+          "projected_rr": "1:3+",
+          "god_brain_synthesis": "Unanimous alignment across macro capital flight, quantitative velocity, and institutional liquidity sweeps points directly to a high-probability short scalp on Nasdaq 100."
         }
       }
     }
